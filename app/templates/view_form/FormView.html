@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Contributor Details{% endblock title %}
+
+
+
+{% block page_header %}
+
+	<h1 class="jupiter main_heading">Take-On</h1>
+
+
+{% endblock page_header %}
+
+
+{% block content %}
+		<div>
+			<div class="wrapper">
+				<div class="group">
+					<div class="col-12">
+
+						<h1 class="jupiter">{{ contributor_details['enterpriseName'] }}</h1>
+						<p><b>Reference:</b> {{ contributor_details['reference'] }} <b>Period:</b> {{ contributor_details['period'] }} <b>Survey:</b> {{ contributor_details['survey'] }} <b>Status:</b> {{ contributor_details['status'] }} <b>Receipt Date:</b> {{ contributor_details['receiptDate'] }} <b>Last Updated By:</b> {{ contributor_details['lastUpdatedBy'] }} <b>Last Updated Date:</b> {{ contributor_details['lastUpdatedDate'] }} </p>
+						<hr>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	<div class="col-8">
+
+	<div id="lockedInfo" style="display:none">
+		<div class="panel panel--info" >
+		<div class="panel__header">
+			<div class="u-fs-r--b">Form locked</div>
+		</div>
+		<div class="panel__body">
+			<div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been checked back in.</div>
+		</div>
+
+		</div>
+			</div>
+			<br>
+	</div>
+
+			<div class="wrapper">
+                <div class="response-split">
+                    <div class="group">
+                        <div class="col-8">
+                            <form method="post">
+                            <button class="btn" id="editFormButton">Edit</button>
+                            </form>
+                        </div>
+                        <br>
+                        <br>
+                    </div>
+                <section>
+                    <div class="wrapper">
+                        <div class="group">
+                            <div class="col-12">
+                                <div class="tab">
+                                    <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionA')">Section A</button>
+                                    <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionB')">Section B</button>
+                                    <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionC')">Section C</button>
+                                    <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionD')">Section D</button>
+                                    <br>
+                                    <br>
+                                </div>
+                                 <div id="SectionB" class="tabcontent">
+                                <form>
+                                    How much did You make from sales last year? <br>
+                                    <input type="text" name="LastYearSales"> <label>Q1452</label> <br>
+                                    How much did You spend on research and design? <br>
+                                    <input type="text" name="ResearchSpend"> <label>Q0658</label> <br>
+                                    How fast is Your internet connection? <br>
+                                    <select name="InternetSpeed">
+                                        <option value="1MB">< 1 MB</option>
+                                        <option value="5MB">Between 1-5 MB</option>
+                                        <option value="10MB">Between 6-10 MB</option>
+                                        <option value="20MB">Between 11-20 MB</option>
+                                    </select><label>Q9542</label> <br>
+                                    Total amount of web sales <br>
+                                    <input type="text" name="WebSales"> <label>Q3541</label> <br>
+                                    Percentage of Male employees in a technical role<br>
+                                    <input type="text" name="MalePercentage" style="padding-right:20px; text-align:right;" value=""> </input> <span style="margin-left:-20px;">% </span><label>Q3251</label>  <br>
+                                    Percentage of Female employees in a technical role<br>
+                                    <input type="text" name="FemalePercentage" style="padding-right:20px; text-align:right;" value=""> </input> <span style="margin-left:-20px;">% </span><label>Q7415</label>  <br>
+                                </form>
+                                     </div>
+
+
+                                <!-- Tab content -->
+                                <div id="Details" class="tabcontent">
+                                    <h3>Details</h3>
+                                    <div style="overflow:auto">
+                                        <table id="ResultsTable" class="table table__dense">
+                                            <tbody>
+                                            <!-- for each record, render each data value -->
+                                            {% for record in contributor_details.keys() %}
+                                            <tr class="table--row">
+                                                <!-- Use .values() method to get values from each row dict -->
+                                                <td class="table--cell">{{ record }}</td> <td class="table--cell">{{ contributor_details[record] }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div id="SectionA" class="tabcontent">
+
+                                    {% for datum in data %}
+                                    <div>
+                                        {{ datum["displayQuestionNumber"] }} <strong>{{ datum["displayText"] }}</strong><br>
+                                        <input name="response:{{ datum['questionCode'] }}" value="{{ responses[datum['questionCode']]['response'] }}" readonly>
+                                        <span style="color:red">{{ datum["questionCode"] }}</span>
+                                        <br>
+                                        <br>
+                                    </div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+				        </div>
+                    </div>
+				</div>
+                </section>
+            </div>
+            <div class="wrapper">
+                <div class="response-split">
+                    <!-- Accordion -->
+                    <div class="collapsible js-collapsible">
+                        <div class="js-collapsible-content">
+                            <h3 class="collapsible__title js-collapsible-title icon--collapsible" data-ga="click" data-ga-category="accordion" data-ga-action="Open panel" data-ga-label="Total retail turnover">
+                                <span class="collapsible__title-text">Total retail turnover</span>
+                                <button class="btn btn--secondary btn--small collapsible__title-right u-d-no@xs@s js-collapsible-toggle u-wa--@xs" data-close-label="Hide" data-open-label="Show" aria-hidden="true" data-ga="click" data-ga-category="accordion" data-ga-action="Open panel"
+                                    data-ga-label="Total retail turnover">Show</button>
+                            </h3>
+                            <div class="collapsible__body u-fs-r js-collapsible-body">
+                                <div class="u-mb-s">
+                                    <div class="u-mb-s">Include:</div>
+                                    <ul>
+                                        <li>VAT</li>
+                                        <li>internet sales</li>
+                                        <li>retail sales from outlets in Great Britain to <a href="#">customers abroad</a></li>
+                                    </ul>
+                                </div>
+                                <div class="u-mb-s">
+                                    <div class="u-mb-s">Exclude:</div>
+                                    <ul>
+                                        <li>revenue from mobile phone network commission and top-up</li>
+                                        <li>sales from catering facilities used by customers</li>
+                                        <li>lottery sales and commission from lottery sales</li>
+                                        <li>sales of car accessories and motor vehicles</li>
+                                        <li>NHS receipts</li>
+                                        <li>automotive fuel</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <h3 class="collapsible__title u-fs-r--b js-collapsible-title icon--collapsible" data-ga="click" data-ga-category="accordion" data-ga-action="Open panel" data-ga-label="Food sales">
+                                <span class="collapsible__title-text">Food sales</span>
+                                <button class="btn btn--secondary btn--small collapsible__title-right u-d-no@xs@s js-collapsible-toggle u-wa--@xs" data-close-label="Hide" data-open-label="Show" aria-hidden="true" data-ga="click" data-ga-category="accordion" data-ga-action="Open panel"
+                                    data-ga-label="Food sales">Show</button>
+                            </h3>
+                            <div class="collapsible__body u-fs-r js-collapsible-body">
+                                <div class="u-mb-s">
+                                    <div class="u-mb-s">Include:</div>
+                                    <ul>
+                                        <li>all fresh food</li>
+                                        <li>other food for human consumption (except chocolate and sugar confectionery)</li>
+                                        <li>soft drinks</li>
+                                    </ul>
+                                </div>
+                                <div class="u-mb-s">
+                                    <div class="u-mb-s">Exclude:</div>
+                                    <ul>
+                                        <li>sales from catering facilities used by customers</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <h3 class="collapsible__title u-fs-r--b js-collapsible-title icon--collapsible" data-ga="click" data-ga-category="accordion" data-ga-action="Open panel" data-ga-label="Alcohol, confectionery, soft drinks and tobacco sales">
+                                <span class="collapsible__title-text">Alcohol, confectionery, soft drinks and tobacco sales</span>
+                                <button class="btn btn--secondary btn--small collapsible__title-right u-d-no@xs@s js-collapsible-toggle u-wa--@xs" data-close-label="Hide" data-open-label="Show" aria-hidden="true" data-ga="click" data-ga-category="accordion" data-ga-action="Open panel"
+                                    data-ga-label="Alcohol, confectionery, soft drinks and tobacco sales">Show</button>
+                            </h3>
+                            <div class="collapsible__body u-fs-r js-collapsible-body">
+                                <div class="u-mb-s">
+                                    <div class="u-mb-s">Include:</div>
+                                    <ul>
+                                        <li>chocolate and sugar confectionery</li>
+                                        <li>tobacco and smokers’ requisites</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+	<script>
+	function openTab(evt, details) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(details).style.display = "block";
+    evt.currentTarget.className += " active";
+	}
+	</script>
+
+	<script>
+		var isLockedBy = "{{ locked }}"
+		if (isLockedBy != ""){
+			document.getElementById("editFormButton").disabled = true;
+			document.getElementById("editFormButton").style.color = "grey";
+			var bar = document.getElementById("lockedInfo");
+			bar.style.display = "block";
+			}
+		document.getElementById("SectionA").style.display = "block"
+	</script>
+
+	<br>
+	<br>
+	<br>
+	<br>
+
+{% endblock content %}
