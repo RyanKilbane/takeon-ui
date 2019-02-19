@@ -26,7 +26,7 @@ class EurekaConfig:
 
             return data
 
-        return mock_contributor_search(url_connect=url_connect).text
+        return mock_contributor_search_screen(url_connect=url_connect).text
 
     def contributor_search_without_paging(self, url_connect):
         if self.mock is False:
@@ -76,6 +76,19 @@ class EurekaConfig:
 
         return None
 
+    def get_validation(self, url_connect):
+        if self.mock is False:
+            cli = eureka_client.get_discovery_client()
+            print(url_connect)
+            response_data = cli.do_service(application_name="VALIDATIONPERSISTENCELAYERAPP",
+                                           method="GET",
+                                           service="/validation-pl/validations/findby?{}".format(url_connect),
+                                           timeout=20, headers={"Content-Type": "Application/Json"})
+
+            return response_data
+
+        return mock_get_validation(url_connect=url_connect).text
+
     @staticmethod
     def update_locked_status(url_connect, data):
         cli = eureka_client.get_discovery_client()
@@ -102,10 +115,25 @@ def mock_contributor_search(mock=None, url_connect=None):
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
+@requests_mock.Mocker()
+def mock_contributor_search_screen(mock=None, url_connect=None):
+    mocked_up_data = mock_suite.MockSuite("mock_contributor_search_screen.json").get_data()
+    url = "http://localhost:8090/" + url_connect
+    mock.get(url, text=mocked_up_data)
+    return requests.get(url)
+
 
 @requests_mock.Mocker()
 def mock_form_response(mock=None, url_connect=None):
     mocked_up_data = mock_suite.MockSuite("mock_form_response.json").get_data()
+    url = "http://localhost:8090/" + url_connect
+    mock.get(url, text=mocked_up_data)
+    return requests.get(url)
+
+
+@requests_mock.Mocker()
+def mock_get_validation(mock=None, url_connect=None):
+    mocked_up_data = mock_suite.MockSuite("mock_validation_outputs.json").get_data()
     url = "http://localhost:8090/" + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)

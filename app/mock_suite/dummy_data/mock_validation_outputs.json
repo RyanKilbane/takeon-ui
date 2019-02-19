@@ -1,0 +1,38 @@
+[
+    {
+        "validationFormEntity":{
+            "validationRuleEntity":{
+                "validationRule":"VP",
+                "name":"Value Present",
+                "description":"Trigger if value is present",
+                "createdBy":"fisdba",
+                "createdDate":1549976290047,
+                "lastUpdatedBy":null,
+                "lastUpdatedDate":null
+            },
+            "validationid":1,
+            "formID":1,
+            "validationCode":"VP",
+            "questionCode":"146",
+            "preCalculationFormula":"Q146 != ''",
+            "severity":"E",
+            "createdBy":"fisdba",
+            "createdDate":1549976290083,
+            "lastUpdatedBy":null,
+            "lastUpdatedDate":null,
+            "validationID":1
+        },
+        "validationOutputID":1,
+        "reference":"49900000000",
+        "period":"201709",
+        "survey":"066   ",
+        "validationID":1,
+        "instance":0,
+        "primaryValue":"470",
+        "formula":"470 != ''",
+        "createdBy":"fisdba",
+        "createdDate":1549977270103,
+        "lastUpdatedBy":null,
+        "lastUpdatedDate":null
+    }
+]

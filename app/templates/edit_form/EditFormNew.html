@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Contributor Details{% endblock title %}
+
+
+{% block page_header %}
+
+<h1 class="jupiter main_heading">Take-On</h1>
+
+
+{% endblock page_header %}
+
+
+{% block content %}
+
+<div>
+
+    <div class="wrapper">
+        <div class="group">
+            <div class="col-12">
+
+                <h1 class="jupiter">{{ contributor_details['enterpriseName'] }}</h1>
+                <p><b>Reference:</b> {{ contributor_details['reference'] }} <b>Period:</b> {{
+                    contributor_details['period'] }} <b>Survey:</b> {{ contributor_details['survey'] }} <b>Status:</b>
+                    {{ contributor_details['status'] }} <b>Receipt Date:</b> {{ contributor_details['receiptDate'] }}
+                    <b>Last Updated By:</b> {{ contributor_details['lastUpdatedBy'] }} <b>Last Updated Date:</b> {{
+                    contributor_details['lastUpdatedDate'] }} </p>
+                <hr>
+                <p id="demo"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-8">
+
+    <div id="lockedInfo" style="display:none">
+        <div class="panel panel--info">
+            <div class="panel__header">
+                <div class="u-fs-r--b">Form locked</div>
+            </div>
+            <div class="panel__body">
+                <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been
+                    checked back in.
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <br>
+</div>
+
+<div class="wrapper">
+    <div class="response-split">
+        <section>
+            <div class="wrapper">
+                <div class="group">
+                    <div class="col-12">
+                        <div class="tab">
+                            <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionA')">Section
+                                A
+                            </button>
+                            <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionB')">Section
+                                B
+                            </button>
+                            <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionC')">Section
+                                C
+                            </button>
+                            <button class="btn btn--secondary btn--small" onclick="openTab(event, 'SectionD')">Section
+                                D
+                            </button>
+                            <br>
+                        </div>
+                        <!-- Tab content -->
+                        <div>
+                            <div id="SectionA" class="tabcontent">
+                                <br>
+                                <form method="post">
+                                    {% for datum in data %}
+                                    <div>
+                                        {{ datum["displayQuestionNumber"] }}<strong> {{ datum["displayText"] }}</strong>
+                                        <br>
+                                        <input name="questionCode:{{ datum['questionCode'] }}|instance:0"
+                                               value="{{ responses[datum['questionCode']]['response'] }}" type="number">
+                                        <span style="color:red">{{ datum["questionCode"] }}</span>
+                                        <br>
+                                        <br>
+                                    </div>
+                                    {% endfor %}
+                                    <button class="btn" type="submit" id="saveFormButton" value="saveForm"
+                                            name="action">Save form
+                                    </button>
+                                    <button class="btn" type="submit" id="exitButton" value="exitForm" name="action">
+                                        Exit
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+
+<div class="wrapper">
+        <div class="response-split">
+            <!-- Accordion -->
+            <h3>Validation</h3>
+            {% for output in validation %}
+            {% if output["validationFormEntity"]["severity"] == "E" %}
+                <button class="accordion-legacy" style="background-color:D0021B"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
+                      <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
+                </button>
+                <div class="panel-legacy">
+                    <b>Validation ID: {{ output["validationFormEntity"]["validationid"] }}</b><br>
+                    <b>Formula: {{ output["formula"] }}</b><br>
+                    <br>
+                    <b>Overridden by: </b>{{ contributor_details['lastUpdatedBy'] }}<br>
+                    <b>Overridden date:</b>{{ contributor_details['lastUpdatedDate'] }}
+                </div>
+            {% else %}
+                <button class="accordion-legacy" style="background-color:#FE781F"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
+                      <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
+                </button>
+                <div class="panel-legacy">
+                    <b>Validation ID: {{ output["validationFormEntity"]["validationid"] }}</b><br>
+                    <b>Formula: {{ output["formula"] }}</b><br>
+                    <br>
+                    <b>Overridden by: </b>{{ contributor_details['lastUpdatedBy'] }}<br>
+                    <b>Overridden date:</b>{{ contributor_details['lastUpdatedDate'] }}
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+<script>
+	function openTab(evt, details) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(details).style.display = "block";
+    evt.currentTarget.className += " active";
+	}
+
+
+</script>
+
+<script>
+		var isLockedBy = "{{ locked }}"
+		if (isLockedBy != ""){
+			document.getElementById("saveFormButton").disabled = true;
+			document.getElementById("saveFormButton").style.color = "grey";
+			var bar = document.getElementById("lockedInfo");
+			bar.style.display = "block";
+			}
+		document.getElementById("SectionA").style.display = "block"
+</script>
+<script>
+    var acc = document.getElementsByClassName("accordion-legacy");
+    var i;
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        /* Toggle between adding and removing the "active" class,
+        to highlight the button that controls the panel */
+        this.classList.toggle("active");
+
+        /* Toggle between hiding and showing the active panel */
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+          panel.style.display = "none";
+        } else {
+          panel.style.display = "block";
+        }
+      });
+    }
+
+
+</script>
+
+<br>
+<br>
+<br>
+<br>
+
+{% endblock content %}
