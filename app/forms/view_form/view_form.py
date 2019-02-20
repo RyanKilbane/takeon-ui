@@ -1,8 +1,8 @@
 import json
 from flask import url_for, redirect
-from app.utilities.helpers import forms_connect_to_eureka
 from flask import render_template, Blueprint, request
-from app.utilities.helpers import build_uri
+from app.utilities.helpers import build_uri, build_uri_2, forms_connect_to_eureka_validation, forms_connect_to_eureka
+
 
 view_form_blueprint = Blueprint(name='view_form',
                                 import_name=__name__,
@@ -14,13 +14,17 @@ def view_form(inqcode, period, ruref):
     print("entered view_form")
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     url_connect = build_uri(url_parameters)
-
+    pl_url_connect = build_uri_2(url_parameters)
     question_definition, contributor_details, form_responses = forms_connect_to_eureka(url_connect)
+    validations_output = forms_connect_to_eureka_validation(pl_url_connect)
 
     definition = json.loads(question_definition)
     contributor_data = json.loads(contributor_details)
     form_response = json.loads(form_responses)
-
+    print("load json")
+    validations_output = json.loads(validations_output)
+    print(type(validations_output))
+    print(validations_output)
     print(form_response)
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST":
@@ -35,4 +39,4 @@ def view_form(inqcode, period, ruref):
 
     return render_template("./view_form/FormView.html", survey=inqcode, period=period, ruref=ruref, data=definition,
                            contributor_details=contributor_data[0], responses=form_response,
-                           locked=contributor_data[0]["lockedBy"])
+                           locked=contributor_data[0]["lockedBy"], validation=validations_output)
