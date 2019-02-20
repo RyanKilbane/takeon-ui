@@ -1,5 +1,4 @@
 from os import getlogin
-import datetime
 from collections import OrderedDict
 from socket import timeout
 from urllib.error import URLError
@@ -49,6 +48,21 @@ def build_uri(url_parameters):
         if url_parameters[keys] == "":
             continue
         url_connect += "{}={};".format(keys, url_parameters[keys])
+    url_connect = url_connect[:-1]
+    return url_connect
+
+
+def build_uri_2(url_parameters):
+    """
+    :param url_parameters: dictionary
+    :return: String
+    Takes a dict and constructs the URL to the business layer
+    """
+    url_connect = ""
+    for keys in url_parameters.keys():
+        if url_parameters[keys] == "":
+            continue
+        url_connect += "{}={}&".format(keys, url_parameters[keys])
     url_connect = url_connect[:-1]
     return url_connect
 
@@ -116,36 +130,16 @@ def forms_connect_to_eureka(url):
         return render_template("TimeOutError.html", error_message=error)
 
 
-# We want to check if the record already exists, we do this by checking if createdBy exists in the dict
-def check_if_exists(original_data, updated_data):
-    data_to_return = {"Updated Responses": []}
-    for element in original_data:
-        updated_key = "questionCode:" + element + "|" + "instance:0"
-        if "createdBy" not in original_data[element].keys():
-            for index in range(len(updated_data["Updated Responses"])):
-                try:
-                    temporary_holder = {"newCreatedBy": get_user(), "newCreatedDate": str(datetime.datetime.now()),
-                                        updated_key: updated_data["Updated Responses"][index][updated_key]}
-                    data_to_return["Updated Responses"].append(temporary_holder)
-                except KeyError as error:
-                    continue
-        else:
-            for index in range(len(updated_data["Updated Responses"])):
-                try:
-                    data_to_return["Updated Responses"].append({updated_key: updated_data["Updated Responses"]
-                                                                [index][updated_key]})
-                except KeyError as error:
-                    continue
-    print("data to return: {}".format(data_to_return))
-    return data_to_return
+def forms_connect_to_eureka_validation(url):
+    from app.setup import eureka_configuration
+    # This was moved here because it's used in a couple of different forms
+    try:
+        return eureka_configuration.get_validation(url)
+    except URLError as error:
+        return render_template("UrlNotFoundError.html", error_message=error)
 
-
-def check_if_blank(form_data):
-    key_list = list(form_data.keys())
-    if not form_data[key_list[0]]:
-        return True
-    else:
-        return False
+    except timeout as error:
+        return render_template("TimeOutError.html", error_message=error)
 
 
 def build_links(links_list, name_of_link):

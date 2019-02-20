@@ -20,6 +20,7 @@ def create_app(setting_overrides=None):
     application.config['JWT_ACCESS_COOKIE_PATH'] = ''
     # application.config['JWT_SECRET_KEY'] = settings.SECRET_KEY using default secret key
     jwt = JWTManager(application)  # pylint: disable=W0612
+    application.config['CORS_HEADERS'] = 'Content-Type'
 
     if setting_overrides:
         application.config.update(setting_overrides)
