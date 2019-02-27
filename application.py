@@ -10,6 +10,6 @@ application = create_app()
 
 if __name__ == '__main__':
     manager = Manager(application)
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.getenv('PORT', 5000))
     manager.add_command("runserver", Server(threaded=True, host='0.0.0.0', port=port))
     manager.run()

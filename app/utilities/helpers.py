@@ -113,7 +113,7 @@ def build_json(data):
 
 def get_user():
     # For the moment, this just returns getLogin(), in the future this will get a cookie from the browser
-    return getlogin()
+    return "fisdba"
 
 
 def forms_connect_to_eureka(url):
