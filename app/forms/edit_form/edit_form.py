@@ -77,6 +77,58 @@ def edit_form(inqcode, period, ruref):
             return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
                                    data=definition, contributor_details=contributor_data[0], responses=form_response,
                                    validation=validations_output)
+
+        if request.form['action'] == 'saveAndValidate':
+            print("Save and validate")
+
+            # Get the form
+            form = request.form
+            print(form)
+            # Build up a contributor key
+            contributor_key_data = {'survey': inqcode, 'period': period, 'reference': ruref}
+            # Get the data from the form
+            data = {key: form[key] for key in form.keys()}
+
+            # decompose the field names from questionCode:number|instance:number to
+            # {questionCode: number, instance: number}
+            response_data = decompose_data(data)
+            original_data = build_json(form_response)
+            # print("form response: {}".format(form_response))
+            # print("original data: {}".format(original_data))
+
+            # Append the original responses to the JSON
+            response_data["Original Responses"] = original_data
+
+            # Append the username
+            response_data["user"] = {"user": get_user()}
+            # Append contributor PK
+            response_data["reference"] = ruref
+            response_data["period"] = period
+            response_data["survey"] = inqcode
+
+            # Build the URL for the contributor responses to update
+            url_connect = build_uri(contributor_key_data)
+
+            # Send the data to the business layer for processing
+            print("total json: {}".format(str(response_data)))
+            error_flag = None
+            try:
+                eureka_configuration.update_response(url_connect, response_data)
+            except Exception as error:
+                error_flag = error
+
+            if not error_flag:
+                eureka_configuration.run_validations(url_connect, )
+
+            # Get the refreshed data from the responses table
+            form_responses = eureka_configuration.form_response(url_connect)
+            form_response = json.loads(form_responses)
+
+            # Render the responses
+            return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
+                                   data=definition, contributor_details=contributor_data[0], responses=form_response,
+                                   validation=validations_output)
+
         # If the form doesn't have saveForm, then the exit button must have been pressed
         # Update the contributor table to unlock the form
         eureka_configuration.update_locked_status(url_connect, data={"lockedBy": ""})
