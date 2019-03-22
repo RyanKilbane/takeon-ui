@@ -118,11 +118,15 @@ def edit_form(inqcode, period, ruref):
                 error_flag = error
 
             if not error_flag:
-                eureka_configuration.run_validations(url_connect, )
+                eureka_configuration.run_validations(url_connect)
 
             # Get the refreshed data from the responses table
+            contributor_details = eureka_configuration.contributor_search_without_paging(url_connect)
             form_responses = eureka_configuration.form_response(url_connect)
             form_response = json.loads(form_responses)
+            validations_output = forms_connect_to_eureka_validation(pl_url_connect)
+            validations_output = json.loads(validations_output)
+            contributor_data = json.loads(contributor_details)
 
             # Render the responses
             return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,

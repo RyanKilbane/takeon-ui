@@ -110,7 +110,7 @@
             <h3>Validation</h3>
             {% for output in validation %}
             {% if output["validationFormEntity"]["severity"] == "E" %}
-                <button class="accordion-legacy" style="background-color:D0021B"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
+                <button class="accordion-legacy" style="background-color:#D0021B"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
                       <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
                 </button>
                 <div class="panel-legacy">
