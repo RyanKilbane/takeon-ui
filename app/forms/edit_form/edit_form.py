@@ -19,10 +19,15 @@ def edit_form(inqcode, period, ruref):
 
     # attempt to connect to Eureka, except common errors
 
-    question_definition, contributor_details, form_responses = forms_connect_to_eureka(url_connect)
+    try:
+        question_definition, contributor_details, form_responses = forms_connect_to_eureka(url_connect)
+    except ValueError as error:
+        return render_template("./404.html", message_header=error)
+
     validations_output = forms_connect_to_eureka_validation(pl_url_connect)
     # update contributor table to lock the form for editing
     eureka_configuration.update_locked_status(url_connect, data={"lockedBy": get_user()})
+
 
     # load the json to turn it into a usable form
     definition = json.loads(question_definition)
@@ -111,27 +116,27 @@ def edit_form(inqcode, period, ruref):
 
             # Send the data to the business layer for processing
             print("total json: {}".format(str(response_data)))
-            error_flag = None
-            try:
-                eureka_configuration.update_response(url_connect, response_data)
-            except Exception as error:
-                error_flag = error
 
-            if not error_flag:
-                eureka_configuration.run_validations(url_connect)
+            output_from_bl = eureka_configuration.run_validations(url_connect, response_data)
+            response_from_bl = json.loads(output_from_bl)
+            if not response_from_bl["error"]:
 
-            # Get the refreshed data from the responses table
-            contributor_details = eureka_configuration.contributor_search_without_paging(url_connect)
-            form_responses = eureka_configuration.form_response(url_connect)
-            form_response = json.loads(form_responses)
-            validations_output = forms_connect_to_eureka_validation(pl_url_connect)
-            validations_output = json.loads(validations_output)
-            contributor_data = json.loads(contributor_details)
+                # Get the refreshed data from the responses table
+                contributor_details = eureka_configuration.contributor_search_without_paging(url_connect)
+                form_responses = eureka_configuration.form_response(url_connect)
+                form_response = json.loads(form_responses)
+                validations_output = forms_connect_to_eureka_validation(pl_url_connect)
+                validations_output = json.loads(validations_output)
+                contributor_data = json.loads(contributor_details)
 
-            # Render the responses
-            return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
-                                   data=definition, contributor_details=contributor_data[0], responses=form_response,
-                                   validation=validations_output)
+                return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
+                                       data=definition, contributor_details=contributor_data[0],
+                                       responses=form_response,
+                                       validation=validations_output)
+
+            else:
+                return render_template("./404.html", message_header="Error in Validate on Save",
+                                       error_message=response_from_bl["error"])
 
         # If the form doesn't have saveForm, then the exit button must have been pressed
         # Update the contributor table to unlock the form
