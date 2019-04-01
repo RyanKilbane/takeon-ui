@@ -89,6 +89,7 @@
                                     <button class="btn" type="submit" id="saveFormButton" value="saveForm"
                                             name="action">Save form
                                     </button>
+                                    <button class="btn" type="submit" id="saveAndValidateButton" value="saveAndValidate" name="action">Save and validate</button>
                                     <button class="btn" type="submit" id="exitButton" value="exitForm" name="action">
                                         Exit
                                     </button>
@@ -109,7 +110,7 @@
             <h3>Validation</h3>
             {% for output in validation %}
             {% if output["validationFormEntity"]["severity"] == "E" %}
-                <button class="accordion-legacy" style="background-color:D0021B"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
+                <button class="accordion-legacy" style="background-color:#D0021B"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
                       <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
                 </button>
                 <div class="panel-legacy">
