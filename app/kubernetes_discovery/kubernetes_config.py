@@ -66,7 +66,7 @@ class KubernetesConfig:
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             output = requests.get("http://" + ip + "/Upsert/CompareResponses/{}".format(url_connect))
             requests.put("http://" + ip + "/Response/QuestionResponse/{}".format(url_connect),
-                         data=bytes(json.dumps(data), encoding="utf-8"))
+                         data=bytes(json.dumps(data), encoding="utf-8"), headers={"Content-Type": "Application/Json"})
             return output.text
 
     def get_validation(self, url_connect):
@@ -89,6 +89,17 @@ class KubernetesConfig:
         service = v1.read_namespaced_service(namespace=namespace, name=service_name)
         ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
         requests.put("http://" + ip + "/Update/LockedStatus/{}".format(url_connect),
-                     data=bytes(json.dumps(data), encoding="utf-8"))
+                     data=bytes(json.dumps(data), encoding="utf-8"), headers={"Content-Type": "Application/Json"})
 
-
+    def run_validations(self, url_connect, data):
+        if self.mock is False:
+            config.load_incluster_config()
+            service_name = "business-layer"
+            namespace = "default"
+            v1 = client.CoreV1Api()
+            service = v1.read_namespaced_service(namespace=namespace, name=service_name)
+            ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
+            output = requests.put("http://" + ip + "/validation-bl/run-all/{}".format(url_connect),
+                                  data=bytes(json.dumps(data), encoding="utf-8"),
+                                  headers={"Content-Type": "Application/Json"})
+            return output.text
