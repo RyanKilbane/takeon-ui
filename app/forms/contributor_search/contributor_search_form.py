@@ -6,7 +6,7 @@ from flask import request, Blueprint, redirect, url_for, render_template
 
 
 from app.utilities.helpers import create_form_class, create_new_dict, clean_search_parameters, build_uri, build_links
-from app.setup import eureka_configuration
+from app.setup import discovery_service
 
 contributor_search_blueprint = Blueprint(name='contributor_search',
                                          import_name=__name__,
@@ -60,7 +60,7 @@ def general_search_screen():
         if "nextButton" in request.form:
             button_value = request.form['nextButton']
             url_connect = button_value.split('/')[-1]
-            data = eureka_configuration.contributor_search(url_connect)
+            data = discovery_service.contributor_search(url_connect)
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -96,7 +96,7 @@ def general_search_screen():
         if "prevButton" in request.form:
             button_value = request.form['prevButton']
             url_connect = button_value.split('/')[-1]
-            data = eureka_configuration.contributor_search(url_connect)
+            data = discovery_service.contributor_search(url_connect)
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -133,7 +133,7 @@ def general_search_screen():
         if "firstButton" in request.form:
             button_value = request.form['firstButton']
             url_connect = button_value.split('/')[-1]
-            data = eureka_configuration.contributor_search(url_connect)
+            data = discovery_service.contributor_search(url_connect)
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -170,7 +170,7 @@ def general_search_screen():
         if "lastButton" in request.form:
             button_value = request.form['lastButton']
             url_connect = button_value.split('/')[-1]
-            data = eureka_configuration.contributor_search(url_connect)
+            data = discovery_service.contributor_search(url_connect)
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -214,7 +214,7 @@ def general_search_screen():
         # is made, the url is passed over to the Persistence layer
 
         try:
-            data = eureka_configuration.contributor_search(url_connect)
+            data = discovery_service.contributor_search(url_connect)
 
         except URLError as error:
             return render_template('./contributor_search/no_eureka_server.html', error_message=error)

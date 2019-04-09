@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, request, render_template, redirect, url_for
-from app.setup import eureka_configuration
+from app.setup import discovery_service
 from app.utilities.helpers import decompose_data, build_uri, build_json, get_user, forms_connect_to_eureka, \
                                   forms_connect_to_eureka_validation, build_uri_2
 
@@ -26,7 +26,7 @@ def edit_form(inqcode, period, ruref):
 
     validations_output = forms_connect_to_eureka_validation(pl_url_connect)
     # update contributor table to lock the form for editing
-    eureka_configuration.update_locked_status(url_connect, data={"lockedBy": get_user()})
+    discovery_service.update_locked_status(url_connect, data={"lockedBy": get_user()})
 
 
     # load the json to turn it into a usable form
@@ -72,10 +72,10 @@ def edit_form(inqcode, period, ruref):
 
             # Send the data to the business layer for processing
             print("total json: {}".format(str(response_data)))
-            eureka_configuration.update_response(url_connect, response_data)
+            discovery_service.update_response(url_connect, response_data)
 
             # Get the refreshed data from the responses table
-            form_responses = eureka_configuration.form_response(url_connect)
+            form_responses = discovery_service.form_response(url_connect)
             form_response = json.loads(form_responses)
 
             # Render the responses
@@ -117,13 +117,13 @@ def edit_form(inqcode, period, ruref):
             # Send the data to the business layer for processing
             print("total json: {}".format(str(response_data)))
 
-            output_from_bl = eureka_configuration.run_validations(url_connect, response_data)
+            output_from_bl = discovery_service.run_validations(url_connect, response_data)
             response_from_bl = json.loads(output_from_bl)
             if not response_from_bl["error"]:
 
                 # Get the refreshed data from the responses table
-                contributor_details = eureka_configuration.contributor_search_without_paging(url_connect)
-                form_responses = eureka_configuration.form_response(url_connect)
+                contributor_details = discovery_service.contributor_search_without_paging(url_connect)
+                form_responses = discovery_service.form_response(url_connect)
                 form_response = json.loads(form_responses)
                 validations_output = forms_connect_to_eureka_validation(pl_url_connect)
                 validations_output = json.loads(validations_output)
@@ -140,7 +140,7 @@ def edit_form(inqcode, period, ruref):
 
         # If the form doesn't have saveForm, then the exit button must have been pressed
         # Update the contributor table to unlock the form
-        eureka_configuration.update_locked_status(url_connect, data={"lockedBy": ""})
+        discovery_service.update_locked_status(url_connect, data={"lockedBy": ""})
         # return the user to the view form screen
         return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode,
                                 period=period))

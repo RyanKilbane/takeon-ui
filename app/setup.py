@@ -2,11 +2,13 @@ from flask import Flask
 
 from flask_jwt_extended import JWTManager
 
-from app.eureka_config import eureka_config
+# from app.eureka_config import eureka_config
+from app.kubernetes_discovery import kubernetes_config
 
 from app import settings
 
-eureka_configuration = eureka_config.EurekaConfig(mocking=settings.MOCKING)
+# eureka_configuration = eureka_config.EurekaConfig(mocking=settings.MOCKING)
+discovery_service = kubernetes_config.KubernetesConfig()
 
 
 def create_app(setting_overrides=None):
@@ -28,7 +30,7 @@ def create_app(setting_overrides=None):
     add_blueprints(application)
 
     # eureka_client_registration(application)
-    eureka_configuration.eureka_client_registration(application)
+    # eureka_configuration.eureka_client_registration(application)
 
     return application
 
