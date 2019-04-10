@@ -59,7 +59,7 @@ class KubernetesConfig:
     def update_response(self, url_connect, data):
         if self.mock is False:
             config.load_incluster_config()
-            service_name = "persistence-layer"
+            service_name = "business-layer"
             namespace = "default"
             v1 = client.CoreV1Api()
             service = v1.read_namespaced_service(namespace=namespace, name=service_name)
