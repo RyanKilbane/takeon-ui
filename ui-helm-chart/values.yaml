@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: takeonacr.azurecr.io/takeon_ui
+  repository: takeonacr.azurecr.io/takeon-ui
   tag: latest
   pullPolicy: IfNotPresent
 
