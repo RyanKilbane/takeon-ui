@@ -120,9 +120,9 @@ def forms_connect_to_eureka(url):
     from app.setup import discovery_service
     # This was moved here because it's used in a couple of different forms
     try:
-        return discovery_service.form_definition(url), \
-               discovery_service.contributor_search_without_paging(url), \
-               discovery_service.form_response(url)
+        return discovery_service.form_definition(url, "business-layer"), \
+               discovery_service.contributor_search_without_paging(url, "business-layer"), \
+               discovery_service.form_response(url, "persistance-layer")
     except URLError as error:
         return render_template("UrlNotFoundError.html", error_message=error)
 
@@ -134,7 +134,7 @@ def forms_connect_to_eureka_validation(url):
     from app.setup import discovery_service
     # This was moved here because it's used in a couple of different forms
     try:
-        return discovery_service.get_validation(url)
+        return discovery_service.get_validation(url, "validation-persistence-layer")
     except URLError as error:
         return render_template("UrlNotFoundError.html", error_message=error)
 
