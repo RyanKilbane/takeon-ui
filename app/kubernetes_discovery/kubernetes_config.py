@@ -65,9 +65,9 @@ class KubernetesConfig:
         requests.put("http://" + ip + "/Update/LockedStatus/{}".format(url_connect),
                      data=bytes(json.dumps(data), encoding="utf-8"), headers={"Content-Type": "Application/Json"})
 
-    def run_validations(self, url_connect, data):
+    def run_validations(self, url_connect, service_name, data):
         if self.mock is False:
-            service = v1.read_namespaced_service(namespace=namespace, name=service_name)
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             output = requests.put("http://" + ip + "/validation-bl/run-all/{}".format(url_connect),
                                   data=bytes(json.dumps(data), encoding="utf-8"),

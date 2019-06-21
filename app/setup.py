@@ -55,3 +55,7 @@ def add_blueprints(application):
     from app.forms.login_form.login_form import login_form_blueprint
     application.register_blueprint(login_form_blueprint)
     login_form_blueprint.config = application.config.copy()
+
+    from app.forms.lambda_test.lambda_test import lambda_test_blueprint
+    application.register_blueprint(lambda_test_blueprint)
+    lambda_test_blueprint.config = application.config.copy()
