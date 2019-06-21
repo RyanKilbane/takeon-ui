@@ -117,7 +117,7 @@ def edit_form(inqcode, period, ruref):
             # Send the data to the business layer for processing
             print("total json: {}".format(str(response_data)))
 
-            output_from_bl = discovery_service.run_validations(url_connect, response_data)
+            output_from_bl = discovery_service.run_validations(url_connect, "validation-persistance-layer", response_data)
             response_from_bl = json.loads(output_from_bl)
             if not response_from_bl["error"]:
 

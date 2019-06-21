@@ -6,12 +6,11 @@ from app.utilities.helpers import decompose_data, build_uri, build_json, get_use
 import boto3
 
 lambda_test_blueprint = Blueprint(name='lambda_test',
-                                import_name=__name__,
-                                url_prefix='/contributor_search')
+                                  import_name=__name__,
+                                  url_prefix='/contributor_search')
 
 @lambda_test_blueprint.route("/lambda_test/<name>")
 def lambda_test(name):
     client = boto3.client("lambda")
     response = client.invoke(FunctionName="takeon-lambda-test", Payload=json.dumps(name).encode("utf-8"))
     return response
-    
