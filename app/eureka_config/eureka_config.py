@@ -82,7 +82,7 @@ class EurekaConfig:
             print(url_connect)
             response_data = cli.do_service(application_name="VALIDATIONPERSISTENCELAYERAPP",
                                            method="GET",
-                                           service="/validation-pl/validations/findby?{}".format(url_connect),
+                                           service="/validation-pl/validations/return?{}".format(url_connect),
                                            timeout=20, headers={"Content-Type": "Application/Json"})
 
             return response_data
@@ -98,6 +98,19 @@ class EurekaConfig:
                        service="/Update/LockedStatus/{}".format(url_connect),
                        timeout=20, headers={"Content-Type": "Application/Json"},
                        data=bytes(json.dumps(data), encoding="utf-8"))
+
+    def run_validations(self, url_connect, data):
+        if self.mock is False:
+            cli = eureka_client.get_discovery_client()
+            validation_data = cli.do_service(application_name="BusinessLogicLayer",
+                                             method="PUT",
+                                             service="/validation-bl/run-all/{}".format(url_connect),
+                                             timeout=20, headers={"Content-Type": "Application/Json"},
+                                             data=bytes(json.dumps(data), encoding="utf-8"))
+
+            return validation_data
+
+        return None
 
 
 @requests_mock.Mocker()

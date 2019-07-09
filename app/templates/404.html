@@ -58,6 +58,8 @@
 				<div class="group">
 					<div class="col-12">
 						{% block page_header %}
+						<h1 class="jupiter main_heading">Error</h1>
+						<h2 class="neptune sub_heading">{{ message_header }}</h2>
 						{% endblock page_header %}
 					</div>
 				</div>
@@ -67,6 +69,13 @@
 	</header>
 
     {% block content %}
+
+	<div>
+		<br>
+		<br>
+		{{ error_message }}
+	</div>
+
     {% endblock content %}
 
 	<footer class="page__footer">

@@ -117,12 +117,12 @@ def get_user():
 
 
 def forms_connect_to_eureka(url):
-    from app.setup import eureka_configuration
+    from app.setup import discovery_service
     # This was moved here because it's used in a couple of different forms
     try:
-        return eureka_configuration.form_definition(url), \
-               eureka_configuration.contributor_search_without_paging(url), \
-               eureka_configuration.form_response(url)
+        return discovery_service.form_definition(url), \
+               discovery_service.contributor_search_without_paging(url), \
+               discovery_service.form_response(url)
     except URLError as error:
         return render_template("UrlNotFoundError.html", error_message=error)
 
@@ -131,10 +131,10 @@ def forms_connect_to_eureka(url):
 
 
 def forms_connect_to_eureka_validation(url):
-    from app.setup import eureka_configuration
+    from app.setup import discovery_service
     # This was moved here because it's used in a couple of different forms
     try:
-        return eureka_configuration.get_validation(url)
+        return discovery_service.get_validation(url)
     except URLError as error:
         return render_template("UrlNotFoundError.html", error_message=error)
 
