@@ -8,7 +8,7 @@ from app.kubernetes_discovery import kubernetes_config
 from app import settings
 
 # eureka_configuration = eureka_config.EurekaConfig(mocking=settings.MOCKING)
-discovery_service = kubernetes_config.KubernetesConfig("defualt", mocking=settings.MOCKING )
+discovery_service = kubernetes_config.KubernetesConfig("take-on", mocking=settings.MOCKING )
 
 
 def create_app(setting_overrides=None):
@@ -55,7 +55,3 @@ def add_blueprints(application):
     from app.forms.login_form.login_form import login_form_blueprint
     application.register_blueprint(login_form_blueprint)
     login_form_blueprint.config = application.config.copy()
-
-    from app.forms.lambda_test.lambda_test import lambda_test_blueprint
-    application.register_blueprint(lambda_test_blueprint)
-    lambda_test_blueprint.config = application.config.copy()

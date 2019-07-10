@@ -79,7 +79,7 @@
 							</div>
                               {% endfor %}
 							<button class="btn" type="submit" id="saveFormButton" value="saveForm" name="action">Save form</button>
-							<button class="btn" type="submit" id="saveAndValidateButton" value="saveAndValidate" name="action">Save and validate</button>
+							<!--<button class="btn" type="submit" id="saveAndValidateButton" value="saveAndValidate" name="action">Save and validate</button>-->
 							<button class="btn" type="submit" id="exitButton" value="exitForm" name="action">Exit</button>
 							</form>
 						</div>
@@ -116,6 +116,19 @@
 
 	<script>
 		document.getElementById("Form2").style.display = "block"
+	</script>
+
+	<script>
+		var statusMessage = "{{ status_message }}"
+		var statusAsObject = JSON.parse(statusMessage)
+		if (Object.keys(statusAsObject) === 0)
+			{}
+		else if (statusAsObject.hasOwnProperty("success")){
+			window.alert(statusAsObject.success);
+		}
+		else if (statusAsObject.hasOwnProperty("error")){
+			window.alert(statusAsObject.error)
+		}
 	</script>
 
 	<br>

@@ -89,7 +89,7 @@
                                     <button class="btn" type="submit" id="saveFormButton" value="saveForm"
                                             name="action">Save form
                                     </button>
-                                    <button class="btn" type="submit" id="saveAndValidateButton" value="saveAndValidate" name="action">Save and validate</button>
+                                    <!--<button class="btn" type="submit" id="saveAndValidateButton" value="saveAndValidate" name="action">Save and validate</button>-->
                                     <button class="btn" type="submit" id="exitButton" value="exitForm" name="action">
                                         Exit
                                     </button>
@@ -107,6 +107,7 @@
 <div class="wrapper">
         <div class="response-split">
             <!-- Accordion -->
+            <!--
             <h3>Validation</h3>
             {% for output in validation %}
             {% if output["validationFormEntity"]["severity"] == "E" %}
@@ -133,6 +134,7 @@
                 </div>
             {% endif %}
             {% endfor %}
+               -->
         </div>
     </div>
 
@@ -184,6 +186,20 @@
     }
 
 
+</script>
+
+
+<script>
+    var statusMessage = "{{ status_message }}"
+    var statusAsObject = JSON.parse(statusMessage)
+    if (Object.keys(statusAsObject) === 0)
+        {}
+    else if (statusAsObject.hasOwnProperty("success")){
+        alert(statusAsObject.success);
+    }
+    else if (statusAsObject.hasOwnProperty("error")){
+        alert(statusAsObject.error)
+    }
 </script>
 
 <br>

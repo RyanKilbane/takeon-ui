@@ -60,7 +60,7 @@ def general_search_screen():
         if "nextButton" in request.form:
             button_value = request.form['nextButton']
             url_connect = button_value.split('/')[-1]
-            data = discovery_service.contributor_search(url_connect, "persistance-layer")
+            data = discovery_service.contributor_search(url_connect, "persistence-layer")
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -96,7 +96,7 @@ def general_search_screen():
         if "prevButton" in request.form:
             button_value = request.form['prevButton']
             url_connect = button_value.split('/')[-1]
-            data = discovery_service.contributor_search(url_connect, "persistance-layer")
+            data = discovery_service.contributor_search(url_connect, "persistence-layer")
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -133,7 +133,7 @@ def general_search_screen():
         if "firstButton" in request.form:
             button_value = request.form['firstButton']
             url_connect = button_value.split('/')[-1]
-            data = discovery_service.contributor_search(url_connect, "persistance-layer")
+            data = discovery_service.contributor_search(url_connect, "persistence-layer")
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -170,7 +170,7 @@ def general_search_screen():
         if "lastButton" in request.form:
             button_value = request.form['lastButton']
             url_connect = button_value.split('/')[-1]
-            data = discovery_service.contributor_search(url_connect, "persistance-layer")
+            data = discovery_service.contributor_search(url_connect, "persistence-layer")
 
             output_data = json.loads(data)
             links = output_data['links']
@@ -214,7 +214,7 @@ def general_search_screen():
         # is made, the url is passed over to the Persistence layer
 
         try:
-            data = discovery_service.contributor_search(url_connect, "persistance-layer")
+            data = discovery_service.contributor_search(url_connect, "persistence-layer")
 
         except URLError as error:
             return render_template('./contributor_search/no_eureka_server.html', error_message=error)

@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  repository: takeonacr.azurecr.io/takeon-ui
-  tag: latest
-  pullPolicy: IfNotPresent
+  repository: jfsebastian19/takeon-ui
+  tag: test
+  pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""

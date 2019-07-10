@@ -122,7 +122,7 @@ def forms_connect_to_eureka(url):
     try:
         return discovery_service.form_definition(url, "business-layer"), \
                discovery_service.contributor_search_without_paging(url, "business-layer"), \
-               discovery_service.form_response(url, "persistance-layer")
+               discovery_service.form_response(url, "persistence-layer")
     except URLError as error:
         return render_template("UrlNotFoundError.html", error_message=error)
 

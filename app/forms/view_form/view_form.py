@@ -16,16 +16,16 @@ def view_form(inqcode, period, ruref):
     url_connect = build_uri(url_parameters)
     pl_url_connect = build_uri_2(url_parameters)
     question_definition, contributor_details, form_responses = forms_connect_to_eureka(url_connect)
-    validations_output = forms_connect_to_eureka_validation(pl_url_connect)
+    # validations_output = forms_connect_to_eureka_validation(pl_url_connect)
 
     definition = json.loads(question_definition)
     contributor_data = json.loads(contributor_details)
     form_response = json.loads(form_responses)
     print("load json")
-    validations_output = json.loads(validations_output)
-    print(type(validations_output))
-    print(validations_output)
-    print(form_response)
+    # validations_output = json.loads(validations_output)
+    # print(type(validations_output))
+    # print(validations_output)
+    # print(form_response)
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST":
         return redirect(url_for("edit_form.edit_form", ruref=ruref, inqcode=inqcode,
@@ -39,4 +39,4 @@ def view_form(inqcode, period, ruref):
 
     return render_template("./view_form/FormView.html", survey=inqcode, period=period, ruref=ruref, data=definition,
                            contributor_details=contributor_data[0], responses=form_response,
-                           locked=contributor_data[0]["lockedBy"], validation=validations_output)
+                           locked=contributor_data[0]["lockedBy"], validation={})
