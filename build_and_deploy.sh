@@ -18,7 +18,7 @@ fi
 
 if [ $2 == "deploy" ];
     then
-    kubectl apply -f ~/Downloads/takeon-ui-test.yaml
+    kubectl apply -f ~/Downloads/takeon-ui-test.yaml -n take-on
 fi
 
 if [ $2 == "logs" ];

@@ -13,7 +13,7 @@ edit_form_blueprint = Blueprint(name='edit_form',
 def edit_form(inqcode, period, ruref):
 
     # Init save_error to empty string
-    status_message = {}
+    status_message = ""
 
     # Build URI for business layer
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
@@ -84,7 +84,7 @@ def edit_form(inqcode, period, ruref):
                                       data=definition, contributor_details=contributor_data[0], responses=form_response,
                                       validation={}, status_message=json.dumps(status_message))
                 
-            status_message = {"success": "New responses saved successfully"}
+            status_message = "New responses saved successfully"
             # Get the refreshed data from the responses table
             form_responses = discovery_service.form_response(url_connect, "persistence-layer")
             form_response = json.loads(form_responses)
@@ -92,7 +92,7 @@ def edit_form(inqcode, period, ruref):
             # Render the responses
             return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
                                    data=definition, contributor_details=contributor_data[0], responses=form_response,
-                                   validation={}, status_message=json.dumps(status_message))
+                                   validation={}, status_message=status_message)
 
         if request.form['action'] == 'saveAndValidate':
             print("Save and validate")

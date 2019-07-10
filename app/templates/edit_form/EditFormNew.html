@@ -190,16 +190,13 @@
 
 
 <script>
-    var statusMessage = "{{ status_message }}"
-    var statusAsObject = JSON.parse(statusMessage)
-    if (Object.keys(statusAsObject) === 0)
-        {}
-    else if (statusAsObject.hasOwnProperty("success")){
-        alert(statusAsObject.success);
-    }
-    else if (statusAsObject.hasOwnProperty("error")){
-        alert(statusAsObject.error)
-    }
+		var statusMessage = "{{ status_message }}"
+		console.log(statusMessage)
+		if (statusMessage == "&#34;&#34;")
+			{}
+		else{
+			alert(statusMessage);
+		}
 </script>
 
 <br>

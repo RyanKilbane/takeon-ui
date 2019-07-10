@@ -119,15 +119,18 @@
 	</script>
 
 	<script>
-		var statusMessage = "{{ status_message }}"
+		var statusMessage = '{{ status_message }}'
+		var message = "{}"
+		var second_message = '{}'
+		console.log(statusMessage)
 		var statusAsObject = JSON.parse(statusMessage)
 		if (Object.keys(statusAsObject) === 0)
 			{}
 		else if (statusAsObject.hasOwnProperty("success")){
-			window.alert(statusAsObject.success);
+			alert(statusAsObject.success);
 		}
 		else if (statusAsObject.hasOwnProperty("error")){
-			window.alert(statusAsObject.error)
+			alert(statusAsObject.error)
 		}
 	</script>
 
