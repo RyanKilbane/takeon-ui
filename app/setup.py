@@ -8,7 +8,7 @@ from app.kubernetes_discovery import kubernetes_config
 from app import settings
 
 # eureka_configuration = eureka_config.EurekaConfig(mocking=settings.MOCKING)
-discovery_service = kubernetes_config.KubernetesConfig()
+discovery_service = kubernetes_config.KubernetesConfig("take-on", mocking=settings.MOCKING )
 
 
 def create_app(setting_overrides=None):
