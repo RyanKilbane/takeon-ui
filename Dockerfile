@@ -1,5 +1,5 @@
 FROM python:3.7.2-alpine3.9
-# ENV MOCKING=True
+ENV MOCKING=True
 EXPOSE 5000
 WORKDIR /TakeOnUi
 COPY . /TakeOnUi
