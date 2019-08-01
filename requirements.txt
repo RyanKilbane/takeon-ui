@@ -39,8 +39,8 @@ pyasn1-modules==0.2.4
 PyJWT==1.7.1
 pylint==2.2.2
 pylint-runner==0.5.4
-pytest==3.5.0
-pytest-cov==2.5.1
+pytest==5.1.0
+pytest-cov==2.7.1
 python-dateutil==2.8.0
 PyYAML==5.1
 requests==2.19.1
