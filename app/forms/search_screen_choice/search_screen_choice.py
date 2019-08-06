@@ -4,6 +4,24 @@ search_screen_choice_blueprint = Blueprint(name='search_selection',
                                            import_name=__name__)
 
 
+#################################################################################################
+# ######################################## FLASK ENDPOINTS ######################################
+#################################################################################################
+@search_screen_choice_blueprint.errorhandler(404)
+def not_found(e):
+    return render_template('./error_templates/404.html', message_header=e), 404
+
+
+@search_screen_choice_blueprint.errorhandler(403)
+def not_auth(e):
+    return render_template('./error_templates/403.html', message_header=e), 403
+
+
+@search_screen_choice_blueprint.errorhandler(500)
+def internal_server_error(e):
+    return render_template('./error_templates/500.html', message_header=e), 500
+
+
 @search_screen_choice_blueprint.route('/', methods=['GET', 'POST'])
 def general_search_screen_selection():
     if request.method == "POST":

@@ -2,7 +2,7 @@ import os
 import json
 import requests
 from py_eureka_client import eureka_client
-from flask import flash
+from flask import flash, Flask
 import requests_mock
 from app.mock_suite import mock_suite
 from kubernetes import client, config
@@ -21,7 +21,6 @@ class KubernetesConfig:
             service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip_addresss = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             output = requests.get("http://" + ip_addresss + "/contributor/searchByLikePageable/{}".format(url_connect))
-            flash("IT WORKS!!!!!")
             return output.text
         
         return mock_contributor_search_screen(url_connect=url_connect).text
