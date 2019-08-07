@@ -7,7 +7,25 @@ from app.utilities.helpers import decompose_data, build_uri, build_json, get_use
 edit_form_blueprint = Blueprint(name='edit_form',
                                 import_name=__name__,
                                 url_prefix='/contributor_search')
-         
+
+
+#################################################################################################
+# ######################################## FLASK ENDPOINTS ######################################
+#################################################################################################
+@edit_form_blueprint.errorhandler(404)
+def not_found(e):
+    return render_template('./error_templates/404.html', message_header=e), 404
+
+
+@edit_form_blueprint.errorhandler(403)
+def not_auth(e):
+    return render_template('./error_templates/403.html', message_header=e), 403
+
+
+@edit_form_blueprint.errorhandler(500)
+def internal_server_error(e):
+    return render_template('./error_templates/500.html', message_header=e), 500
+
 
 @edit_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/editform', methods=['GET', 'POST'])
 def edit_form(inqcode, period, ruref):
@@ -22,15 +40,11 @@ def edit_form(inqcode, period, ruref):
 
     # attempt to connect to Eureka, except common errors
 
-    try:
-        question_definition, contributor_details, form_responses = forms_connect_to_eureka(url_connect)
-    except ValueError as error:
-        return render_template("./404.html", message_header=error)
+    question_definition, contributor_details, form_responses = forms_connect_to_eureka(url_connect)
 
     # validations_output = forms_connect_to_eureka_validation(pl_url_connect)
     # update contributor table to lock the form for editing
     discovery_service.update_locked_status(url_connect, "persistence-layer", data={"lockedBy": get_user()})
-
 
     # load the json to turn it into a usable form
     definition = json.loads(question_definition)

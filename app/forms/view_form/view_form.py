@@ -9,6 +9,24 @@ view_form_blueprint = Blueprint(name='view_form',
                                 url_prefix='/contributor_search')
 
 
+#################################################################################################
+# ######################################## FLASK ENDPOINTS ######################################
+#################################################################################################
+@view_form_blueprint.errorhandler(404)
+def not_found(e):
+    return render_template('./error_templates/404.html', message_header=e), 404
+
+
+@view_form_blueprint.errorhandler(403)
+def not_auth(e):
+    return render_template('./error_templates/403.html', message_header=e), 403
+
+
+@view_form_blueprint.errorhandler(500)
+def internal_server_error(e):
+    return render_template('./error_templates/500.html', message_header=e), 500
+
+
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/viewform', methods=['GET', 'POST'])
 def view_form(inqcode, period, ruref):
     print("entered view_form")
