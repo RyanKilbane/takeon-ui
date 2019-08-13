@@ -1,5 +1,9 @@
 import json
 
+#Mocking
+import app.settings
+import hashlib
+
 from urllib.error import URLError
 #from content_management import Content
 from flask import request, Blueprint, redirect, url_for, render_template
@@ -7,6 +11,8 @@ from flask_jwt_extended import jwt_required
 
 from app.utilities.helpers import create_form_class, create_new_dict, clean_search_parameters, build_uri, build_links
 from app.setup import discovery_service
+
+
 
 contributor_search_blueprint = Blueprint(name='contributor_search',
                                          import_name=__name__,
@@ -224,8 +230,18 @@ def general_search_screen():
         # Make a get request from the built up URL, when the request
         # is made, the url is passed over to the Persistence layer
 
-        data = discovery_service.contributor_search(url_connect, "persistence-layer")
-
+        if app.settings.MOCKING is False:
+            data = discovery_service.contributor_search(url_connect, "persistence-layer")
+        else:
+            string_value = str(request.form)
+            hash_value = hashlib.md5(string_value.encode()).hexdigest()
+            try:
+                with open('app/mock_suite/dummy_data/BDD/'+str(hash_value)+".json", 'r') as myfile:
+                    data = myfile.read()
+            except FileNotFoundError:
+                print("Mocking file was not found. Looking for "+str(hash_value)+".json")
+                with open('app/mock_suite/dummy_data/BDD/failed.json', 'r') as myfile:
+                    data = myfile.read()
     # take the JSON string and turn is into a Python object, the resulting object should be a list of dictionaries
     # Extracting content and links for pagination
         output_data = json.loads(data)
