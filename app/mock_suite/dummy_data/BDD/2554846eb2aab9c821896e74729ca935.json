@@ -1,0 +1,103 @@
+{
+    "links": [
+        {
+            "rel": "first",
+            "href": "http://localhost:8080/contributor/searchByLikePageable/reference=499;period=2017?page=0&size=10&sort=period,desc",
+            "hreflang": null,
+            "media": null,
+            "title": null,
+            "type": null,
+            "deprecation": null
+        },
+        {
+            "rel": "self",
+            "href": "http://localhost:8080/contributor/searchByLikePageable/reference=499;period=2017",
+            "hreflang": null,
+            "media": null,
+            "title": null,
+            "type": null,
+            "deprecation": null
+        },
+        {
+            "rel": "next",
+            "href": "http://localhost:8080/contributor/searchByLikePageable/reference=499;period=2017?page=1&size=10&sort=period,desc",
+            "hreflang": null,
+            "media": null,
+            "title": null,
+            "type": null,
+            "deprecation": null
+        },
+        {
+            "rel": "last",
+            "href": "http://localhost:8080/contributor/searchByLikePageable/reference=499;period=2017?page=152&size=10&sort=period,desc",
+            "hreflang": null,
+            "media": null,
+            "title": null,
+            "type": null,
+            "deprecation": null
+        }
+    ],
+    "content": [
+
+        {
+            "reference": "49900000105",
+            "period": "201712",
+            "survey": "066",
+            "formid": 4,
+            "status": "Overridden",
+            "receiptDate": null,
+            "lockedBy": "",
+            "lockedDate": null,
+            "createdBy": "Frank",
+            "createdDate": "2018-12-21 13:51:34.8120080 +00:00",
+            "lastUpdatedBy": "kilbar",
+            "lastUpdatedDate": "2019-01-23 11:12:42.1870000 +00:00",
+            "formType": "0004",
+            "checkletter": "E",
+            "frozenSicOutdated": "56423",
+            "ruSicOutdated": "56424",
+            "frozenSic": "56426",
+            "ruSic": "56424",
+            "frozenEmployees": 300182,
+            "employees": 476451,
+            "frozenEmployment": 246017,
+            "employment": 406073,
+            "frozenFteEmployment": 335716.880,
+            "fteEmployment": 163793.530,
+            "frozenTurnover": 965988,
+            "turnover": 715045,
+            "enterpriseReference": "9900864929",
+            "wowEnterpriseReference": "442726249",
+            "cellNumber": "620",
+            "currency": "S",
+            "vatReference": "123456789012",
+            "payeReference": "3210987654321",
+            "companyRegistrationNumber": "123456",
+            "numberLiveLocalUnits": 9674,
+            "numberLiveVat": 1955,
+            "numberLivePaye": 7724,
+            "legalStatus": "8",
+            "reportingUnitMarker": "A",
+            "region": "AA",
+            "birthDate": "",
+            "enterpriseName": "An enterprise name",
+            "name": "A reference name",
+            "address": "A random reference address",
+            "postcode": "A9 9AA",
+            "tradingStyle": "A random trading style",
+            "contact": "Mr contact person",
+            "telephone": "01234 567 890",
+            "fax": "+0044 1234 567 891",
+            "selectionType": "G",
+            "inclusionExclusion": "X",
+            "links": []
+        }
+        
+    ],
+    "page": {
+        "size": 10,
+        "totalElements": 1530,
+        "totalPages": 153,
+        "number": 0
+    }
+}
