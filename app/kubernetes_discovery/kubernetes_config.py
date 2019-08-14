@@ -24,7 +24,6 @@ class KubernetesConfig:
             ip_addresss = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             output = requests.get("http://" + ip_addresss + "/contributor/searchByLikePageable/{}".format(url_connect))
             return output.text
-        print("Mocking search screen "+str(url_connect))
         return mock_contributor_search_screen(url_connect=url_connect).text
         # return mock_contributor_search_screen_no_error(url_connect=url_connect).text
         # return mock_contributor_search_screen_error_blank(url_connect=url_connect).text
