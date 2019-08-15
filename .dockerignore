@@ -6,3 +6,5 @@ dockerfile
 readme.md
 *.imi
 Jenkinsfile
+venv
+tests

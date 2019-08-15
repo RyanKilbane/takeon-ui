@@ -7,10 +7,13 @@ from app.utilities.helpers import decompose_data, build_uri, build_json, get_use
 edit_form_blueprint = Blueprint(name='edit_form',
                                 import_name=__name__,
                                 url_prefix='/contributor_search')
-
+         
 
 @edit_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/editform', methods=['GET', 'POST'])
 def edit_form(inqcode, period, ruref):
+
+    # Init save_error to empty string
+    status_message = ""
 
     # Build URI for business layer
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
@@ -24,16 +27,16 @@ def edit_form(inqcode, period, ruref):
     except ValueError as error:
         return render_template("./404.html", message_header=error)
 
-    validations_output = forms_connect_to_eureka_validation(pl_url_connect)
+    # validations_output = forms_connect_to_eureka_validation(pl_url_connect)
     # update contributor table to lock the form for editing
-    discovery_service.update_locked_status(url_connect, data={"lockedBy": get_user()})
+    discovery_service.update_locked_status(url_connect, "persistence-layer", data={"lockedBy": get_user()})
 
 
     # load the json to turn it into a usable form
     definition = json.loads(question_definition)
     contributor_data = json.loads(contributor_details)
     form_response = json.loads(form_responses)
-    validations_output = json.loads(validations_output)
+    # validations_output = json.loads(validations_output)
 
     # Only run the following code if the UI has submitted a POST request
     if request.method == "POST":
@@ -45,6 +48,7 @@ def edit_form(inqcode, period, ruref):
             # Get the form
             form = request.form
             print(form)
+            print(form_response)
             # Build up a contributor key
             contributor_key_data = {'survey': inqcode, 'period': period, 'reference': ruref}
             # Get the data from the form
@@ -72,16 +76,23 @@ def edit_form(inqcode, period, ruref):
 
             # Send the data to the business layer for processing
             print("total json: {}".format(str(response_data)))
-            discovery_service.update_response(url_connect, response_data)
-
+            try:
+                discovery_service.update_response(url_connect, "business-layer", response_data)
+            except Exception as error:
+                status_message = {"Error": "There was an error when attempting to save new responses:\n{}".format(error)}
+                return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
+                                      data=definition, contributor_details=contributor_data[0], responses=form_response,
+                                      validation={}, status_message=json.dumps(status_message))
+                
+            status_message = "New responses saved successfully"
             # Get the refreshed data from the responses table
-            form_responses = discovery_service.form_response(url_connect)
+            form_responses = discovery_service.form_response(url_connect, "persistence-layer")
             form_response = json.loads(form_responses)
 
             # Render the responses
             return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
                                    data=definition, contributor_details=contributor_data[0], responses=form_response,
-                                   validation=validations_output)
+                                   validation={}, status_message=status_message)
 
         if request.form['action'] == 'saveAndValidate':
             print("Save and validate")
@@ -117,13 +128,13 @@ def edit_form(inqcode, period, ruref):
             # Send the data to the business layer for processing
             print("total json: {}".format(str(response_data)))
 
-            output_from_bl = discovery_service.run_validations(url_connect, response_data)
+            output_from_bl = discovery_service.run_validations(url_connect, "validation-persistence-layer", response_data)
             response_from_bl = json.loads(output_from_bl)
             if not response_from_bl["error"]:
 
                 # Get the refreshed data from the responses table
-                contributor_details = discovery_service.contributor_search_without_paging(url_connect)
-                form_responses = discovery_service.form_response(url_connect)
+                contributor_details = discovery_service.contributor_search_without_paging(url_connect, "business-layer")
+                form_responses = discovery_service.form_response(url_connect, "persistence-layer")
                 form_response = json.loads(form_responses)
                 validations_output = forms_connect_to_eureka_validation(pl_url_connect)
                 validations_output = json.loads(validations_output)
@@ -132,7 +143,7 @@ def edit_form(inqcode, period, ruref):
                 return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
                                        data=definition, contributor_details=contributor_data[0],
                                        responses=form_response,
-                                       validation=validations_output)
+                                       validation={})
 
             else:
                 return render_template("./404.html", message_header="Error in Validate on Save",
@@ -140,7 +151,7 @@ def edit_form(inqcode, period, ruref):
 
         # If the form doesn't have saveForm, then the exit button must have been pressed
         # Update the contributor table to unlock the form
-        discovery_service.update_locked_status(url_connect, data={"lockedBy": ""})
+        discovery_service.update_locked_status(url_connect, "persistence-layer", data={"lockedBy": ""})
         # return the user to the view form screen
         return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode,
                                 period=period))
@@ -148,4 +159,4 @@ def edit_form(inqcode, period, ruref):
     # Render the screen
     return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref, data=definition,
                            contributor_details=contributor_data[0], responses=form_response,
-                           locked=contributor_data[0]["lockedBy"], validation=validations_output)
+                           locked=contributor_data[0]["lockedBy"], validation={}, status_message=json.dumps(status_message))
