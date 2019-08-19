@@ -1,12 +1,14 @@
 import json
 
 from urllib.error import URLError
+#from content_management import Content
 from flask import request, Blueprint, redirect, url_for, render_template
-# from flask_jwt_extended import jwt_required
-
+from flask_jwt_extended import jwt_required
 
 from app.utilities.helpers import create_form_class, create_new_dict, clean_search_parameters, build_uri, build_links
 from app.setup import discovery_service
+
+
 
 contributor_search_blueprint = Blueprint(name='contributor_search',
                                          import_name=__name__,
@@ -20,8 +22,18 @@ headers = ['reference', 'period', 'survey', 'status', 'formId']
 # ######################################## FLASK ENDPOINTS ######################################
 #################################################################################################
 @contributor_search_blueprint.errorhandler(404)
-def not_found():
-    return render_template('404.html'), 404
+def not_found(e):
+    return render_template('./error_templates/404.html', message_header=e), 404
+
+
+@contributor_search_blueprint.errorhandler(403)
+def not_auth(e):
+    return render_template('./error_templates/403.html', message_header=e), 403
+
+
+@contributor_search_blueprint.errorhandler(500)
+def internal_server_error(e):
+    return render_template('./error_templates/500.html', message_header=e), 500
 
 
 @contributor_search_blueprint.route('/')
@@ -135,6 +147,7 @@ def general_search_screen():
             url_connect = button_value.split('/')[-1]
             data = discovery_service.contributor_search(url_connect, "persistence-layer")
 
+
             output_data = json.loads(data)
             links = output_data['links']
             content = output_data['content']
@@ -213,16 +226,11 @@ def general_search_screen():
         # Make a get request from the built up URL, when the request
         # is made, the url is passed over to the Persistence layer
 
-        try:
-            data = discovery_service.contributor_search(url_connect, "persistence-layer")
+        data = discovery_service.contributor_search(url_connect, "persistence-layer")
 
-        except URLError as error:
-            return render_template('./contributor_search/no_eureka_server.html', error_message=error)
-
-        # take the JSON string and turn is into a Python object, the resulting object should be a list of dictionaries
-        # Extracting content and links for pagination
+    # take the JSON string and turn is into a Python object, the resulting object should be a list of dictionaries
+    # Extracting content and links for pagination
         output_data = json.loads(data)
-        print(output_data)
         links = output_data['links']
         content = output_data['content']
 
@@ -237,6 +245,7 @@ def general_search_screen():
         last_page = page_info['totalPages'] - 1
 
         print("Current Page: " + str(current_page))
+
 
         first_link = build_links(links, 'first')
         next_link = build_links(links, 'next')

@@ -18,9 +18,9 @@ def create_app(setting_overrides=None):
     # Configurations
     application.config.from_object(settings)
     application.config['JWT_TOKEN_LOCATION'] = ['cookies']  # store token in cookies
-    # application.config['JWT_COOKIE_SECURE'] = True  # cookies can only be sent over https
+    application.config['JWT_COOKIE_SECURE'] = True  # cookies can only be sent over https
     application.config['JWT_ACCESS_COOKIE_PATH'] = ''
-    # application.config['JWT_SECRET_KEY'] = settings.SECRET_KEY using default secret key
+    application.config['JWT_SECRET_KEY'] = settings.SECRET_KEY  # using default secret key
     jwt = JWTManager(application)  # pylint: disable=W0612
     application.config['CORS_HEADERS'] = 'Content-Type'
 
