@@ -1,7 +1,7 @@
 .tabs li {
   float: left;
   width: 20%;
-  list-style:none;
+  list-style: none;
   padding: 0;
   margin: 0;
 }
@@ -34,15 +34,9 @@ ul {
   color: #033E58;
 }
 
-.tabs a:focus{
+.tabs a:focus {
   outline: none;
   background-color: none;
-}
-
-.clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
 }
 
 /*#tab1, #tab2, #tab3, #tab4, #tab5 {
