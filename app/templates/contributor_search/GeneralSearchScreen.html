@@ -20,7 +20,7 @@
 			<div class="grid grid--flex grid--gutterless grid--vertical-center grid--no-wrap">
 
 				<div class="field-group searchTop">
-
+					<form method="post">
 					{% from "RenderForms.html" import render_field %}
 					{% for i in fields.keys() %}
 					<p class="field">
@@ -33,7 +33,7 @@
 					</span>
 					{% endfor %}
 					<button class="btn" type="submit"><span class="btn__inner">Search</span></button>
-
+					</form>
 				</div>
 			</div>
 		</div>
