@@ -63,13 +63,26 @@
     {% block content %}
     {% endblock content %}
 
-	<footer class="page__footer">
-		<div class="wrapper">
-			<div class="group">
-				This is a work in progress
+	<footer class="footer " data-ga-element="footer">
+		<div class="container">
+		  <div class="grid">
+			<div class="grid__col col-4@m">
+			 This is a work in progress
+
 			</div>
+			<div class="grid__col u-mt-m u-mb-m">
+			  <hr class="footer__hr">
+			</div>
+			<div class="grid__col">
+			  <div class="footer__license">
+				<img alt="OGL" class="footer__ogl-img" src="{{ url_for('static',filename='img/UKOpenGovernmentLicence-grey.svg') }}">
+				All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" class="footer__link">Open Government Licence v3.0</a>, except where otherwise stated
+			  </div>
+			</div>
+		  </div>
 		</div>
-	</footer>
+	  </footer>
+
 
 </body>
 
