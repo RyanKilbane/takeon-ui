@@ -9,13 +9,12 @@
 
 {% endblock page_header %}
 
-
+<br>
 {% block content %}
-    <div>
-        <div class="wrapper">
-            <div class="group">
-                <div class="col-12">
-                    <h1 class="jupiter">{{ contributor_details['enterpriseName'] }}</h1>
+    <div class="panel panel--info panel--simple">
+        <div class="panel__body">
+            
+                    <h1>{{ contributor_details['enterpriseName'] }}</h1>
                     <p><b>Reference:</b> {{ contributor_details['reference'] }}
                         <b>Period:</b> {{ contributor_details['period'] }}
                         <b>Survey:</b> {{ contributor_details['survey'] }}
@@ -23,9 +22,6 @@
                         <b>Receipt Date:</b> {{ contributor_details['receiptDate'] }}
                         <b>Last Updated By:</b> {{ contributor_details['lastUpdatedBy'] }}
                         <b>Last Updated Date:</b> {{ contributor_details['lastUpdatedDate'] }} </p>
-                    <hr>
-                </div>
-            </div>
         </div>
     </div>
 
