@@ -11,6 +11,20 @@
 
 <br>
 {% block content %}
+
+
+<div id="lockedInfo" style="display:block">
+        <div class="panel panel--error panel--simple" >
+            <div class="panel__error">
+                <div class="u-fs-r--b">Form locked</div>
+            </div>
+            <div class="panel__body">
+                <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been checked back in.</div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
             
@@ -25,18 +39,7 @@
         </div>
     </div>
 
-	<div class="col-8">
-	    <div id="lockedInfo" style="display:none">
-		    <div class="panel panel--info" >
-		        <div class="panel__header">
-			        <div class="u-fs-r--b">Form locked</div>
-		        </div>
-		        <div class="panel__body">
-			        <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been checked back in.</div>
-		        </div>
-		    </div>
-        </div>
-	</div>
+	
 
     <div class="wrapper">
         <div class="response-split">
