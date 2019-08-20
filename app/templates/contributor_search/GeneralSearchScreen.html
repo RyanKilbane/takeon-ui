@@ -5,58 +5,66 @@
 
 
 {% block page_header %}
-	<h1 class="jupiter main_heading">Search</h1>
+<h1 class="jupiter header__title">Search</h1>
 {% endblock page_header %}
 
 
 {% block content %}
 
-	<section>
-		<div id="lockedInfo" style="color:red;display:none">This form is currently checked out to</div>
-		<div class="search_bar ">
-			<div class="wrapper" >
-				<div class="group" >
-					<form method="post" style="white-space: wrap">
-						<div class="row">
-							<div  style="white-space: wrap">
-							{% from "RenderForms.html" import render_field %}
-                            {% for i in fields.keys() %}
-								<div class="col-sm-3" >
+<section>
+	<div id="lockedInfo" style="color:red;display:none">This form is currently checked out to</div>
+
+
+	<div class="phase-banner">
+		<div class="">
+			<div class="grid grid--flex grid--gutterless grid--vertical-center grid--no-wrap">
+
+				<div class="field-group">
+
+					{% from "RenderForms.html" import render_field %}
+					{% for i in fields.keys() %}
+					<p class="field">
+						<span class="input-type">
+							<span class="input-type__inner">
+
 								{{ render_field(fields[i]) }}
-								</div>
-								{% endfor %}
-								<div>
-								<button class="btn btn--small btn-divider" type="submit">Search</button>
-								</div>
-							</div>
-						</div>
-					</form>
+					</p>
+					</span>
+					</span>
+					{% endfor %}
+					<button class="btn" type="submit"><span class="btn__inner">Search</span></button>
+
 				</div>
 			</div>
 		</div>
 
+	</div>
 
-		<div>
-			<div class="wrapper">
 
-				<div class="group">
-					<div class="col-12">
-						<div style="overflow:auto;">
+	<div>
+		<div class="wrapper">
+
+			<div class="group">
+				<div class="col-12">
+					<div style="overflow:auto;">
 						<table id="ResultsTable" class="table table__dense">
 							<thead class="table--head caps-first-letter">
-                            <th></th> <!--Blank column for view form button-->
-							<!--Render each column name -->
-							{% for column in header %}
+								<th></th>
+								<!--Blank column for view form button-->
+								<!--Render each column name -->
+								{% for column in header %}
 								<th class="table--header--cell"> {{ column }}
-							{% endfor %}
+									{% endfor %}
 							</thead>
 							<tbody>
 								<!-- for each record, render each data value -->
 								{% for record in records %}
 
 								<tr class="table--row">
-									<td><a href="{{ record['survey'] }}/{{ record['period'] }}/{{ record['reference'] }}/viewform" target="_blank">
-                                        <input class="btn btn--small" name="formButton" value="View Form" type="submit"></a></td>
+									<td><a href="{{ record['survey'] }}/{{ record['period'] }}/{{ record['reference'] }}/viewform"
+											target="_blank">
+											<input class="btn btn--small" name="formButton" value="View Form"
+												type="submit"></a></td>
 									<!-- Use .values() method to get values from each row dict -->
 									{% for element in record.values() %}
 									<td class="table--cell">{{ element }}</td>
@@ -71,62 +79,62 @@
 			</div>
 			<h1>{{ message }}</h1>
 		</div>
-	</section>
+</section>
 
-	<br>
+<br>
 
-	<div class="button-container">
-		{% if first_url %}
-    <form method="post"><button class="btn btn--small" name="firstButton" value="{{ first_url }}" id="first" type="submit">First</button></form>
-    {% endif %}
-    {% if prev_url %}
-		<form method="post"><button class="btn btn--small" name="prevButton" value="{{ prev_url }}" id="prev" type="submit"> << </button></form>
-    {% endif %}
-	{% if next_url %}
-		<form method="post"><button class="btn btn--small" name="nextButton" value="{{ next_url }}" id="next" type="submit"> >> </button></form>
+<div class="button-container">
+	{% if first_url %}
+	<form method="post"><button class="btn btn--small" name="firstButton" value="{{ first_url }}" id="first"
+			type="submit">First</button></form>
+	{% endif %}
+	{% if prev_url %}
+	<form method="post"><button class="btn btn--small" name="prevButton" value="{{ prev_url }}" id="prev" type="submit">
+			<< </button> </form> {% endif %} {% if next_url %} <form method="post"><button class="btn btn--small"
+					name="nextButton" value="{{ next_url }}" id="next" type="submit"> >> </button></form>
 	{% endif %}
 	{% if last_url %}
-		<form method="post"><button class="btn btn--small" name="lastButton" value="{{ last_url }}" id="last" type="submit">Last</button></form>
+	<form method="post"><button class="btn btn--small" name="lastButton" value="{{ last_url }}" id="last"
+			type="submit">Last</button></form>
 	{% endif %}
+</div>
+
+<br>
+<br>
+
+<div class="panel panel--success">
+	{% if current_page >= 0 %}
+	<div class="panel__header" id="hide_panel" style="background-color:#edf4f0">
+		<div class="venus"><span style="color: black; ">Page {{ current_page }} of {{ last_page }}</span></div>
+		{% endif %}
 	</div>
-
-    <br>
-	<br>
-
-    <div class="panel panel--success">
-            {% if current_page >= 0 %}
-		<div class="panel__header" id="hide_panel" style="background-color:#edf4f0">
-			<div class="venus" ><span style="color: black; ">Page {{ current_page }} of {{ last_page }}</span></div>
-            {% endif %}
-        </div>
-    <div class="panel__body">
-            {% if total_records %}
-            <div>Total Records: {{ total_records }}</div>
-            {% endif %}
-        </div>
-    </div>
+	<div class="panel__body">
+		{% if total_records %}
+		<div>Total Records: {{ total_records }}</div>
+		{% endif %}
+	</div>
+</div>
 
 
-	<br>
-	<br>
-	<br>
-	<br>
+<br>
+<br>
+<br>
+<br>
 
 <script>
 	var statusMessage = "{{ status_message }}"
 	console.log(statusMessage)
-	if (statusMessage == "&#34;&#34;")
-		{}
-	else{
+	if (statusMessage == "&#34;&#34;") { }
+	else {
 		//alert(statusMessage);
 	}
 </script>
 
 <script>
-    var rows = document.getElementById("ResultsTable");
-    if(rows.length === 0){
-        document.getElementById("hide_panel").style.display = "none";
-       }
+	var rows = document.getElementById("ResultsTable");
+	if (rows.length === 0) {
+		document.getElementById("hide_panel").style.display = "none";
+	}
 </script>
 
 {% endblock content %}
