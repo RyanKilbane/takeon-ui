@@ -83,14 +83,61 @@
                 </select><label class="label">Q9542</label> <br>
                 Total amount of web sales <br>
                 <input type="text" name="WebSales" class="input input--text input-type__input"> <label class="label">Q3541</label> <br>
-                Percentage of Male employees in a technical role<br>
-                <input type="text" name="MalePercentage" class="input input--text input-type__input" style="padding-right:20px; text-align:right;"
-                    value=""> </input> <span style="margin-left:-20px;">% </span><label class="label">Q3251</label>
-                <br>
-                Percentage of Female employees in a technical role<br>
-                <input type="text" name="FemalePercentage"  class="input input--text input-type__input"style="padding-right:20px; text-align:right;"
-                    value=""> </input> <span style="margin-left:-20px;">% </span><label class="label">Q7415</label>
-                <br>
+
+                <p class="field">
+                        <label class="label" for="suffixed-malePercentage">Percentage of Male employees in a technical role
+                                <br>
+                                <span class="label__description" style="color:red">Q3251</span>
+                            
+                        </label>
+                        <span class="input-type">
+                                      <span class="input-type__inner">
+                              <input
+                                  type="number"
+                                  class="input input--text input-type__input input--w-4"
+                                  title="MalePercentage"
+                                  pattern="[0-9]*"
+                                  inputmode="numeric"
+                                  autocomplete="off"
+                                  required="true" 
+                              />
+                                          <abbr
+                                              class="input-type__type"
+                                              aria-hidden="true"
+                                              title="%"
+                                              >%</abbr>
+                                      </span>
+                        </span>
+                      </p>
+
+
+                      <p class="field">
+                            <label class="label" for="suffixed-femalePercentage">Percentage of Female employees in a technical role
+                                    <br>
+                                    <span class="label__description" style="color:red">Q7415</span>
+                                
+                            </label>
+                            <span class="input-type">
+                                          <span class="input-type__inner">
+                                  <input
+                                      type="number"
+                                      class="input input--text input-type__input input--w-4"
+                                      title="femalePercentage"
+                                      pattern="[0-9]*"
+                                      inputmode="numeric"
+                                      autocomplete="off"
+                                      required="true" 
+                                  />
+                                              <abbr
+                                                  class="input-type__type"
+                                                  aria-hidden="true"
+                                                  title="%"
+                                                  >%</abbr>
+                                          </span>
+                            </span>
+                          </p>
+
+              
             </form>
         </div>
 
