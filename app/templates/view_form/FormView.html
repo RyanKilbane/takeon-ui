@@ -42,7 +42,7 @@
 
 
 
-<div>
+<div class="mainContent">
 
     <form method="post" id="save">
         <button class="btn" type="submit" id="editFormButton" value="saveForm" name="action" onclick="submitForm()">
@@ -114,14 +114,22 @@
         </div>
 
         <div id="SectionA" class="tabcontent">
+            <h2>SectionA</h2>
             {% for datum in data %}
             <div>
-                {{ datum["displayQuestionNumber"] }} <strong>{{ datum["displayText"] }}</strong><br>
-                <input name="response:{{ datum['questionCode'] }}"
-                    value="{{ responses[datum['questionCode']]['response'] }}"
-                    id="questionCode:{{ datum['questionCode'] }}|instance:{{ datum['instance'] }}" class="input input--text input-type__input"
-                    readonly>
-                <span style="color:red">{{ datum["questionCode"] }}</span>
+                    <p class="field">
+                            <label class="label">{{ datum["displayQuestionNumber"] }} <strong>{{ datum["displayText"] }}</strong>
+                                <br>
+                                <span class="label__description" style="color:red">{{ datum["questionCode"] }}</span>
+                              </label>
+                            <input name="response:{{ datum['questionCode'] }}"
+                            value="{{ responses[datum['questionCode']]['response'] }}"
+                            id="questionCode:{{ datum['questionCode'] }}|instance:{{ datum['instance'] }}" class="input input--text input-type__input"
+                            readonly>
+                        </p>
+               
+               
+                
                 <br>
                 <br>
             </div>
