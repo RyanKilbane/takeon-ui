@@ -92,7 +92,7 @@
 <br>
 
 <nav class="pagination " arial-label="Page {{ current_page }} of {{ last_page }}">
-		<div class="pagination__position">Page {{ current_page }} of {{ last_page }}</div>
+		
 		<ul class="pagination__items">
 				{% if first_url %}
 		  <li class="pagination__item pagination__item--first">
@@ -116,6 +116,13 @@
 			  </li>
 			  {% endif %}
 			</ul>
+
+			{% if current_page >= 0 %}
+		<div class="pagination__position">Page {{ current_page }} of {{ last_page }}</div>
+		{% endif %}
+		{% if total_records %}
+		<div class="pagination__position">Total Records: {{ total_records }}</div>
+		{% endif %}
 		  </nav>
 
 
