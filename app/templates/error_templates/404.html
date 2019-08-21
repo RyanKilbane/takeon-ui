@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}404 - Page not found {% endblock title %}
+{% block title %}Page not found {% endblock title %}
 
 
 {% block page_header %}
 
-<h1 class="main_heading">404 - Page not found</h1>
+<h1 class="main_heading">Take-on</h1>
 
 {% endblock page_header %}
 
@@ -14,8 +14,17 @@
 
 <div class="mainContent">
     <main class="page__main">
-	   <h1>Sorry</h1>
-	   <p>The page you are looking for could not be found</p>
+	   <h1>Page not found</h1>
+       <p>If you entered a web address, chec it is correct.</p>
+       <p>If you pasted the web address, check you copied the whole address.</p>
+       <div class="panel panel--info panel--simple">
+        <div class="panel__body">
+          <p>Here's the error:
+            <br>
+            <strong class="u-fs-l u-mt-s u-d-b">{{ message_header }}</strong>
+          </p>
+        </div>
+      </div>
 		
     </main>
 
