@@ -5,7 +5,7 @@
 
 {% block page_header %}
 
-<h1 class="jupiter main_heading">Take-On</h1>
+    <h1 class="jupiter main_heading">Take-On</h1>
 
 {% endblock page_header %}
 
@@ -13,203 +13,144 @@
 {% block content %}
 
 
-<div id="lockedInfo" style="display:none">
-    <div class="panel panel--error panel--simple">
-        <div class="panel__error">
-            <div class="u-fs-r--b">Form locked</div>
+    <div id="lockedInfo" style="display:none">
+        <div class="panel panel--error panel--simple">
+            <div class="panel__error">
+                <div class="u-fs-r--b">Form locked</div>
+            </div>
+            <div class="panel__body">
+                <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been
+                    checked
+                    back in.
+                </div>
+            </div>
         </div>
+    </div>
+
+
+    <div class="panel panel--info panel--simple">
         <div class="panel__body">
-            <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been checked
-                back in.</div>
+
+            <h1>{{ contributor_details['enterpriseName'] }}</h1>
+            <p><b>Reference:</b> {{ contributor_details['reference'] }}
+                <b>Period:</b> {{ contributor_details['period'] }}
+                <b>Survey:</b> {{ contributor_details['survey'] }}
+                <b>Status:</b> {{ contributor_details['status'] }}
+                <b>Receipt Date:</b> {{ contributor_details['receiptDate'] }}
+                <b>Last Updated By:</b> {{ contributor_details['lastUpdatedBy'] }}
+                <b>Last Updated Date:</b> {{ contributor_details['lastUpdatedDate'] }} </p>
         </div>
     </div>
-</div>
-
-
-<div class="panel panel--info panel--simple">
-    <div class="panel__body">
-
-        <h1>{{ contributor_details['enterpriseName'] }}</h1>
-        <p><b>Reference:</b> {{ contributor_details['reference'] }}
-            <b>Period:</b> {{ contributor_details['period'] }}
-            <b>Survey:</b> {{ contributor_details['survey'] }}
-            <b>Status:</b> {{ contributor_details['status'] }}
-            <b>Receipt Date:</b> {{ contributor_details['receiptDate'] }}
-            <b>Last Updated By:</b> {{ contributor_details['lastUpdatedBy'] }}
-            <b>Last Updated Date:</b> {{ contributor_details['lastUpdatedDate'] }} </p>
-    </div>
-</div>
-
-
-
-<div class="mainContent">
-
-    <form method="post" id="save">
-        <button class="btn" type="submit" id="editFormButton" value="saveForm" name="action" onclick="submitForm()">
-            <span class="btn__inner">Edit</span></button>
-    </form>
     <br>
 
-    <nav class="section-nav" id="" aria-label="Section menu">
-        <ul class="section-nav__list" aria-label="">
-            <li class="section-nav__item ">
-                <a  class="section-nav__link" onclick="openTab(event, 'SectionA')">Section A</a>
-            </li>
-            <li class="section-nav__item ">
-                <a class="section-nav__link" onclick="openTab(event, 'SectionB')">Section B</a>
-            </li>
-            <li class="section-nav__item ">
-                <a class="section-nav__link" onclick="openTab(event, 'SectionC')">Section C</a>
-            </li>
-            <li class="section-nav__item ">
-                <a class="section-nav__link" onclick="openTab(event, 'SectionD')">Section D</a>
-            </li>
-        </ul>
-    </nav>
 
-    <div id="SectionB" class="tabcontent">
+    <div class="mainContent">
+        <form method="post" id="save">
+            <button class="btn" type="submit" id="editFormButton" value="saveForm" name="action" onclick="submitForm()">
+                <span class="btn__inner">Edit</span></button>
+        </form>
+        <br>
+
+        <nav class="section-nav" id="" aria-label="Section menu">
+            <ul class="section-nav__list" aria-label="">
+                <li class="section-nav__item ">
+                    <a class="section-nav__link" onclick="openTab(event, 'SectionA')">Section A</a>
+                </li>
+                <li class="section-nav__item ">
+                    <a class="section-nav__link" onclick="openTab(event, 'SectionB')">Section B</a>
+                </li>
+                <li class="section-nav__item ">
+                    <a class="section-nav__link" onclick="openTab(event, 'SectionC')">Section C</a>
+                </li>
+                <li class="section-nav__item ">
+                    <a class="section-nav__link" onclick="openTab(event, 'SectionD')">Section D</a>
+                </li>
+            </ul>
+        </nav>
+    <br>
+
+        <div id="SectionB" class="tabcontent">
             <form>
-
-                    <p class="field">
-                            <label class="label" for="suffixed-LastYearSales">How much did You make from sales last year?
-                                    <br>
-                                    <span class="label__description" style="color:red">Q1452</span>
-                                
-                            </label>
-                            <span class="input-type">
-                                          <span class="input-type__inner">
-                                  <input
-                                      type="number"
-                                      class="input input--text input-type__input"
-                                      title="LastYearSales"
-                               
-                                      inputmode="numeric"
-                                      autocomplete="off"
-                                      required="true" 
-                                  />
-                                             
-                                          </span>
-                            </span>
-                          </p>
-
-
-                          <p class="field">
-                                <label class="label" for="suffixed-ResearchSpend">How much did You spend on research and design?
-                                        <br>
-                                        <span class="label__description" style="color:red">Q0658</span>
-                                    
-                                </label>
-                                <span class="input-type">
-                                              <span class="input-type__inner">
-                                      <input
-                                          type="number"
-                                          class="input input--text input-type__input"
-                                          title="ResearchSpend"
-                                       
-                                          inputmode="numeric"
-                                          autocomplete="off"
-                                          required="true" 
-                                      />
-                                                
-                                              </span>
-                                </span>
-                              </p>
-
-
-                              <p class="field">
-                                    <label class="label" for="suffixed-InternetSpeed"> How fast is Your internet connection?
-                                            <br>
-                                            <span class="label__description" style="color:red">Q9542</span>
-                                        
-                                    </label>
-                                    <span class="input-type">
-                                                  <span class="input-type__inner">
-                                                        <select name="InternetSpeed" class="input input--select input-type__input">
-                                                                <option value="1MB">
-                                                                    < 1 MB</option> <option value="5MB">Between 1-5 MB
-                                                                </option>
-                                                                <option value="10MB">Between 6-10 MB</option>
-                                                                <option value="20MB">Between 11-20 MB</option>
-                                                            </select>
-                                    </span>
-                                  </p>
-
-
-                                  <p class="field">
-                                        <label class="label" for="suffixed-WebSales">Total amount of web sales
-                                                <br>
-                                                <span class="label__description" style="color:red">Q3541</span>
-                                            
-                                        </label>
-                                        <span class="input-type">
-                                                      <span class="input-type__inner">
-                                              <input
-                                                  type="number"
-                                                  class="input input--text input-type__input"
-                                                  title="WebSales"
-                                    
-                                                  inputmode="numeric"
-                                                  autocomplete="off"
-                                                  required="true" 
-                                              />
-                                                         
-                                                      </span>
-                                        </span>
-                                      </p>
-
-                        <label class="label" for="suffixed-malePercentage">Percentage of Male employees in a technical role
-                                <br>
-                                <span class="label__description" style="color:red">Q3251</span>
-                            
-                        </label>
-                        <span class="input-type">
-                                      <span class="input-type__inner">
-                              <input
-                                  type="number"
-                                  class="input input--text input-type__input input--w-4"
-                                  title="MalePercentage"
-                                  pattern="[0-9]*"
-                                  inputmode="numeric"
-                                  autocomplete="off"
-                                  required="true" 
-                              />
-                                          <abbr
-                                              class="input-type__type"
-                                              aria-hidden="true"
-                                              title="%"
-                                              >%</abbr>
-                                      </span>
+                <p class="field">
+                    <label class="label" for="suffixed-LastYearSales">How much did You make from sales last year?
+                        <br>
+                        <span class="label__description" style="color:red">Q1452</span>
+                    </label>
+                    <span class="input-type">
+                        <span class="input-type__inner">
+                            <input type="number" class="input input--text input-type__input" title="LastYearSales" inputmode="numeric" autocomplete="off" required="true">
                         </span>
-                      </p>
+                    </span>
+                </p>
 
+                <p class="field">
+                    <label class="label" for="suffixed-ResearchSpend">How much did You spend on research and design?
+                        <br>
+                        <span class="label__description" style="color:red">Q0658</span>
+                    </label>
+                    <span class="input-type">
+                        <span class="input-type__inner">
+                            <input type="number" class="input input--text input-type__input" title="ResearchSpend" inputmode="numeric" autocomplete="off" required="true">
+                        </span>
+                    </span>
+                </p>
 
-                      <p class="field">
-                            <label class="label" for="suffixed-femalePercentage">Percentage of Female employees in a technical role
-                                    <br>
-                                    <span class="label__description" style="color:red">Q7415</span>
-                                
-                            </label>
-                            <span class="input-type">
-                                          <span class="input-type__inner">
-                                  <input
-                                      type="number"
-                                      class="input input--text input-type__input input--w-4"
-                                      title="femalePercentage"
-                                      pattern="[0-9]*"
-                                      inputmode="numeric"
-                                      autocomplete="off"
-                                      required="true" 
-                                  />
-                                              <abbr
-                                                  class="input-type__type"
-                                                  aria-hidden="true"
-                                                  title="%"
-                                                  >%</abbr>
-                                          </span>
-                            </span>
-                          </p>
+                <p class="field">
+                    <label class="label" for="suffixed-InternetSpeed"> How fast is Your internet connection?
+                        <br>
+                        <span class="label__description" style="color:red">Q9542</span>
+                    </label>
+                    <span class="input-type">
+                        <span class="input-type__inner">
+                            <select name="InternetSpeed" class="input input--select input-type__input">
+                                <option value="1MB">< 1 MB</option>
+                                <option value="5MB">Between 1-5 MB</option>
+                                <option value="10MB">Between 6-10 MB</option>
+                                <option value="20MB">Between 11-20 MB</option>
+                            </select>
+                        </span>
+                    </span>
+                </p>
 
-              
+                <p class="field">
+                    <label class="label" for="suffixed-WebSales">Total amount of web sales
+                        <br>
+                        <span class="label__description" style="color:red">Q3541</span>
+                    </label>
+                    <span class="input-type">
+                        <span class="input-type__inner">
+                            <input type="number" class="input input--text input-type__input" title="WebSales" inputmode="numeric" autocomplete="off" required="true">
+                        </span>
+                    </span>
+                </p>
+
+                <p class="field">
+                    <label class="label" for="suffixed-malePercentage">Percentage of Male employees in a technical role
+                        <br>
+                        <span class="label__description" style="color:red">Q3251</span>
+                    </label>
+                    <span class="input-type">
+                        <span class="input-type__inner">
+                            <input type="number" class="input input--text input-type__input input--w-4" title="MalePercentage" pattern="[0-9]*" inputmode="numeric" autocomplete="off" required="true">
+                            <abbr class="input-type__type" aria-hidden="true" title="%">%</abbr>
+                        </span>
+                    </span>
+                </p>
+
+                <p class="field">
+                    <label class="label" for="suffixed-femalePercentage">Percentage of Female employees in a technical
+                        role
+                        <br>
+                        <span class="label__description" style="color:red">Q7415</span>
+
+                    </label>
+                    <span class="input-type">
+                        <span class="input-type__inner">
+                            <input type="number" class="input input--text input-type__input input--w-4" title="femalePercentage" pattern="[0-9]*" inputmode="numeric" autocomplete="off" required="true">
+                            <abbr class="input-type__type" aria-hidden="true" title="%">%</abbr>
+                        </span>
+                    </span>
+                </p>
             </form>
         </div>
 
@@ -219,54 +160,48 @@
             <div style="overflow:auto">
                 <table id="ResultsTable" class="table table__dense">
                     <tbody>
-                        <!-- for each record, render each data value -->
-                        {% for record in contributor_details.keys() %}
+                    <!-- for each record, render each data value -->
+                    {% for record in contributor_details.keys() %}
                         <tr class="table--row">
                             <!-- Use .values() method to get values from each row dict -->
                             <td class="table--cell">{{ record }}</td>
                             <td class="table--cell">{{ contributor_details[record] }}</td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div id="SectionA" class="tabcontent">
-            <h2>SectionA</h2>
             {% for datum in data %}
-            <div>
+                <div>
                     <p class="field">
-                            <label class="label">{{ datum["displayQuestionNumber"] }} <strong>{{ datum["displayText"] }}</strong>
-                                <br>
-                                <span class="label__description" style="color:red">{{ datum["questionCode"] }}</span>
-                              </label>
-                            <input name="response:{{ datum['questionCode'] }}"
-                            value="{{ responses[datum['questionCode']]['response'] }}"
-                            id="questionCode:{{ datum['questionCode'] }}|instance:{{ datum['instance'] }}" class="input input--text input-type__input"
-                            readonly>
-                        </p>
-               
-               
-                
-                <br>
-                <br>
-            </div>
+                        <label class="label">{{ datum["displayQuestionNumber"] }}
+                            <strong>{{ datum["displayText"] }}</strong>
+                            <br>
+                            <span class="label__description" style="color:red">{{ datum["questionCode"] }}</span>
+                        </label>
+                        <input name="response:{{ datum['questionCode'] }}" value="{{ responses[datum['questionCode']]['response'] }}" id="questionCode:{{ datum['questionCode'] }}|instance:{{ datum['instance'] }}" class="input input--text input-type__input" readonly>
+                    </p>
+                    <br>
+                    <br>
+                </div>
             {% endfor %}
         </div>
+    </div>
 
 
-</div>
-
-
-<div class="wrapper">
-    <div class="response-split">
-        <!-- Accordion -->
-        <!--
+    <div class="wrapper">
+        <div class="response-split">
+            <!-- Accordion -->
+            <!--
             <h3>Validation</h3>
             {% for output in validation %}
             {% if output["validationFormEntity"]["severity"] == "E" %}
-                <button class="accordion-legacy" style="background-color:#D0021B" id="questionCode:{{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
+                <button class="accordion-legacy" style="background-color:#D0021B" id="questionCode:
+                {{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>
+                {{ output["validationFormEntity"]["questionCode"] }}</strong>
                       <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
                 </button>
                 <div class="panel-legacy">
@@ -277,7 +212,9 @@
                     <b>Overridden date:</b>{{ contributor_details['lastUpdatedDate'] }}
                 </div>
             {% else %}
-                <button class="accordion-legacy" style="background-color:#FE781F" id="questionCode:{{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>{{ output["validationFormEntity"]["questionCode"] }}</strong>
+                <button class="accordion-legacy" style="background-color:#FE781F" id="questionCode:
+                {{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>
+                {{ output["validationFormEntity"]["questionCode"] }}</strong>
                     <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
                 </button>
                 <div class="panel-legacy">
@@ -290,70 +227,70 @@
             {% endif %}
             {% endfor %}]
             -->
+        </div>
     </div>
-</div>
 
 
-<script>
-    function openTab(evt, details) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(details).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-</script>
-
-<script>
-    var isLockedBy = "{{ locked }}"
-    if (isLockedBy != "") {
-        document.getElementById("editFormButton").disabled = true;
-        document.getElementById("editFormButton").style.color = "grey";
-        var bar = document.getElementById("lockedInfo");
-        bar.style.display = "block";
-    }
-    document.getElementById("SectionA").style.display = "block"
-</script>
-
-
-<script>
-    var acc = document.getElementsByClassName("accordion-legacy");
-    var i;
-
-    for (i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function () {
-            /* Toggle between adding and removing the "active" class,
-            to highlight the button that controls the panel */
-            this.classList.toggle("active");
-
-            /* Toggle between hiding and showing the active panel */
-            var panel = this.nextElementSibling;
-            if (panel.style.display === "block") {
-                panel.style.display = "none";
-            } else {
-                panel.style.display = "block";
+    <script>
+        function openTab(evt, details) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
             }
-        });
-    }
-</script>
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(details).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 
-<script>
-    var regex = new RegExp('(.+\|.+_)');
-    var inputElements = document.getElementsByTagName('input');
-    var index;
-    var responseElements = inputElements.filter(element => document.querySelector('[id^="questionCode"]'));
-    window.alert(responseElements);
-</script>
+    <script>
+        var isLockedBy = "{{ locked }}"
+        if (isLockedBy != "") {
+            document.getElementById("editFormButton").disabled = true;
+            document.getElementById("editFormButton").style.color = "grey";
+            var bar = document.getElementById("lockedInfo");
+            bar.style.display = "block";
+        }
+        document.getElementById("SectionA").style.display = "block"
+    </script>
 
-<br>
-<br>
-<br>
-<br>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion-legacy");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                /* Toggle between adding and removing the "active" class,
+                to highlight the button that controls the panel */
+                this.classList.toggle("active");
+
+                /* Toggle between hiding and showing the active panel */
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+    <script>
+        var regex = new RegExp('(.+\|.+_)');
+        var inputElements = document.getElementsByTagName('input');
+        var index;
+        var responseElements = inputElements.filter(element => document.querySelector('[id^="questionCode"]'));
+        window.alert(responseElements);
+    </script>
+
+    <br>
+    <br>
+    <br>
+    <br>
 
 {% endblock content %}
