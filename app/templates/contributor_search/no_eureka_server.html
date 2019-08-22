@@ -1,86 +1,35 @@
-<!doctype html>
-<html lang="en-gb" dir="ltr" class="no-js">
+{% extends "base.html" %}
 
-<head>
-    {% block head %}
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>{% block title %}{% endblock title %}</title>
-        <meta content="width=device-width, initial-scale=1" name="viewport">
-        <link rel="apple-touch-icon" sizes="180x180" href="{{  url_for('static', filename='\static\img\favicons\apple-touch-icon.png') }}">
-        <link rel="icon" type="image/png" href="{{ url_for('static',filename='\img\favicons\favicon-32x32.png') }}" sizes="32x32">
+{% block title %}Internal server error {% endblock title %}
 
-        <link rel="icon" type="image/png" href="{{ url_for('static',filename='\img\favicons\favicon-16x16.png') }}" sizes="16x16">
-        <link rel="manifest" href="static/img/favicons/manifest.json">
 
-        <link rel="mask-icon" href="./static/img/favicons/safari-pinned-tab.svg" color="#5bbad5">
-        <meta name="theme-color" content="#ffffff">
+{% block page_header %}
 
-        {% block css %}
-            <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.css'>
-            <link rel="stylesheet" href="https://cdn.ons.gov.uk/sdc/322aece/css/styles.css">
-            <link rel="stylesheet" href="{{ url_for('static',filename='css/legacy-main.css') }}" media="all" type="text/css">
-        {% endblock css %}
+<h1 class="main_heading">Take-on</h1>
 
-        {% block head_js %}
-            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-            <script type="text/javascript" src="{{ url_for('static', filename='js/industry-range.js')}}"></script>
-            <script src="https://cdn.ons.gov.uk/sdc/322aece/scripts/bundle.min.js"></script>
-        {% endblock head_js %}
+{% endblock page_header %}
 
-    {% endblock head %}
-</head>
+<br>
+{% block content %}
 
-<body>
-
-	<header class="page__header">
-
-		<!--Navigation Bar -->
-
-		<div class="logo_container">
-			<div class="wrapper">
-				<div class="group">
-					<div class="col-7">
-						<div class="logo_header">
-							<a href="/">
-								<img src="{{ url_for('static',filename='img/logo.svg') }}" alt="Office for National Statistics" class="logo__img" />
-							</a>
-						</div>
-					</div>
-				</div>
+<div class="mainContent">
+    <main class="page__main">
+	   <h1>Sorry, there is a problem with the service</h1>
+	   <p>Try again later.</p>
+	   <p>The server is having a few issues and can't process this request</p>
+	   <div class="panel panel--info panel--simple">
+			<div class="panel__body">
+			  <p>This has been caused by the eureka server, here's the message: 
+				<br>
+				<strong class="u-fs-l u-mt-s u-d-b">{{ error_message }}</strong>
+			  </p>
 			</div>
-		</div>
+		  </div>
 
-		<!--Page Title -->
+		
+    </main>
 
-		<div class="page_title">
-			<div class="wrapper">
-				<div class="group">
-					<div class="col-12">
-						{% block page_header %}
-						{% endblock page_header %}
-					</div>
-				</div>
-			</div>
-		</div>
 
-	</header>
+</div>
 
-    {% block content %}
-    <section>
-        <h1>Something went wrong</h1>
-        <h2>No Eureka server found</h2>
-		<p>{{ error_message }}</p>
-    </section>
-    {% endblock content %}
-
-	<footer class="page__footer">
-		<div class="wrapper">
-			<div class="group">
-			</div>
-		</div>
-	</footer>
-
-</body>
-
-</html>
+{% endblock content %}
