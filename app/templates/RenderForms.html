@@ -1,5 +1,5 @@
 {% macro render_field(field="") %}
-  {{ field(placeholder=field.label.text.capitalize(), class="input input--text input-type__input sbr-search-input input-grey-color" ) }}
+  {{ field(placeholder=field.label.text.capitalize(), class="input input--text input-type__input input--w-11" ) }}
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}
