@@ -5,78 +5,81 @@
 
 {% block page_header %}
 
-<h1 class="main_heading">Search</h1>
+    <h1 class="main_heading">Search</h1>
 
 {% endblock page_header %}
 
 <br>
 {% block content %}
 
-<div class="mainContent">
-    <main class="page__main">
-        <h1>Search by</h1>
-        <form name="searchSelection" method="POST">
-        <fieldset class="fieldset">
-            <p class="checkboxes__label">Select all that apply</p>
-            <span class="checkboxes__items">
+    <div class="mainContent">
+        <main class="page__main">
+            <h1>Search by</h1>
+            <form name="searchSelection" method="POST">
+                <fieldset class="fieldset">
+                    <p class="checkboxes__label">Select all that apply</p>
+                    <span class="checkboxes__items">
                 <p class="checkboxes__item">
-                    <span class="checkbox ">
-                        <input type="checkbox" name="reference" class="checkbox__input js-checkbox" value="RU ref" checked>
-                        <label id="reference-label" class="checkbox__label " for="reference">
+                    <span class="checkbox">
+                        <input type="checkbox" name="reference" class="checkbox__input js-checkbox checkboxAlignment"
+                               checked>
+                        <label id="reference-label" class="checkbox__label checkboxTextAlignment" for="reference">
                             Reference
                         </label>
                     </span>
                 </p>
                 <br>
                 <p class="checkboxes__item">
-                    <span class="checkbox ">
-                        <input type="checkbox" name="period" class="checkbox__input js-checkbox " value="RU ref" checked>
-                        <label id="period-label" class="checkbox__label " for="period">
+                    <span class="checkbox">
+                        <input type="checkbox" name="period" class="checkbox__input js-checkbox checkboxAlignment"
+                               checked>
+                        <label id="period-label" class="checkbox__label checkboxTextAlignment" for="period">
                             Period
                         </label>
                     </span>
                 </p>
                 <br>
                 <p class="checkboxes__item">
-                    <span class="checkbox ">
-                        <input type="checkbox" name="survey" class="checkbox__input js-checkbox " value="RU ref" checked>
-                        <label id="inq-label" class="checkbox__label " for="inq">
+                    <span class="checkbox">
+                        <input type="checkbox" name="survey" class="checkbox__input js-checkbox checkboxAlignment"
+                               checked>
+                        <label id="inq-label" class="checkbox__label checkboxTextAlignment" for="inq">
                             Survey
                         </label>
                     </span>
                 </p>
                 <br>
                 <p class="checkboxes__item">
-                    <span class="checkbox ">
-                        <input type="checkbox" name="status" class="checkbox__input js-checkbox " value="RU ref">
-                        <label id="status-label" class="checkbox__label " for="status">
+                    <span class="checkbox">
+                        <input type="checkbox" name="status" class="checkbox__input js-checkbox checkboxAlignment">
+                        <label id="status-label" class="checkbox__label checkboxTextAlignment" for="status">
                             Status
                         </label>
                     </span>
                 </p>
                 <br>
                 <p class="checkboxes__item">
-                    <span class="checkbox ">
-                        <input type="checkbox" name="receiptdate" class="checkbox__input js-checkbox " value="RU ref">
-                        <label id="receiptdate-label" class="checkbox__label " for="receiptdate">
+                    <span class="checkbox">
+                        <input type="checkbox" name="receiptdate" class="checkbox__input js-checkbox checkboxAlignment">
+                        <label id="receiptdate-label" class="checkbox__label checkboxTextAlignment" for="receiptdate">
                             Receipt Date
                         </label>
                     </span>
                 </p>
                 <br>
                 <p class="checkboxes__item">
-                    <span class="checkbox ">
-                        <input type="checkbox" name="formtype" class="checkbox__input js-checkbox " value="RU ref">
-                        <label id="formtype-label" class="checkbox__label " for="formtype">
+                    <span class="checkbox">
+                        <input type="checkbox" name="formtype" class="checkbox__input js-checkbox checkboxAlignment">
+                        <label id="formtype-label" class="checkbox__label checkboxTextAlignment" for="formtype">
                             Form Type
                         </label>
                     </span>
                 </p>
                 <br>
                 <p class="checkboxes__item">
-                    <span class="checkbox ">
-                        <input type="checkbox" name="formid" class="checkbox__input js-checkbox " value="RU ref">
-                        <label id="formid-label" class="checkbox__label " for="formid">
+                    <span class="checkbox">
+                        <input type="checkbox" name="formid" class="checkbox__input js-checkbox checkboxAlignment">
+                        <label id="formid-label" class="checkbox__label checkboxTextAlignment" for="formid">
                             Form Id
                         </label>
                     </span>
@@ -84,11 +87,9 @@
                 <br>
                 <button class="btn btn--small" type="submit"><span class="btn__inner">Okay</span></button>
             </span>
-        </fieldset>
-    </form>
-    </main>
-
-
-</div>
+                </fieldset>
+            </form>
+        </main>
+    </div>
 
 {% endblock content %}

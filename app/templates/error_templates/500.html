@@ -5,31 +5,27 @@
 
 {% block page_header %}
 
-<h1 class="main_heading">Take-on</h1>
+    <h1 class="main_heading">Take-on</h1>
 
 {% endblock page_header %}
 
 <br>
 {% block content %}
 
-<div class="mainContent">
-    <main class="page__main">
-	   <h1>Sorry, there is a problem with the service</h1>
-	   <p>Try again later.</p>
-	   <p>The server is having a few issues and can't process this request</p>
-	   <div class="panel panel--info panel--simple">
-			<div class="panel__body">
-			  <p>Here's the error:
-				<br>
-				<strong class="u-fs-l u-mt-s u-d-b">{{ message_header }}</strong>
-			  </p>
-			</div>
-		  </div>
-
-		
-    </main>
-
-
-</div>
+    <div class="mainContent">
+        <main class="page__main">
+            <h1>Sorry, there is a problem with the service</h1>
+            <p>Try again later.</p>
+            <p>The server is having a few issues and can't process this request</p>
+            <div class="panel panel--info panel--simple">
+                <div class="panel__body">
+                    <p>Here's the error:
+                        <br>
+                        <strong class="u-fs-l u-mt-s u-d-b">{{ message_header }}</strong>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
 
 {% endblock content %}
