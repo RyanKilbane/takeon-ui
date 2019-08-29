@@ -43,15 +43,9 @@
         </div>
     </div>
 
+
     <div class="mainContent">
         <br>
-        <form method="post" id="save">
-            <button class="btn btn--small" type="submit" id="editFormButton" value="saveForm" name="action"
-                    onclick="submitForm()">
-                <span class="btn__inner">Edit</span></button>
-        </form>
-        <br>
-
         <nav class="section-nav" id="" aria-label="Section menu">
             <ul class="section-nav__list" aria-label="">
                 <li class="section-nav__item ">
@@ -95,6 +89,7 @@
         </div>
     </div>
 
+
     <div class="wrapper">
         <div class="response-split">
             <!-- Accordion -->
@@ -131,6 +126,7 @@
         </div>
     </div>
 
+
     <script>
         function openTab(evt, details) {
             var i, tabcontent, tablinks;
@@ -145,9 +141,8 @@
             document.getElementById(details).style.display = "block";
             evt.currentTarget.className += " active";
         }
-
-
     </script>
+
 
     <script>
         var isLockedBy = "{{ locked }}"
@@ -159,6 +154,8 @@
         }
         document.getElementById("SectionA").style.display = "block"
     </script>
+
+
     <script>
         var acc = document.getElementsByClassName("accordion-legacy");
         var i;
@@ -177,8 +174,6 @@
                 }
             });
         }
-
-
     </script>
 
 
