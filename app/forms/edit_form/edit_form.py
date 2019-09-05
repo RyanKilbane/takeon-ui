@@ -94,9 +94,9 @@ def edit_form(inqcode, period, ruref):
                 discovery_service.update_response(url_connect, "business-layer", response_data)
             except Exception as error:
                 status_message = {"Error": "There was an error when attempting to save new responses:\n{}".format(error)}
-                return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
-                                      data=definition, contributor_details=contributor_data[0], responses=form_response,
-                                      validation={}, status_message=json.dumps(status_message))
+                return render_template("./edit_form/EditForm.html", survey=inqcode, period=period, ruref=ruref,
+                                       data=definition, contributor_details=contributor_data[0], responses=form_response,
+                                       validation={}, status_message=json.dumps(status_message))
                 
             status_message = "New responses saved successfully"
             # Get the refreshed data from the responses table
@@ -104,7 +104,7 @@ def edit_form(inqcode, period, ruref):
             form_response = json.loads(form_responses)
 
             # Render the responses
-            return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
+            return render_template("./edit_form/EditForm.html", survey=inqcode, period=period, ruref=ruref,
                                    data=definition, contributor_details=contributor_data[0], responses=form_response,
                                    validation={}, status_message=status_message)
 
@@ -154,7 +154,7 @@ def edit_form(inqcode, period, ruref):
                 validations_output = json.loads(validations_output)
                 contributor_data = json.loads(contributor_details)
 
-                return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref,
+                return render_template("./edit_form/EditForm.html", survey=inqcode, period=period, ruref=ruref,
                                        data=definition, contributor_details=contributor_data[0],
                                        responses=form_response,
                                        validation={})
@@ -171,6 +171,6 @@ def edit_form(inqcode, period, ruref):
                                 period=period))
 
     # Render the screen
-    return render_template("./edit_form/EditFormNew.html", survey=inqcode, period=period, ruref=ruref, data=definition,
+    return render_template("./edit_form/EditForm.html", survey=inqcode, period=period, ruref=ruref, data=definition,
                            contributor_details=contributor_data[0], responses=form_response,
                            locked=contributor_data[0]["lockedBy"], validation={}, status_message=json.dumps(status_message))

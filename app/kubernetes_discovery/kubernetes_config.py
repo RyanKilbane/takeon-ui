@@ -7,6 +7,8 @@ import requests_mock
 from app.mock_suite import mock_suite
 from kubernetes import client, config
 
+import hashlib
+
 
 class KubernetesConfig:
     def __init__(self, namespace, mocking=True):
@@ -22,7 +24,6 @@ class KubernetesConfig:
             ip_addresss = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             output = requests.get("http://" + ip_addresss + "/contributor/searchByLikePageable/{}".format(url_connect))
             return output.text
-        
         return mock_contributor_search_screen(url_connect=url_connect).text
         # return mock_contributor_search_screen_no_error(url_connect=url_connect).text
         # return mock_contributor_search_screen_error_blank(url_connect=url_connect).text
@@ -110,7 +111,9 @@ def mock_contributor_search(mock=None, url_connect=None):
 
 @requests_mock.Mocker()
 def mock_contributor_search_screen(mock=None, url_connect=None):
-    mocked_up_data = mock_suite.MockSuite("mock_contributor_search_screen.json").get_data()
+    hash_value = hashlib.md5(url_connect.encode()).hexdigest()
+   
+    mocked_up_data = mock_suite.MockSuite("BDD/"+hash_value+".json").get_data()
     url = "http://localhost:8090/" + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)

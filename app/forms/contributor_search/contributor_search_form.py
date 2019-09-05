@@ -8,6 +8,8 @@ from flask_jwt_extended import jwt_required
 from app.utilities.helpers import create_form_class, create_new_dict, clean_search_parameters, build_uri, build_links
 from app.setup import discovery_service
 
+
+
 contributor_search_blueprint = Blueprint(name='contributor_search',
                                          import_name=__name__,
                                          url_prefix='/contributor_search')

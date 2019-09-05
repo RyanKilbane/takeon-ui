@@ -1,0 +1,38 @@
+.searchTop {
+    padding-left: 22px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.mainContent {
+    padding-left: 22px;
+    padding-right: 16px;
+}
+
+.capitalisation{
+    text-transform: capitalize;
+}
+
+.buttonWidth{
+    width: 108px;
+    padding-bottom: 2px;
+    padding-top: 1px;
+}
+
+.checkboxAlignment{
+    vertical-align: middle;
+    top: 32px;
+    bottom: -1px;
+    position: relative;
+}
+
+.checkboxTextAlignment{
+    position: relative;
+
+}
+.textAlignment{
+    vertical-align: middle;
+    top: 25px;
+    bottom: -1px;
+    position: relative;
+}
