@@ -36,8 +36,11 @@ def create_app(setting_overrides=None):
 
 
 def add_blueprints(application):
-    from app.forms.contributor_search.contributor_search_form import contributor_search_blueprint
+    from app.forms.contributor_search.contributor_search_form import contributor_search_blueprint,\
+                                                                     contributor_search_blueprint_post
     application.register_blueprint(contributor_search_blueprint)
+    application.register_blueprint(contributor_search_blueprint_post)
+    contributor_search_blueprint_post.config = application.config.copy()
     contributor_search_blueprint.config = application.config.copy()
 
     from app.forms.view_form.view_form import view_form_blueprint

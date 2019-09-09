@@ -1,0 +1,121 @@
+{% extends "./base.html" %}
+
+{% block title %}Dashboard{% endblock title %}
+
+
+
+{% block page_header %}
+    <h1 class="jupiter header__title">Search</h1>
+{% endblock page_header %}
+
+
+{% block content %}
+
+    <section>
+        <div id="lockedInfo" style="color:red;display:none">This form is currently checked out to</div>
+        <div class="phase-banner">
+            <div class="">
+                <div class="grid grid--flex grid--gutterless grid--vertical-center grid--no-wrap">
+                    <div class="field-group searchTop">
+                        <form method="post">
+                            {% from "RenderForms.html" import render_field %}
+                            {% for i in fields.keys() %}
+                                <p class="field">
+                                    <span class="input-type">
+								    <span class="input-type__inner">
+									{{ render_field(fields[i]) }}
+                                </p>
+                                </span>
+                                </span>
+                            {% endfor %}
+                            <button class="btn btn--small" type="submit"><span class="btn__inner">Search</span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mainContent">
+            <div>
+                <div class="table-scrollable table-scrollable--on">
+                    <div class="table-scrollable__content" tabindex="0" role="region"
+                         aria-label="Scrollable table">
+                        <table class="table" id="ResultsTable">
+                            <thead class="table__head capitalisation">
+                            <tr class="table__row">
+                                <th></th><!--Blank column for view form button-->
+                                <!--Render each column name -->
+                                {% for column in header %}
+                                    <th class="table__header"> {{ column }}</th>
+                                {% endfor %}
+                            </tr>
+                            </tr>
+                            </thead>
+                            <tbody class="table__body">
+
+                            <!-- for each record, render each data value -->
+                            {% for record in records %}
+
+                                <tr class="table__row">
+                                    <td>
+                                        <a href="{{ record['survey'] }}/{{ record['period'] }}/{{ record['reference'] }}/viewform"
+                                           target="_blank">
+                                            <button type="submit" class="btn btn--small buttonWidth">
+                                                <span class="btn__inner">View Form</span>
+                                            </button>
+                                            <!-- Use .values() method to get values from each row dict -->
+                                            {% for element in record.values() %}
+                                                <td class="table__cell">{{ element }}</td>
+                                            {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1>{{ message }}</h1>
+        </div>
+
+        <div id="pages">
+            <ul>
+                <li class="pagination__item--next" id="prev" style="display:none"> << </li>
+                <li class="pagination__item--next" id="next" style="display:none"> >> </li>
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        var statusMessage = "{{ status_message }}"
+        console.log(statusMessage)
+        if (statusMessage == "&#34;&#34;") {
+        } else {
+            //alert(statusMessage);
+        }
+    </script>
+
+    <script>
+        var rows = document.getElementById("ResultsTable");
+        if (rows.length === 0) {
+            document.getElementById("hide_panel").style.display = "none";
+        }
+    </script>
+
+    <script>
+        var pageInfo = {{ links|tojson }};
+        console.log(pageInfo['endCursor'])
+        var end = pageInfo['endCursor'];
+        if (pageInfo['hasNextPage'] == true){
+            document.getElementById("next").style.display = "";
+           }
+        else if (pageInfo["hasPreviousPage"] == true){
+            document.getElementById("prev").style.display = "";
+           }
+
+
+    </script>
+
+
+{% endblock content %}

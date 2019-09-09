@@ -154,3 +154,14 @@ def build_links(links_list, name_of_link):
         if link['rel'] == name_of_link:
             extracted_link = link['href']
     return extracted_link
+
+
+def find_nodes(data: dict, node_to_find: str) -> (dict, list, str):
+    if node_to_find in data:
+        return data[node_to_find]
+    for att in data:
+        if att not in (node_to_find) and isinstance(data[att], dict):
+            item = find_nodes(data[att], node_to_find)
+        if item is not None:
+            return item
+    raise KeyError(f"No node with name \"{node_to_find}\" found")

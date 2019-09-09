@@ -111,9 +111,7 @@ def mock_contributor_search(mock=None, url_connect=None):
 
 @requests_mock.Mocker()
 def mock_contributor_search_screen(mock=None, url_connect=None):
-    hash_value = hashlib.md5(url_connect.encode()).hexdigest()
-   
-    mocked_up_data = mock_suite.MockSuite("BDD/"+hash_value+".json").get_data()
+    mocked_up_data = mock_suite.MockSuite("mock_contributor_search.json").get_data()
     url = "http://localhost:8090/" + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
