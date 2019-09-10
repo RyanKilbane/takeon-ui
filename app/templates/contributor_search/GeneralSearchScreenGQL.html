@@ -116,15 +116,35 @@
     </script>
 
     <script>
-        function loadPage(){
+        function nextPage(){
             $.ajax({
                 type: 'POST',
                 url: "/contributor_search/Contributor/next",
                 contentType: "application/json",
-                data: JSON.stringify({cursor: "aferga"})
+                data: JSON.stringify({cursor: getCursor("next")})
             })
         }
-        $('#next_button').on('click', loadPage)
+        $('#next_button').on('click', nextPage)
+        function prevPage(){
+            $.ajax({
+                type: 'POST',
+                url: "/contributor_search/Contributor/next",
+                contentType: "application/json",
+                data: JSON.stringify({cursor: getCursor("prev")})
+            })
+        }
+        $('#prev_button').on('click', prevPage)
+
+        function getCursor(data){
+            var pageInfo = {{ links|tojson }};
+            if (data == "next"){
+                return pageInfo["endCursor"]
+            }
+            else if (data == "prev"){
+                return pageInfo["startCursor"]
+            }
+
+        }
     </script>
 
 
