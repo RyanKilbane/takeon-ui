@@ -106,15 +106,13 @@
     <script>
         var pageInfo = {{ links|tojson }};
         console.log(pageInfo['endCursor'])
-        var end = pageInfo['endCursor'];
         if (pageInfo['hasNextPage'] == true){
             document.getElementById("next").style.display = "";
            }
         else if (pageInfo["hasPreviousPage"] == true){
             document.getElementById("prev").style.display = "";
+            this.start = pageInfo["startCursor"];
            }
-
-
     </script>
 
 
