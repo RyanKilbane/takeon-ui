@@ -24,9 +24,9 @@
                                     <span class="input-type">
 								    <span class="input-type__inner">
 									{{ render_field(fields[i]) }}
+                                    </span>
+                                </span>
                                 </p>
-                                </span>
-                                </span>
                             {% endfor %}
                             <button class="btn btn--small" type="submit"><span class="btn__inner">Search</span></button>
                         </form>
@@ -80,10 +80,21 @@
         </div>
 
         <div id="pages">
+            <nav class="pagination btn btn--small" arial-label="Page {{ current_page }} of {{ last_page }}">
             <ul>
-                <li class="pagination__item--next" id="prev" style="display:none"> << </li>
-                <li class="pagination__item--next" id="next" style="display:none"> >> </li>
+
+                <li class="pagination__item--next" id="prev" style="display:none">
+                    <a id="prev_anch">
+                    <<
+                    </a>
+                </li>
+                <li class="pagination__item--next" id="next" style="display:none">
+                     <a id="next_anch">
+                    >>
+                     </a>
+                </li>
             </ul>
+            </nav>
         </div>
     </section>
 
@@ -108,10 +119,11 @@
         console.log(pageInfo['endCursor'])
         if (pageInfo['hasNextPage'] == true){
             document.getElementById("next").style.display = "";
+            document.getElementById("prev_anch").setAttribute("href", pageInfo['endCursor']);
            }
-        else if (pageInfo["hasPreviousPage"] == true){
+        if (pageInfo["hasPreviousPage"] == true){
             document.getElementById("prev").style.display = "";
-            this.start = pageInfo["startCursor"];
+            document.getElementById("next_anch").setAttribute("href", pageInfo['startCursor']);
            }
     </script>
 

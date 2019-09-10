@@ -1,6 +1,7 @@
 import json
 from app.utilities.helpers import find_nodes
 
+
 class GraphData:
     def __init__(self, data):
         self.data = self.load_data(data)
