@@ -79,22 +79,10 @@
         <h1>{{ message }}</h1>
         </div>
 
-        <div id="pages">
-            <nav class="pagination btn btn--small" arial-label="Page {{ current_page }} of {{ last_page }}">
-            <ul>
-
-                <li class="pagination__item--next" id="prev" style="display:none">
-                    <a id="prev_anch">
-                    <span class="btn__inner">Previous</span>
-                    </a>
-                </li>
-                <li class="pagination__item--next" id="next" style="display:none">
-                     <a id="next_anch">
-                    <span class="btn__inner">Next</span>
-                     </a>
-                </li>
-            </ul>
-            </nav>
+        <div>
+            <button class="btn btn--small buttonWidth" type="submit" id="next_button" form_id="next_form" method="POST">
+                <span class="btn__inner">Next</span>
+            </button>
         </div>
     </section>
 
@@ -119,12 +107,24 @@
         console.log(pageInfo['endCursor'])
         if (pageInfo['hasNextPage'] == true){
             document.getElementById("next").style.display = "";
-            document.getElementById("prev_anch").setAttribute("href", pageInfo['endCursor']);
+            document.getElementById("next_button").setAttribute("value", pageInfo['endCursor']);
            }
         if (pageInfo["hasPreviousPage"] == true){
             document.getElementById("prev").style.display = "";
-            document.getElementById("next_anch").setAttribute("href", pageInfo['startCursor']);
+            document.getElementById("next_anch").setAttribute("value", pageInfo['startCursor']);
            }
+    </script>
+
+    <script>
+        function loadPage(){
+            $.ajax({
+                type: 'POST',
+                url: "/contributor_search/Contributor/next",
+                contentType: "application/json",
+                data: JSON.stringify({cursor: "aferga"})
+            })
+        }
+        $('#next_button').on('click', loadPage)
     </script>
 
 
