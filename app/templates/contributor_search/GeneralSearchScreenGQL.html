@@ -80,7 +80,10 @@
         </div>
 
         <div>
-            <button class="btn btn--small buttonWidth" type="submit" id="next_button" form_id="next_form" method="POST">
+            <button class="btn btn--small buttonWidth" type="submit" id="prev_button" method="POST" style="display: none">
+                <span class="btn__inner">Previous</span>
+            </button>
+            <button class="btn btn--small buttonWidth" type="submit" id="next_button" form_id="next_form" method="POST" style="display:none">
                 <span class="btn__inner">Next</span>
             </button>
         </div>
@@ -106,12 +109,10 @@
         var pageInfo = {{ links|tojson }};
         console.log(pageInfo['endCursor'])
         if (pageInfo['hasNextPage'] == true){
-            document.getElementById("next").style.display = "";
-            document.getElementById("next_button").setAttribute("value", pageInfo['endCursor']);
+            document.getElementById("next_button").style.display = "";
            }
         if (pageInfo["hasPreviousPage"] == true){
-            document.getElementById("prev").style.display = "";
-            document.getElementById("next_anch").setAttribute("value", pageInfo['startCursor']);
+            document.getElementById("prev_button").style.display = "";
            }
     </script>
 
@@ -143,7 +144,6 @@
             else if (data == "prev"){
                 return pageInfo["startCursor"]
             }
-
         }
     </script>
 
