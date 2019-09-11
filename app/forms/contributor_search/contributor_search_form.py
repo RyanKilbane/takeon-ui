@@ -1,24 +1,39 @@
 import json
 
 from urllib.error import URLError
-#from content_management import Content
-from flask import request, Blueprint, redirect, url_for, render_template, render_template_string
+
+# from content_management import Content
+from flask import (
+    request,
+    Blueprint,
+    redirect,
+    url_for,
+    render_template,
+    render_template_string,
+)
 from flask_jwt_extended import jwt_required
 
-from app.utilities.helpers import create_form_class, create_new_dict, clean_search_parameters, build_uri
+from app.utilities.helpers import (
+    create_form_class,
+    create_new_dict,
+    clean_search_parameters,
+    build_uri,
+)
 from app.utilities.graphql_data import GraphData
 from app.setup import discovery_service
 
-contributor_search_blueprint = Blueprint(name='contributor_search',
-                                         import_name=__name__,
-                                         url_prefix='/contributor_search')
+contributor_search_blueprint = Blueprint(
+    name="contributor_search", import_name=__name__, url_prefix="/contributor_search"
+)
 
-contributor_search_blueprint_post = Blueprint(name='contributor_search_post',
-                                              import_name=__name__,
-                                              url_prefix='/contributor_search')
+contributor_search_blueprint_post = Blueprint(
+    name="contributor_search_post",
+    import_name=__name__,
+    url_prefix="/contributor_search",
+)
 
 # headers here double as url parameters
-headers = ['reference', 'period', 'survey', 'status', 'formId']
+headers = ["reference", "period", "survey", "status", "formId"]
 
 
 #################################################################################################
@@ -26,42 +41,51 @@ headers = ['reference', 'period', 'survey', 'status', 'formId']
 #################################################################################################
 @contributor_search_blueprint.errorhandler(404)
 def not_found(e):
-    return render_template('./error_templates/404.html', message_header=e), 404
+    return render_template("./error_templates/404.html", message_header=e), 404
 
 
 @contributor_search_blueprint.errorhandler(403)
 def not_auth(e):
-    return render_template('./error_templates/403.html', message_header=e), 403
+    return render_template("./error_templates/403.html", message_header=e), 403
 
 
 @contributor_search_blueprint.errorhandler(500)
 def internal_server_error(e):
-    return render_template('./error_templates/500.html', message_header=e), 500
+    return render_template("./error_templates/500.html", message_header=e), 500
 
 
-@contributor_search_blueprint.route('/')
+@contributor_search_blueprint.route("/")
 # Redirect to from the landing page to the GeneralSearchScreen
 def landing_page():
-    return redirect(url_for('contributor_search.general_search_screen_selection'))
+    return redirect(url_for("contributor_search.general_search_screen_selection"))
 
 
 # ####################### SIMPLE SEARCH SCREEN, EXPOSES ALL FIELDS #############################
-@contributor_search_blueprint.route('/Contributor/searchSelection', methods=['GET', 'POST'])
+@contributor_search_blueprint.route(
+    "/Contributor/searchSelection", methods=["GET", "POST"]
+)
 # @jwt_required
 # Selection options, just pull out the values that have been selected, join
 # them all together in a semi-colon delimited string
 def general_search_screen_selection():
     if request.method == "POST":
-        criteria = ';'.join(i for i in request.form.keys())
+        criteria = ";".join(i for i in request.form.keys())
         # redirect to general search screen, criteria is added as a url parameter. ?criteria=VALUE1;VALUE2
-        return redirect(url_for("contributor_search.general_search_screen", criteria=criteria))
+        return redirect(
+            url_for("contributor_search.general_search_screen", criteria=criteria)
+        )
 
-    return render_template('./search_screen_choice/GeneralSearchScreenChoice.html')
+    return render_template("./search_screen_choice/GeneralSearchScreenChoice.html")
 
 
-@contributor_search_blueprint_post.route('/Contributor/GeneralSearch', methods=['POST'])
+@contributor_search_blueprint_post.route("/Contributor/GeneralSearch", methods=["POST"])
 def general_search_screen():
-    criteria = request.args['criteria'].split(";")
+
+    criteria = request.args["criteria"].split(";")
+
+    # Build class for the forms that are passed in, this must be done dynamically
+    # create form object
+
     # Build class for the forms that are passed in, this must be done dynamically
     selection_form = create_form_class(criteria)
     # create form object
@@ -72,21 +96,36 @@ def general_search_screen():
     url_connect = build_uri(clean_parameters)
     print(url_connect)
 
-    data = GraphData(discovery_service.contributor_search(url_connect, "persistence-layer"))
+    data = GraphData(
+        discovery_service.contributor_search(url_connect, "persistence-layer")
+    )
     output_data = data.nodes
     links = data.page_info
 
-    return render_template("./contributor_search/GeneralSearchScreenGQL.html", form=form,
-                           records=output_data,
-                           header=output_data[0],
-                           fields=dict(form.__dict__['_fields']),
-                           links=links)
+    return render_template(
+        "./contributor_search/GeneralSearchScreenGQL.html",
+        form=form,
+        records=output_data,
+        header=output_data[0],
+        fields=dict(form.__dict__["_fields"]),
+        links=links,
+    )
 
 
-@contributor_search_blueprint.route('/Contributor/GeneralSearch', methods=['GET'])
+@contributor_search_blueprint.route("/Contributor/next", methods=["POST"])
+def next():
+    newpage = request.json["cursor"]
+    data = GraphData(
+        discovery_service.graphql_post("age", "persistence-layer", newpage)
+    )
+    print(data.nodes)
+    return render_template_string(json.dumps(request.json))
+
+
+@contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["GET"])
 # Main search screen
 def general_search_screen():
-    criteria = request.args['criteria'].split(";")
+    criteria = request.args["criteria"].split(";")
     # Build class for the forms that are passed in, this must be done dynamically
     selection_form = create_form_class(criteria)
     # create form object
@@ -94,7 +133,6 @@ def general_search_screen():
     # On search, and if form object passes validation enter block
     current_page = -1
     last_page = -1
-
 
     # if request.method == "POST":
     #
@@ -312,6 +350,10 @@ def general_search_screen():
     #                            fields=dict(form.__dict__['_fields']))
 
     # before any searches are done, return just the webpage with the search fields.
-    return render_template("./contributor_search/GeneralSearchScreen.html",
-                           form=form, fields=dict(form.__dict__['_fields']), current_page=current_page,
-                           last_page=last_page)
+    return render_template(
+        "./contributor_search/GeneralSearchScreen.html",
+        form=form,
+        fields=dict(form.__dict__["_fields"]),
+        current_page=current_page,
+        last_page=last_page,
+    )
