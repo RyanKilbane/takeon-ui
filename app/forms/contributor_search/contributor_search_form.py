@@ -10,6 +10,7 @@ from flask import (
     url_for,
     render_template,
     render_template_string,
+    jsonify,
 )
 from flask_jwt_extended import jwt_required
 
@@ -118,8 +119,11 @@ def next():
     data = GraphData(
         discovery_service.graphql_post("age", "persistence-layer", newpage)
     )
+
     print(data.nodes)
-    return render_template_string(json.dumps(request.json))
+    output_data = data.nodes
+    links = data.page_info
+    return jsonify(data=output_data)
 
 
 @contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["GET"])

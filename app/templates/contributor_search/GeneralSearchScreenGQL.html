@@ -52,7 +52,7 @@
                             </tr>
                             </tr>
                             </thead>
-                            <tbody class="table__body">
+                            <tbody class="table__body" id="search_results_body">
 
                             <!-- for each record, render each data value -->
                             {% for record in records %}
@@ -122,7 +122,7 @@
                 url: "/contributor_search/Contributor/next",
                 contentType: "application/json",
                 data: JSON.stringify({cursor: getCursor("next")})
-            })
+            }).done(update);
         }
         $('#next_button').on('click', nextPage)
         function prevPage(){
@@ -131,7 +131,7 @@
                 url: "/contributor_search/Contributor/next",
                 contentType: "application/json",
                 data: JSON.stringify({cursor: getCursor("prev")})
-            })
+            }).done(update);
         }
         $('#prev_button').on('click', prevPage)
 
@@ -144,6 +144,39 @@
                 return pageInfo["startCursor"]
             }
 
+        }
+
+        function update(data){
+            console.log("update called")
+            var headers = getTableHeaders()
+            alert(headers)
+            var some = data;
+            alert(some.data.length);
+            $('#search_results_body').empty()
+            for (var i=0; i < some.data.length; i++){
+                row = some.data[i]
+                var link = "/" + row.survey + "/" + row.period + "/" + row.reference + "/viewform";
+                newRow = `<tr class=\"table__row\"> <td> <a target= \"_blank\" href=\"${link}\"> <button type=\"submit\" class=\"btn btn--small buttonWidth\">  <span class=\"btn__inner\">View Form </span> </button></a></td>`
+                for (var j=1; j < headers.length; j++){
+                    var key =  headers[j].toString();
+                    alert(key)
+                    alert(row["reference"]);
+                    alert()
+                    newRow + `<td class=\"table__cell\">${row[headers[j]]}</td>`
+                }
+                newRow + `</tr>`
+                $('#ResultsTable').append(newRow);
+            }
+            console.log(data.data);
+        }
+
+        function getTableHeaders(){
+            var headers = Array();
+            $("table tr th").each(function(i, v){
+                headers[i] = $(this).text();
+            }
+            )
+            return headers;
         }
     </script>
 
