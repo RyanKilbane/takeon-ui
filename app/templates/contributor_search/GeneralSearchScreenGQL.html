@@ -149,22 +149,17 @@
         function update(data){
             console.log("update called")
             var headers = getTableHeaders()
-            alert(headers)
             var some = data;
-            alert(some.data.length);
             $('#search_results_body').empty()
             for (var i=0; i < some.data.length; i++){
                 row = some.data[i]
                 var link = "/" + row.survey + "/" + row.period + "/" + row.reference + "/viewform";
-                newRow = `<tr class=\"table__row\"> <td> <a target= \"_blank\" href=\"${link}\"> <button type=\"submit\" class=\"btn btn--small buttonWidth\">  <span class=\"btn__inner\">View Form </span> </button></a></td>`
+                var newRow = `<tr class=\"table__row\"> <td> <a target= \"_blank\" href=\"${link}\"> <button type=\"submit\" class=\"btn btn--small buttonWidth\">  <span class=\"btn__inner\">View Form </span> </button></a></td>`
                 for (var j=1; j < headers.length; j++){
-                    var key =  headers[j].toString();
-                    alert(key)
-                    alert(row["reference"]);
-                    alert()
-                    newRow + `<td class=\"table__cell\">${row[headers[j]]}</td>`
+                    var key =  `${headers[j]}`
+                    newRow += `<td class=\"table__cell\">${row[key.replace(/ /g,'')]}</td>`
                 }
-                newRow + `</tr>`
+                newRow += `</tr>`
                 $('#ResultsTable').append(newRow);
             }
             console.log(data.data);
