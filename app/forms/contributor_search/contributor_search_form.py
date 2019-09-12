@@ -10,6 +10,7 @@ from flask import (
     url_for,
     render_template,
     render_template_string,
+    jsonify,
 )
 from flask_jwt_extended import jwt_required
 
@@ -21,7 +22,6 @@ from app.utilities.helpers import (
 )
 from app.utilities.graphql_data import GraphData
 from app.setup import discovery_service
-from flask_wtf import *
 
 contributor_search_blueprint = Blueprint(
     name="contributor_search", import_name=__name__, url_prefix="/contributor_search"
@@ -81,9 +81,11 @@ def general_search_screen_selection():
 
 @contributor_search_blueprint_post.route("/Contributor/GeneralSearch", methods=["POST"])
 def general_search_screen():
+
+    criteria = request.args["criteria"].split(";")
+
     # Build class for the forms that are passed in, this must be done dynamically
     # create form object
-    criteria = request.args["criteria"].split(";")
 
     # Build class for the forms that are passed in, this must be done dynamically
     selection_form = create_form_class(criteria)
@@ -91,8 +93,10 @@ def general_search_screen():
     form = selection_form(request.form)
     mutable_form = create_new_dict(request.form)
     clean_parameters = clean_search_parameters(mutable_form)
+
     url_connect = build_uri(clean_parameters)
     print(url_connect)
+
     data = GraphData(
         discovery_service.contributor_search(url_connect, "persistence-layer")
     )
@@ -111,8 +115,15 @@ def general_search_screen():
 
 @contributor_search_blueprint.route("/Contributor/next", methods=["POST"])
 def next():
-    print(request.json)
-    return render_template_string(json.dumps(request.json))
+    newpage = request.json["cursor"]
+    data = GraphData(
+        discovery_service.graphql_post("age", "persistence-layer", newpage)
+    )
+
+    print(data.nodes)
+    output_data = data.nodes
+    links = data.page_info
+    return jsonify(data=output_data)
 
 
 @contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["GET"])
