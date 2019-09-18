@@ -15,4 +15,3 @@ class GraphData:
             return json.loads(data)
         except Exception as error:
             return error
-

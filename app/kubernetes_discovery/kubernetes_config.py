@@ -27,9 +27,7 @@ class KubernetesConfig:
                 service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             )
             output = requests.get(
-                "http://"
-                + ip_addresss
-                + "/contributor/qlSearch/{}".format(url_connect)
+                "http://" + ip_addresss + "/contributor/qlSearch/{}".format(url_connect)
             )
             return output.text
         return mock_contributor_search_screen(url_connect=url_connect).text
