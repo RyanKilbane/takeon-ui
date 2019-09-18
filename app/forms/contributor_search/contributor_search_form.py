@@ -115,7 +115,7 @@ def general_search_screen():
 
 
 @contributor_search_blueprint.route("/Contributor/next", methods=["POST"])
-def next():
+def next_page():
     newpage = request.json["cursor"]
     data = GraphData(
         discovery_service.graphql_post("graphql", "business-layer", newpage)
