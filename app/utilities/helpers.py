@@ -162,6 +162,6 @@ def find_nodes(data: dict, node_to_find: str) -> (dict, list, str):
     for att in data:
         if att not in (node_to_find) and isinstance(data[att], dict):
             item = find_nodes(data[att], node_to_find)
-        if item is not None:
-            return item
+            if item is not None:
+                return item
     raise KeyError(f"No node with name \"{node_to_find}\" found")

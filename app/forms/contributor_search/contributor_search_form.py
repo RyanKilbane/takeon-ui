@@ -95,13 +95,14 @@ def general_search_screen():
     clean_parameters = clean_search_parameters(mutable_form)
 
     url_connect = build_uri(clean_parameters)
-    print(url_connect)
+    print("url connect: {}".format(url_connect))
 
     data = GraphData(
-        discovery_service.contributor_search(url_connect, "persistence-layer")
+        discovery_service.contributor_search(url_connect, "business-layer")
     )
     output_data = data.nodes
-    links = data.page_info
+    print("Data from GQL: {}".format(output_data))
+    links = {}
 
     return render_template(
         "./contributor_search/GeneralSearchScreenGQL.html",
@@ -117,12 +118,12 @@ def general_search_screen():
 def next():
     newpage = request.json["cursor"]
     data = GraphData(
-        discovery_service.graphql_post("age", "persistence-layer", newpage)
+        discovery_service.graphql_post("graphql", "business-layer", newpage)
     )
 
     print(data.nodes)
     output_data = data.nodes
-    links = data.page_info
+    # links = data.page_info
     return jsonify(data=output_data)
 
 

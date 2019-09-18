@@ -29,13 +29,10 @@ class KubernetesConfig:
             output = requests.get(
                 "http://"
                 + ip_addresss
-                + "/contributor/searchByLikePageable/{}".format(url_connect)
+                + "/contributor/qlSearch/{}".format(url_connect)
             )
             return output.text
         return mock_contributor_search_screen(url_connect=url_connect).text
-        # return mock_contributor_search_screen_no_error(url_connect=url_connect).text
-        # return mock_contributor_search_screen_error_blank(url_connect=url_connect).text
-        # return mock_contributor_search_screen_error_populated(url_connect=url_connect).text
 
     def contributor_search_without_paging(self, url_connect, service_name):
         if self.mock is False:
@@ -138,7 +135,17 @@ class KubernetesConfig:
 
     def graphql_post(self, url_connect, service_name, newpage):
         if self.mock is False:
-            pass
+            service = self.client.read_namespaced_service(
+                namespace=self.namespace, name=service_name
+            )
+            ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
+            output = requests.put(
+                "http://" + ip + "/validation-bl/run-all/{}".format(url_connect),
+                data=bytes(json.dumps(data), encoding="utf-8"),
+                headers={"Content-Type": "Application/Json"},
+            )
+            return output.text
+
         return mock_next_page(url_connect=url_connect).text
 
 
