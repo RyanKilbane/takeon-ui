@@ -130,7 +130,7 @@
                 url: "/contributor_search/Contributor/next",
                 contentType: "application/json",
                 data: JSON.stringify({cursor: getCursor("prev")})
-            }).done(update);
+            }).done(updateResultsTable);
         }
         $('#prev_button').on('click', prevPage)
 
@@ -144,7 +144,7 @@
             }
         }
 
-        function update(data){
+        function updateResultsTable(data){
             console.log("update called")
             var headers = getTableHeaders()
             var some = data;
