@@ -272,7 +272,7 @@
 
     <script>
         var isLockedBy = "{{ locked }}"
-        if (isLockedBy != "" || isLockedBy == "None") {
+        if (isLockedBy != "") {
             document.getElementById("editFormButton").disabled = true;
             document.getElementById("editFormButton").style.color = "grey";
             var bar = document.getElementById("lockedInfo");

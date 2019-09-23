@@ -79,7 +79,7 @@
         <h1>{{ message }}</h1>
         </div>
 
-        <div>
+        <div id="button_div">
             <button class="btn btn--small buttonWidth" type="submit" id="prev_button" method="POST" style="display: none">
                 <span class="btn__inner">Previous</span>
             </button>
@@ -107,7 +107,12 @@
     </script>
 
     <script>
+        window.onload = function addButtons(data=null){
+        if (data == null){
         var pageInfo = {{ links|tojson }};
+        } else{
+            var pageInfo = data;
+        }
         console.log(pageInfo['endCursor'])
         if (pageInfo['hasNextPage'] == true){
             document.getElementById("next_button").style.display = "";
@@ -115,6 +120,7 @@
         if (pageInfo["hasPreviousPage"] == true){
             document.getElementById("prev_button").style.display = "";
            }
+        }
     </script>
 
     <script>
@@ -140,10 +146,10 @@
         function getCursor(data){
             var pageInfo = {{ links|tojson }};
             if (data == "next"){
-                return pageInfo["endCursor"]
+                return pageInfo["endCursor"];
             }
             else if (data == "prev"){
-                return pageInfo["startCursor"]
+                return pageInfo["startCursor"];
             }
         }
 
@@ -163,6 +169,7 @@
                 newRow += `</tr>`
                 $('#ResultsTable').append(newRow);
             }
+            addButtons(data)
             console.log(data.data);
         }
 
