@@ -6,7 +6,7 @@ class GraphData:
     def __init__(self, data):
         self.data = self.load_data(data)
         self.nodes = find_nodes(self.data, "data")
-        # self.page_info = find_nodes(self.data, "pageInfo")
+        self.page_info = find_nodes(self.data, "pageInfo")
         # self.edges = find_nodes(self.data, "edges")
 
     @staticmethod

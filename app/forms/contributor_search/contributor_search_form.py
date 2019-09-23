@@ -102,7 +102,8 @@ def general_search_screen():
     )
     output_data = data.nodes
     print("Data from GQL: {}".format(output_data))
-    links = {}
+    links = data.page_info
+    print("GQL Links: {}".format(links))
 
     return render_template(
         "./contributor_search/GeneralSearchScreenGQL.html",
@@ -123,8 +124,8 @@ def next_page():
 
     print(data.nodes)
     output_data = data.nodes
-    # links = data.page_info
-    return jsonify(data=output_data)
+    links = data.page_info
+    return jsonify(data=output_data, links=links)
 
 
 @contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["GET"])

@@ -98,19 +98,31 @@
     </script>
 
     <script>
-        window.onload = function addButtons(data=null){
-        if (data == null){
-        var pageInfo = {{ links|tojson }};
-        } else{
-            var pageInfo = data;
-        }
-        console.log(pageInfo['endCursor'])
+        addButtons()
+        function addButtons(data=false){
+            console.log(data)
+            document.getElementById("next_button").style.display = "None";
+            document.getElementById("prev_button").style.display = "None";
+
+        if (data == false){
+        let pageInfo = {{ links|tojson }};
+        console.log(pageInfo)
         if (pageInfo['hasNextPage'] == true){
             document.getElementById("next_button").style.display = "";
            }
         if (pageInfo["hasPreviousPage"] == true){
             document.getElementById("prev_button").style.display = "";
            }
+        } else{
+            var pageInfo = data;
+            console.log(pageInfo['endCursor'])
+        if (pageInfo['hasNextPage'] == true){
+            document.getElementById("next_button").style.display = "";
+           }
+        if (pageInfo["hasPreviousPage"] == true){
+            document.getElementById("prev_button").style.display = "";
+           }
+        }
         }
     </script>
 
@@ -121,7 +133,7 @@
                 url: "/contributor_search/Contributor/next",
                 contentType: "application/json",
                 data: JSON.stringify({cursor: getCursor("next")})
-            }).done(update);
+            }).done(updateResultsTable);
         }
         $('#next_button').on('click', nextPage)
         function prevPage(){
@@ -160,8 +172,8 @@
                 newRow += `</tr>`
                 $('#ResultsTable').append(newRow);
             }
-            addButtons(data)
-            console.log(data.data);
+            addButtons(data.links)
+            console.log(data);
         }
 
         function getTableHeaders(){
