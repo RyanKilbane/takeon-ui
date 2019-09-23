@@ -1,11 +1,21 @@
-FROM python:3.7.2-alpine3.9
-# ENV MOCKING=True
-EXPOSE 5000
-WORKDIR /TakeOnUi
-COPY . /TakeOnUi
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev && \
-	pip install -r requirements.txt && \
-	apk del .build-deps gcc musl-dev && \
-	chmod +x entry.sh
+FROM python:3.7.4-alpine3.10 as base
 
-ENTRYPOINT ["/TakeOnUi/entry.sh"]
+
+# Download and resolve any dependencies
+FROM base as builder
+
+RUN mkdir /install
+WORKDIR /install
+COPY requirements.txt /requirements.txt
+RUN apk add --virtual .build-deps gcc musl-dev && \
+    pip install --install-option="--prefix=/install" -r /requirements.txt
+
+
+# Build our final image using the resolved dependencies and the application
+FROM base
+
+EXPOSE 5000
+COPY --from=builder /install /usr/local
+COPY . /TakeOnUi
+WORKDIR /TakeOnUi
+CMD python application.py runserver
