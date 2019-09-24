@@ -116,9 +116,10 @@ def general_search_screen():
 @contributor_search_blueprint.route("/Contributor/next", methods=["POST"])
 def next_page():
     newpage = request.json["cursor"]
+    url_connect = "graphql;" + f";startCursor={newpage}" + ";first=10"
     print(newpage)
     data = GraphData(
-        discovery_service.graphql_post("graphql", "business-layer", newpage)
+        discovery_service.graphql_post(url_connect, "business-layer")
     )
 
     print(data.nodes)
@@ -126,6 +127,20 @@ def next_page():
     links = data.page_info
     return jsonify(data=output_data, links=links)
 
+
+@contributor_search_blueprint.route("/Contributor/previous", methods=["POST"])
+def previous_page():
+    newpage = request.json["cursor"]
+    url_connect = "graphql;" + f";endCursor={newpage}" + ";last=10"
+    print(newpage)
+    data = GraphData(
+        discovery_service.graphql_post(url_connect, "business-layer")
+    )
+
+    print(data.nodes)
+    output_data = data.nodes
+    links = data.page_info
+    return jsonify(data=output_data, links=links)
 
 @contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["GET"])
 # Main search screen

@@ -131,14 +131,14 @@ class KubernetesConfig:
             )
             return output.text
 
-    def graphql_post(self, url_connect, service_name, newpage):
+    def graphql_post(self, url_connect, service_name):
         if self.mock is False:
             service = self.client.read_namespaced_service(
                 namespace=self.namespace, name=service_name
             )
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             output = requests.get(
-                "http://" + ip + "/contributor/qlSearch/{}".format(url_connect+f";startCursor={newpage}"+";first=10")
+                "http://" + ip + "/contributor/qlSearch/{}".format(url_connect)
             )
             return output.text
 

@@ -142,9 +142,9 @@
         function prevPage(){
             $.ajax({
                 type: 'POST',
-                url: "/contributor_search/Contributor/next",
+                url: "/contributor_search/Contributor/previous",
                 contentType: "application/json",
-                data: JSON.stringify({cursor: getCursor(whichCursor="prev")})
+                data: JSON.stringify({cursor: getCursor(whichCursor="prev", pagingInfo=pageData)})
             }).done(updateResultsTable);
         }
         $('#prev_button').on('click', prevPage)
