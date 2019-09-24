@@ -137,10 +137,8 @@ class KubernetesConfig:
                 namespace=self.namespace, name=service_name
             )
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            output = requests.put(
-                "http://" + ip + "/validation-bl/run-all/{}".format(url_connect),
-                data=bytes(json.dumps(data), encoding="utf-8"),
-                headers={"Content-Type": "Application/Json"},
+            output = requests.get(
+                "http://" + ip + "/contributor/qlSearch/{}".format(url_connect+f";startCursor={newpage}"+";first=10")
             )
             return output.text
 

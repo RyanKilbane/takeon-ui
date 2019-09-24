@@ -81,7 +81,7 @@ def general_search_screen_selection():
 
 @contributor_search_blueprint_post.route("/Contributor/GeneralSearch", methods=["POST"])
 def general_search_screen():
-
+    print("Reached post")
     criteria = request.args["criteria"].split(";")
 
     # Build class for the forms that are passed in, this must be done dynamically
@@ -95,29 +95,28 @@ def general_search_screen():
     clean_parameters = clean_search_parameters(mutable_form)
 
     url_connect = build_uri(clean_parameters)
+    url_connect += ";first=10"
     print("url connect: {}".format(url_connect))
 
     data = GraphData(
         discovery_service.contributor_search(url_connect, "business-layer")
     )
     output_data = data.nodes
-    print("Data from GQL: {}".format(output_data))
-    links = data.page_info
-    print("GQL Links: {}".format(links))
-
+    # links = data.page_info
     return render_template(
         "./contributor_search/GeneralSearchScreenGQL.html",
         form=form,
         records=output_data,
         header=output_data[0],
         fields=dict(form.__dict__["_fields"]),
-        links=links,
+        links=data.page_info,
     )
 
 
 @contributor_search_blueprint.route("/Contributor/next", methods=["POST"])
 def next_page():
     newpage = request.json["cursor"]
+    print(newpage)
     data = GraphData(
         discovery_service.graphql_post("graphql", "business-layer", newpage)
     )
