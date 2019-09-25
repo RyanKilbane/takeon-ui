@@ -1,0 +1,202 @@
+{% extends "./base.html" %}
+
+{% block title %}Dashboard{% endblock title %}
+
+
+
+{% block page_header %}
+    <h1 class="jupiter header__title">Search</h1>
+{% endblock page_header %}
+
+
+{% block content %}
+
+    <section>
+        <div id="lockedInfo" style="color:red;display:none">This form is currently checked out to</div>
+        <div class="phase-banner">
+            <div class="">
+                <div class="grid grid--flex grid--gutterless grid--vertical-center grid--no-wrap">
+                    <div class="field-group searchTop">
+                        <form method="post">
+                            {% from "RenderForms.html" import render_field %}
+                            {% for i in fields.keys() %}
+                                <p class="field">
+                                    <span class="input-type">
+								    <span class="input-type__inner">
+									{{ render_field(fields[i]) }}
+                                    </span>
+                                </span>
+                                </p>
+                            {% endfor %}
+                            <button class="btn btn--small" type="submit"><span class="btn__inner">Search</span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mainContent">
+            <div>
+                <div class="table-scrollable table-scrollable--on">
+                    <div class="table-scrollable__content" tabindex="0" role="region"
+                         aria-label="Scrollable table">
+                        <table class="table" id="ResultsTable">
+                            <thead class="table__head capitalisation">
+                            <tr class="table__row">
+                                <th></th><!--Blank column for view form button-->
+                                <!--Render each column name -->
+                                {% for column in header %}
+                                    <th class="table__header"> {{ column }}</th>
+                                {% endfor %}
+                            </tr>
+                            </tr>
+                            </thead>
+                            <tbody class="table__body" id="search_results_body">
+
+                            <!-- for each record, render each data value -->
+                            {% for record in records %}
+
+                                <tr class="table__row">
+                                    <td>
+                                        <a href="{{ record['survey'] }}/{{ record['period'] }}/{{ record['reference'] }}/viewform"
+                                           target="_blank">
+                                            <button type="submit" class="btn btn--small buttonWidth">
+                                                <span class="btn__inner">View Form</span>
+                                            </button>
+                                            <!-- Use .values() method to get values from each row dict -->
+                                            {% for element in record.values() %}
+                                                <td class="table__cell">{{ element }}</td>
+                                            {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1>{{ message }}</h1>
+        </div>
+
+        <div id="button_div">
+            <button class="btn btn--small buttonWidth" type="submit" id="prev_button" method="POST" style="display: none">
+                <span class="btn__inner">Previous</span>
+            </button>
+            <button class="btn btn--small buttonWidth" type="submit" id="next_button" form_id="next_form" method="POST" style="display:none">
+                <span class="btn__inner">Next</span>
+            </button>
+
+        </div>
+    </section>
+
+    <script>
+        var rows = document.getElementById("ResultsTable");
+        if (rows.length === 0) {
+            document.getElementById("hide_panel").style.display = "none";
+        }
+    </script>
+
+    <script>
+        addButtons()
+        function addButtons(data=false){
+            console.log(data)
+            document.getElementById("next_button").style.display = "None";
+            document.getElementById("prev_button").style.display = "None";
+
+        if (data == false){
+        let pageInfo = {{ links|tojson }};
+        console.log(pageInfo)
+        if (pageInfo['hasNextPage'] == true){
+            document.getElementById("next_button").style.display = "";
+           }
+        if (pageInfo["hasPreviousPage"] == true){
+            document.getElementById("prev_button").style.display = "";
+           }
+        } else{
+            var pageInfo = data;
+            console.log(pageInfo['endCursor'])
+        if (pageInfo['hasNextPage'] == true){
+            document.getElementById("next_button").style.display = "";
+           }
+        if (pageInfo["hasPreviousPage"] == true){
+            document.getElementById("prev_button").style.display = "";
+           }
+        }
+        }
+    </script>
+
+    <script>
+        var pageData = null;
+
+        function nextPage(){
+            console.log(getCursor(whichCursor="next", pagingInfo=pageData))
+            $.ajax({
+                type: 'POST',
+                url: "/contributor_search/Contributor/next",
+                contentType: "application/json",
+                data: JSON.stringify({cursor: getCursor(whichCursor="next", pagingInfo=pageData)})
+            }).done(updateResultsTable);
+        }
+        $('#next_button').on('click', nextPage)
+        function prevPage(){
+            $.ajax({
+                type: 'POST',
+                url: "/contributor_search/Contributor/previous",
+                contentType: "application/json",
+                data: JSON.stringify({cursor: getCursor(whichCursor="prev", pagingInfo=pageData)})
+            }).done(updateResultsTable);
+        }
+        $('#prev_button').on('click', prevPage)
+
+        function getCursor(whichCursor=false, pagingInfo=null){
+            if(pagingInfo == null){
+                var pageInfo = {{ links|tojson }};
+            }
+            else{
+                var pageInfo = pageData
+            }
+                
+            if (whichCursor == "next"){
+                return pageInfo["endCursor"];
+            }
+            else if (whichCursor == "prev"){
+                return pageInfo["startCursor"];
+            }
+            else if (whichCUrsor == false){
+                return null;
+            }
+        }
+
+        function updateResultsTable(data){
+            console.log("update called")
+            var headers = getTableHeaders()
+            var some = data;
+            $('#search_results_body').empty()
+            for (var i=0; i < some.data.length; i++){
+                row = some.data[i]
+                var link = "/contributor_search/Contributor/" + row.survey + "/" + row.period + "/" + row.reference + "/viewform";
+                var newRow = `<tr class=\"table__row\"> <td> <a target= \"_blank\" href=\"${link}\"> <button type=\"submit\" class=\"btn btn--small buttonWidth\">  <span class=\"btn__inner\">View Form </span> </button></a></td>`
+                for (var j=1; j < headers.length; j++){
+                    var key =  `${headers[j]}`
+                    newRow += `<td class=\"table__cell\">${row[key.replace(/ /g,'')]}</td>`
+                }
+                newRow += `</tr>`
+                $('#ResultsTable').append(newRow);
+            }
+            pageData = data.links
+            addButtons(data.links)
+            console.log(data);
+        }
+
+        function getTableHeaders(){
+            var headers = Array();
+            $("table tr th").each(function(i, v){
+                headers[i] = $(this).text();
+            }
+            )
+            return headers;
+        }
+    </script>
+
+{% endblock content %}

@@ -3,8 +3,10 @@ from collections import OrderedDict
 from socket import timeout
 from urllib.error import URLError
 from flask import render_template
-from wtforms import StringField, Form  # validators <-- Re-add when/if validation is required
-
+from wtforms import (
+    StringField,
+    Form,
+)  # validators <-- Re-add when/if validation is required
 
 
 # ###################################### UTILITY FUNCTIONS ###########################################
@@ -75,9 +77,9 @@ def str_to_bool(string_to_convert):
     :return: boolean
     Takes a string which should be either True or False and returns the bool value or ValueError
     """
-    if string_to_convert == 'True':
+    if string_to_convert == "True":
         return True
-    if string_to_convert == 'False':
+    if string_to_convert == "False":
         return False
     raise ValueError
 
@@ -106,7 +108,9 @@ def build_json(data):
     data = OrderedDict(data)
     # print(data)
     for key in data.keys():
-        data_atoms.append({form_key: data[key].get(form_key) for form_key in data[key].keys()})
+        data_atoms.append(
+            {form_key: data[key].get(form_key) for form_key in data[key].keys()}
+        )
         data_atoms[-1]["questionCode"] = key
     return data_atoms
 
@@ -118,11 +122,14 @@ def get_user():
 
 def forms_connect_to_eureka(url):
     from app.setup import discovery_service
+
     # This was moved here because it's used in a couple of different forms
     try:
-        return discovery_service.form_definition(url, "business-layer"), \
-               discovery_service.contributor_search_without_paging(url, "business-layer"), \
-               discovery_service.form_response(url, "persistence-layer")
+        return (
+            discovery_service.form_definition(url, "business-layer"),
+            discovery_service.contributor_search_without_paging(url, "business-layer"),
+            discovery_service.form_response(url, "persistence-layer"),
+        )
     except URLError as error:
         return render_template("UrlNotFoundError.html", error_message=error)
 
@@ -132,6 +139,7 @@ def forms_connect_to_eureka(url):
 
 def forms_connect_to_eureka_validation(url):
     from app.setup import discovery_service
+
     # This was moved here because it's used in a couple of different forms
     try:
         return discovery_service.get_validation(url, "validation-persistence-layer")
@@ -149,8 +157,19 @@ def build_links(links_list, name_of_link):
     :return: String
     Takes a list of links which and returns the correct one depending on parameter
     """
-    extracted_link = ''
+    extracted_link = ""
     for link in links_list:
-        if link['rel'] == name_of_link:
-            extracted_link = link['href']
+        if link["rel"] == name_of_link:
+            extracted_link = link["href"]
     return extracted_link
+
+
+def find_nodes(data: dict, node_to_find: str) -> (dict, list, str):
+    if node_to_find in data:
+        return data[node_to_find]
+    for att in data:
+        if att not in (node_to_find) and isinstance(data[att], dict):
+            item = find_nodes(data[att], node_to_find)
+            if item is not None:
+                return item
+    raise KeyError(f'No node with name "{node_to_find}" found')
