@@ -3,6 +3,9 @@ __pycache__
 .coverage
 .pytest_cache/
 
+# VSCode IDE
+.vscode/*
+
 # Pycharm Settings
 .idea
 
