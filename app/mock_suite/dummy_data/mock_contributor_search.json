@@ -1,1 +1,60 @@
-[{"reference": "49900002896", "survey": "333", "period": "201812", "lockedBy":"", "status": "Living", "formId": "3"}, {"reference": "49900004974", "survey": "111", "period": "201812", "lockedBy":"", "status": "Dead", "formId": "3"}, {"reference": "49900004858", "survey": "333", "period": "201712", "lockedBy":"", "status": "Failed validation", "formId": "3"}, {"reference": "49900002364", "survey": "333", "period": "201812", "lockedBy":"", "status": "Dead", "formId": "3"}, {"reference": "49900003831", "survey": "333", "period": "201712", "lockedBy":"", "status": "Living", "formId": "3"}, {"reference": "49900002083", "survey": "111", "period": "201812", "lockedBy":"", "status": "Failed validation", "formId": "2"}, {"reference": "49900003097", "survey": "333", "period": "201712", "lockedBy":"", "status": "Dead", "formId": "1"}]
+{
+ "data":[
+       {
+         "reference": "4990012",
+         "period": "201211",
+         "survey": "066 "
+       },
+       {
+         "reference": "4990012",
+         "period": "201212",
+         "survey": "066 "
+       },
+       {
+         "reference": "4990065",
+         "period": "201309",
+         "survey": "076 "
+       },
+       {
+         "reference": "77700000000",
+         "period": "201803",
+         "survey": "076 "
+       },
+       {
+         "reference": "77700000001",
+         "period": "201712",
+         "survey": "066 "
+       },
+       {
+         "reference": "77700000001",
+         "period": "201803",
+         "survey": "066 "
+       },
+       {
+         "reference": "77700000001",
+         "period": "201803",
+         "survey": "076 "
+       },
+       {
+         "reference": "77700000001",
+         "period": "201809",
+         "survey": "074 "
+       },
+       {
+         "reference": "77700000002",
+         "period": "201703",
+         "survey": "076 "
+       },
+       {
+         "reference": "77700000002",
+         "period": "201803",
+         "survey": "066 "
+       }
+     ],
+     "pageInfo": {
+      "endCursor": "WyJwcmltYXJ5X2tleV9hc2MiLFsiNzc3MDAwMDAwMDIiLCIyMDE4MDMiLCIwNjYgIl1d",
+      "hasNextPage": true,
+      "startCursor": "WyJwcmltYXJ5X2tleV9hc2MiLFsiNDk5MDAxMiIsIjIwMTIxMSIsIjA2NiAiXV0=",
+      "hasPreviousPage": true
+    }
+}
