@@ -1,18 +1,11 @@
-import json
-
-from urllib.error import URLError
-
-# from content_management import Content
 from flask import (
     request,
     Blueprint,
     redirect,
     url_for,
     render_template,
-    render_template_string,
-    jsonify,
+    jsonify
 )
-from flask_jwt_extended import jwt_required
 
 from app.utilities.helpers import (
     create_form_class,
