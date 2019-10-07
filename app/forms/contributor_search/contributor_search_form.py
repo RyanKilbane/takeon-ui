@@ -79,8 +79,8 @@ def general_search_screen_selection():
     return render_template("./search_screen_choice/GeneralSearchScreenChoice.html")
 
 
-@contributor_search_blueprint_post.route("/Contributor/GeneralSearch", methods=["POST"])
-def general_search_screen():
+@contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["POST"])
+def general_search_screen_post():
     print("Reached post")
     criteria = request.args["criteria"].split(";")
 
