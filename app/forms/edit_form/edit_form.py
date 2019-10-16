@@ -36,7 +36,7 @@ def edit_form(inqcode, period, ruref):
     # Build URI for business layer
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     url_connect = build_uri(url_parameters)
-    pl_url_connect = build_uri_2(url_parameters)
+    # pl_url_connect = build_uri_2(url_parameters)
 
     # attempt to connect to Eureka, except common errors
 
@@ -150,8 +150,8 @@ def edit_form(inqcode, period, ruref):
                 contributor_details = discovery_service.contributor_search_without_paging(url_connect, "business-layer")
                 form_responses = discovery_service.form_response(url_connect, "persistence-layer")
                 form_response = json.loads(form_responses)
-                validations_output = forms_connect_to_eureka_validation(pl_url_connect)
-                validations_output = json.loads(validations_output)
+               # validations_output = forms_connect_to_eureka_validation(pl_url_connect)
+               # validations_output = json.loads(validations_output)
                 contributor_data = json.loads(contributor_details)
 
                 return render_template("./edit_form/EditForm.html", survey=inqcode, period=period, ruref=ruref,
