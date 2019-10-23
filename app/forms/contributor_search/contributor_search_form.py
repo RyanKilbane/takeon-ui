@@ -11,7 +11,7 @@ from app.utilities.helpers import (
     create_form_class,
     create_new_dict,
     clean_search_parameters,
-    build_uri,
+    build_uri
 )
 from app.utilities.graphql_data import GraphData
 from app.setup import discovery_service
