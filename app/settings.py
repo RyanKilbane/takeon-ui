@@ -13,7 +13,7 @@ CSRF_SESSION_KEY = os.getenv('SECRET_KEY')
 APP_NAME = "Take_On_UI"
 PORT = 5000
 
-MOCKING = str_to_bool(os.getenv('MOCKING', default="False"))
+MOCKING = str_to_bool(os.getenv('MOCKING', default="True"))
 
 TOKEN_ENDPOINT = ""
 CLIENT_ID = ""

@@ -1,13 +1,9 @@
-import os
 import json
 import requests
-from py_eureka_client import eureka_client
-from flask import flash, Flask
 import requests_mock
-from app.mock_suite import mock_suite
-from kubernetes import client, config
 
-import hashlib
+from kubernetes import client, config
+from app.mock_suite import mock_suite
 
 
 class KubernetesConfig:
@@ -20,96 +16,60 @@ class KubernetesConfig:
 
     def contributor_search(self, url_connect, service_name):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
-            ip_addresss = (
-                service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            )
-            output = requests.get(
-                "http://" + ip_addresss + "/contributor/qlSearch/{}".format(url_connect)
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
+            ip_addresss = (service.spec.cluster_ip + ":" + str(service.spec.ports[0].port))
+            output = requests.get("http://" + ip_addresss + "/contributor/qlSearch/{}".format(url_connect))
             return output.text
         return mock_contributor_search_screen(url_connect=url_connect).text
 
     def contributor_search_without_paging(self, url_connect, service_name):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip_address = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            output = requests.get(
-                "http://" + ip_address + "/contributor/search/{}".format(url_connect)
-            )
+            output = requests.get("http://" + ip_address + "/contributor/search/{}".format(url_connect))
             return output.text
 
         return mock_contributor_search(url_connect=url_connect).text
 
     def form_definition(self, url_connect, service_name):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            output = requests.get(
-                "http://"
-                + ip
-                + "/FormDefinition/GetFormDefinition/{}".format(url_connect)
-            )
-
+            output = requests.get("http://" + ip + "/FormDefinition/GetFormDefinition/{}".format(url_connect))
             return output.text
-
         return mock_form_definition(url_connect=url_connect).text
 
     def form_response(self, url_connect, service_name):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            output = requests.get(
-                "http://" + ip + "/Response/QuestionResponse/{}".format(url_connect)
-            )
+            output = requests.get("http://" + ip + "/Response/QuestionResponse/{}".format(url_connect))
             return output.text
 
         return mock_form_response(url_connect=url_connect).text
 
     def update_response(self, url_connect, service_name, data):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            # output = requests.get("http://" + ip + "/Upsert/CompareResponses/{}".format(url_connect))
             requests.put(
                 "http://" + ip + "/Upsert/CompareResponses/{}".format(url_connect),
                 data=bytes(json.dumps(data), encoding="utf-8"),
                 headers={"Content-Type": "Application/Json"},
             )
-            # return output.text
-
         return None
 
     def get_validation(self, url_connect, service_name):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            output = requests.get(
-                "http://"
-                + ip
-                + "/validation-pl/validations/return?{}".format(url_connect)
-            )
+            output = requests.get("http://" + ip + "/validation-pl/validations/return?{}".format(url_connect))
             return output.text
-
         return mock_get_validation(url_connect=url_connect).text
 
     def update_locked_status(self, url_connect, service_name, data):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             requests.put(
                 "http://" + ip + "/Update/LockedStatus/{}".format(url_connect),
@@ -120,9 +80,7 @@ class KubernetesConfig:
 
     def run_validations(self, url_connect, service_name, data):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
             output = requests.put(
                 "http://" + ip + "/validation-bl/run-all/{}".format(url_connect),
@@ -133,15 +91,10 @@ class KubernetesConfig:
 
     def graphql_post(self, url_connect, service_name):
         if self.mock is False:
-            service = self.client.read_namespaced_service(
-                namespace=self.namespace, name=service_name
-            )
+            service = self.client.read_namespaced_service(namespace=self.namespace, name=service_name)
             ip = service.spec.cluster_ip + ":" + str(service.spec.ports[0].port)
-            output = requests.get(
-                "http://" + ip + "/contributor/qlSearch/{}".format(url_connect)
-            )
+            output = requests.get("http://" + ip + "/contributor/qlSearch/{}".format(url_connect))
             return output.text
-
         return mock_next_page(url_connect=url_connect).text
 
 

@@ -17,16 +17,17 @@
 				<div class="group">
 					<div class="col-12">
 						<h3 class="saturn sml-margin buttom_10_extra_space">Respondents</h3>
-                        <div id="lockedInfo" style="display:none">
-                            <div class="panel panel--info" >
-                            <div class="panel__header">
-                                <div class="u-fs-r--b">Form locked</div>
-                            </div>
-                            <div class="panel__body">
-                                <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been checked back in.</div>
-                            </div>
-
-                        </div>
+                        	<div id="lockedInfo" style="display:none">
+								<!--
+								<div class="panel panel--info" >
+									<div class="panel__header">
+										<div class="u-fs-r--b">Form locked</div>
+									</div>
+									<div class="panel__body">
+										<div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been checked back in.</div>
+									</div>								
+								</div>
+								-->
                             <br>
                         </div>
                         <h2>Viewing form for Respondent {{ ruref }} for survey {{ survey }} in period {{ period }}</h2>
@@ -105,6 +106,7 @@
 	}
 	</script>
 
+	<!--
 	<script>
 		var isLockedBy = "{{ locked }}"
 		if (isLockedBy != ""){
@@ -113,10 +115,9 @@
 			var bar = document.getElementById("lockedInfo");
 			bar.style.display = "block";
 			}
-
-
 		document.getElementById("Form2").style.display = "block"
 	</script>
+	-->
 
 	<br>
 	<br>
