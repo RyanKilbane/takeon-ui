@@ -1,10 +1,13 @@
+import logging
 from flask import Flask
-
-from flask_jwt_extended import JWTManager
-from app.utilities import kubernetes_config
 from app import settings
+from app.utilities.api_request import ApiRequest
 
-discovery_service = kubernetes_config.KubernetesConfig("take-on", mocking=settings.MOCKING)
+log = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+api_caller = ApiRequest(service="business-layer", mocking=settings.MOCKING)
+api_caller_pl = ApiRequest(service="persistence-layer", mocking=settings.MOCKING)
 
 def create_app(setting_overrides=None):
     # Define the WSGI application object
@@ -26,8 +29,8 @@ def create_app(setting_overrides=None):
 
 
 def add_blueprints(application):
-    from app.forms.contributor_search_form import contributor_search_blueprint,\
-                                                                     contributor_search_blueprint_post
+
+    from app.forms.contributor_search_form import contributor_search_blueprint, contributor_search_blueprint_post
     application.register_blueprint(contributor_search_blueprint)
     application.register_blueprint(contributor_search_blueprint_post)
     contributor_search_blueprint_post.config = application.config.copy()

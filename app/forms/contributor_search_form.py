@@ -14,17 +14,17 @@ from app.utilities.helpers import (
     build_uri
 )
 from app.utilities.graphql_data import GraphData
-from app.setup import discovery_service
+from app.setup import log, api_caller
 
 contributor_search_blueprint = Blueprint(
-    name="contributor_search", import_name=__name__, url_prefix="/contributor_search"
-)
+    name="contributor_search",
+    import_name=__name__, 
+    url_prefix="/contributor_search")
 
 contributor_search_blueprint_post = Blueprint(
     name="contributor_search_post",
     import_name=__name__,
-    url_prefix="/contributor_search",
-)
+    url_prefix="/contributor_search")
 
 # headers here double as url parameters
 headers = ["reference", "period", "survey", "status", "formId"]
@@ -55,26 +55,24 @@ def landing_page():
 
 
 # ####################### SIMPLE SEARCH SCREEN, EXPOSES ALL FIELDS #############################
-@contributor_search_blueprint.route(
-    "/Contributor/searchSelection", methods=["GET", "POST"]
-)
-# @jwt_required
+@contributor_search_blueprint.route("/Contributor/searchSelection", methods=["GET", "POST"])
+
+
 # Selection options, just pull out the values that have been selected, join
 # them all together in a semi-colon delimited string
 def general_search_screen_selection():
+    log.info("general_search_screen_selection")
     if request.method == "POST":
         criteria = ";".join(i for i in request.form.keys())
         # redirect to general search screen, criteria is added as a url parameter. ?criteria=VALUE1;VALUE2
-        return redirect(
-            url_for("contributor_search.general_search_screen", criteria=criteria)
-        )
+        return redirect(url_for("contributor_search.general_search_screen", criteria=criteria))
 
     return render_template("./search_screen_choice/GeneralSearchScreenChoice.html")
 
 
 @contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["POST"])
 def general_search_screen_post():
-    print("Reached post")
+    log.info("general_search_screen_post")
     criteria = request.args["criteria"].split(";")
 
     # Build class for the forms that are passed in, this must be done dynamically
@@ -82,6 +80,7 @@ def general_search_screen_post():
 
     # Build class for the forms that are passed in, this must be done dynamically
     selection_form = create_form_class(criteria)
+
     # create form object
     form = selection_form(request.form)
     mutable_form = create_new_dict(request.form)
@@ -91,11 +90,10 @@ def general_search_screen_post():
     url_connect += ";first=10"
     print("url connect: {}".format(url_connect))
 
-    data = GraphData(
-        discovery_service.contributor_search(url_connect, "business-layer")
-    )
+    contributor_data = api_caller.contributor_search(parameters=url_connect)
+    data = GraphData(contributor_data)
     output_data = data.nodes
-    # links = data.page_info
+
     return render_template(
         "./contributor_search/GeneralSearchScreenGQL.html",
         form=form,
@@ -108,12 +106,13 @@ def general_search_screen_post():
 
 @contributor_search_blueprint.route("/Contributor/next", methods=["POST"])
 def next_page():
+    log.info("Next page")
     newpage = request.json["cursor"]
     url_connect = "graphql;" + f";startCursor={newpage}" + ";first=10"
     print(newpage)
-    data = GraphData(
-        discovery_service.graphql_post(url_connect, "business-layer")
-    )
+
+    contributor_data = api_caller.graphql_post(parameters=url_connect)
+    data = GraphData(contributor_data)
 
     print(data.nodes)
     output_data = data.nodes
@@ -123,12 +122,13 @@ def next_page():
 
 @contributor_search_blueprint.route("/Contributor/previous", methods=["POST"])
 def previous_page():
+    log.info("Previous page")
     newpage = request.json["cursor"]
     url_connect = "graphql;" + f";endCursor={newpage}" + ";last=10"
     print(newpage)
-    data = GraphData(
-        discovery_service.graphql_post(url_connect, "business-layer")
-    )
+
+    contributor_data = api_caller.graphql_post(parameters=url_connect)
+    data = GraphData(contributor_data)
 
     print(data.nodes)
     output_data = data.nodes
@@ -138,6 +138,7 @@ def previous_page():
 @contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["GET"])
 # Main search screen
 def general_search_screen():
+    log.info("general_search_screen")
     criteria = request.args["criteria"].split(";")
     # Build class for the forms that are passed in, this must be done dynamically
     selection_form = create_form_class(criteria)
