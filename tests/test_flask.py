@@ -1,4 +1,3 @@
-from app.eureka_config import eureka_config
 from app.forms.contributor_search_form import build_uri, clean_search_parameters
 
 
