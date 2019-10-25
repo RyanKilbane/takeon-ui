@@ -1,8 +1,4 @@
-from os import getlogin
 from collections import OrderedDict
-from socket import timeout
-from urllib.error import URLError
-from flask import render_template
 from wtforms import (
     StringField,
     Form,
@@ -120,34 +116,34 @@ def get_user():
     return "fisdba"
 
 
-def forms_connect_to_eureka(url):
-    from app.setup import discovery_service
+# def forms_connect_to_eureka(parameters):
+#     from app.setup import discovery_service
 
-    # This was moved here because it's used in a couple of different forms
-    try:
-        return (
-            discovery_service.form_definition(url, "business-layer"),
-            discovery_service.contributor_search_without_paging(url, "business-layer"),
-            discovery_service.form_response(url, "persistence-layer"),
-        )
-    except URLError as error:
-        return render_template("UrlNotFoundError.html", error_message=error)
+#     # This was moved here because it's used in a couple of different forms
+#     try:
+#         return (
+#             discovery_service.form_definition(parameters),
+#             discovery_service.contributor_search_without_paging(parameters),
+#             discovery_service.form_response(parameters),
+#         )
+#     except URLError as error:
+#         return render_template("UrlNotFoundError.html", error_message=error)
 
-    except timeout as error:
-        return render_template("TimeOutError.html", error_message=error)
+#     except timeout as error:
+#         return render_template("TimeOutError.html", error_message=error)
 
 
-def forms_connect_to_eureka_validation(url):
-    from app.setup import discovery_service
+# def forms_connect_to_eureka_validation(url):
+#     from app.setup import discovery_service
 
-    # This was moved here because it's used in a couple of different forms
-    try:
-        return discovery_service.get_validation(url, "validation-persistence-layer")
-    except URLError as error:
-        return render_template("UrlNotFoundError.html", error_message=error)
+#     # This was moved here because it's used in a couple of different forms
+#     try:
+#         return discovery_service.get_validation(url, "validation-persistence-layer")
+#     except URLError as error:
+#         return render_template("UrlNotFoundError.html", error_message=error)
 
-    except timeout as error:
-        return render_template("TimeOutError.html", error_message=error)
+#     except timeout as error:
+#         return render_template("TimeOutError.html", error_message=error)
 
 
 def build_links(links_list, name_of_link):
