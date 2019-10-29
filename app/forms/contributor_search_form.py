@@ -15,16 +15,10 @@ from app.utilities.helpers import (
 )
 from app.utilities.graphql_data import GraphData
 from app.setup import log, api_caller
+from app.utilities.api_request import TakeonApiException
 
-contributor_search_blueprint = Blueprint(
-    name="contributor_search",
-    import_name=__name__, 
-    url_prefix="/contributor_search")
-
-contributor_search_blueprint_post = Blueprint(
-    name="contributor_search_post",
-    import_name=__name__,
-    url_prefix="/contributor_search")
+contributor_search_blueprint = Blueprint(name="contributor_search", import_name=__name__, url_prefix="/contributor_search")
+contributor_search_blueprint_post = Blueprint(name="contributor_search_post", import_name=__name__, url_prefix="/contributor_search")
 
 # headers here double as url parameters
 headers = ["reference", "period", "survey", "status", "formId"]
@@ -34,18 +28,32 @@ headers = ["reference", "period", "survey", "status", "formId"]
 # ######################################## FLASK ENDPOINTS ######################################
 #################################################################################################
 @contributor_search_blueprint.errorhandler(404)
-def not_found(e):
-    return render_template("./error_templates/404.html", message_header=e), 404
+def not_found(error):
+    return render_template("./error_templates/404.html", message_header=error), 404
 
 
 @contributor_search_blueprint.errorhandler(403)
-def not_auth(e):
-    return render_template("./error_templates/403.html", message_header=e), 403
+def not_auth(error):
+    return render_template("./error_templates/403.html", message_header=error), 403
 
 
 @contributor_search_blueprint.errorhandler(500)
-def internal_server_error(e):
-    return render_template("./error_templates/500.html", message_header=e), 500
+def internal_server_error(error):
+    return render_template("./error_templates/500.html", message_header=error), 500
+
+
+@contributor_search_blueprint.errorhandler(TakeonApiException)
+def handle_invalid_usage(error):
+    display = 'Service Error. Please contact support'
+    log.info('Exception caught: %s', error.message)
+    return render_template("./error_templates/500.html", message_header=display), 400
+
+
+@contributor_search_blueprint.app_errorhandler(Exception)
+def handle_unexpected_error(error):
+    log.info('Unexpected exception caught: %s', error)
+    display = 'Unexpected service Error! Please contact support'
+    return render_template("./error_templates/500.html", message_header=display), 500
 
 
 @contributor_search_blueprint.route("/")
@@ -108,42 +116,37 @@ def general_search_screen_post():
 def next_page():
     log.info("Next page")
     newpage = request.json["cursor"]
-    url_connect = "graphql;" + f";startCursor={newpage}" + ";first=10"
-    print(newpage)
-
-    contributor_data = api_caller.graphql_post(parameters=url_connect)
-    data = GraphData(contributor_data)
-
-    print(data.nodes)
-    output_data = data.nodes
-    links = data.page_info
-    return jsonify(data=output_data, links=links)
+    parameters = "graphql;" + f";startCursor={newpage}" + ";first=10"
+    return change_page(parameters)
 
 
 @contributor_search_blueprint.route("/Contributor/previous", methods=["POST"])
 def previous_page():
     log.info("Previous page")
     newpage = request.json["cursor"]
-    url_connect = "graphql;" + f";endCursor={newpage}" + ";last=10"
-    print(newpage)
+    parameters = "graphql;" + f";endCursor={newpage}" + ";last=10"
+    return change_page(parameters)
 
-    contributor_data = api_caller.graphql_post(parameters=url_connect)
+
+def change_page(parameters):
+    contributor_data = api_caller.graphql_post(parameters=parameters)
     data = GraphData(contributor_data)
-
-    print(data.nodes)
     output_data = data.nodes
     links = data.page_info
     return jsonify(data=output_data, links=links)
 
+
 @contributor_search_blueprint.route("/Contributor/GeneralSearch", methods=["GET"])
 # Main search screen
 def general_search_screen():
+
     log.info("general_search_screen")
     criteria = request.args["criteria"].split(";")
+
     # Build class for the forms that are passed in, this must be done dynamically
     selection_form = create_form_class(criteria)
-    # create form object
     form = selection_form(request.form)
+
     # On search, and if form object passes validation enter block
     current_page = -1
     last_page = -1

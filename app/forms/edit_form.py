@@ -57,7 +57,7 @@ def edit_form(inqcode, period, ruref):
         # If the form doesn't have saveForm, then the exit button must have been pressed
         # return the user to the view form screen
         return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
-    
+
     log.info("Starting form save")
     form = request.form
     log.info("UI Form: %s", form)
@@ -98,7 +98,13 @@ def edit_form(inqcode, period, ruref):
     ## form_responses = discovery_service.form_response(parameters=url_connect)
     form_responses = api_caller_pl.form_response(parameters=parameters)
 
-    return render_template("./edit_form/EditForm.html", survey=inqcode, period=period, ruref=ruref,
-                            data=json.loads(question_definition), contributor_details=contributor_data['data'][0], responses=json.loads(form_responses),
-                            validation={}, status_message=json.dumps(status_message))
-
+    return render_template(
+        "./edit_form/EditForm.html",
+        survey=inqcode,
+        period=period,
+        ruref=ruref,
+        data=json.loads(question_definition),
+        contributor_details=contributor_data['data'][0],
+        responses=json.loads(form_responses),
+        validation={},
+        status_message=json.dumps(status_message))
