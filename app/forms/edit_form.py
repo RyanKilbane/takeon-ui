@@ -95,5 +95,5 @@ def extract_responses(data) -> dict:
     output = []
     for key in data.keys():
         if key != "action":
-            output.append({'question': key, 'response': data[key]})
+            output.append({'question': key, 'response': data[key], 'instance': 0})
     return output
