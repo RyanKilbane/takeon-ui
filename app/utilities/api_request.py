@@ -8,7 +8,7 @@ from app.utilities.kubernetes_config import KubernetesConfig
 class ApiRequest:
     def __init__(self, service="business-layer", mocking=True):
         self.mock = mocking
-        print('Mocking status: {}'.format(self.mock))
+        #print('Mocking status: {}'.format(self.mock))
         if not self.mock:
             self.kube = KubernetesConfig(service)
 
@@ -18,8 +18,12 @@ class ApiRequest:
     def request_get(self, endpoint, parameters):
         try:
             return requests.get(self.build_endpoint(endpoint, parameters))
-        except ApiException:
-            return "Nuts"
+        except ApiException as error:
+            raise TakeonApiException(error.body, status_code=410)
+        # except ConnectionError as error:
+            # raise TakeonApiException(error.args, status_code=410)
+        except requests.RequestException as error:
+            raise TakeonApiException(error.args, status_code=410)
 
     def request_put(self, endpoint, parameters, data, headers):
         return requests.put(self.build_endpoint(endpoint, parameters), data=data, headers=headers)
@@ -61,6 +65,21 @@ class ApiRequest:
         return self.request_get(endpoint="/contributor/qlSearch", parameters=parameters).text
 
 
+
+class TakeonApiException(Exception):
+    status_code = 400
+
+    def __init__(self, message, status_code=None, payload=None):
+        Exception.__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        output = dict(self.payload or ())
+        output['message'] = self.message
+        return output
 
 
 
