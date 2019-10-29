@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, request, render_template, redirect, url_for
-from app.utilities.helpers import decompose_data, build_uri, build_json, get_user
+from app.utilities.helpers import build_uri, get_user
 from app.setup import log, api_caller, api_caller_pl
 
 edit_form_blueprint = Blueprint(name='edit_form', import_name=__name__, url_prefix='/contributor_search')
@@ -58,44 +58,25 @@ def edit_form(inqcode, period, ruref):
         # return the user to the view form screen
         return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
 
-    log.info("Starting form save")
-    form = request.form
-    log.info("UI Form: %s", form)
-
-    # Build up a contributor key
-    # contributor_key_data = {'survey': inqcode, 'period': period, 'reference': ruref}
+    log.info('Starting form save')
 
     # Extract response data from UI elements
-    data = {key: form[key] for key in form.keys()}
-
-    # decompose the field names from questionCode:number|instance:number to
-    # {questionCode: number, instance: number}
-    response_data = decompose_data(data)
-    original_data = build_json(form_response)
+    response_data = extract_responses(request.form)
+    log.info('Response data: %s', response_data)
 
     # Build up JSON structure to save
-    response_data["Original Responses"] = original_data
-    response_data["user"] = {"user": get_user()}
-    response_data["reference"] = ruref
-    response_data["period"] = period
-    response_data["survey"] = inqcode
-
-    # Build the URL for the contributor responses to update
-    # url_connect = build_uri(contributor_key_data)
+    json_output = {}
+    json_output["responses"] = response_data
+    json_output["user"] = get_user()
+    json_output["reference"] = ruref
+    json_output["period"] = period
+    json_output["survey"] = inqcode
 
     # Send the data to the business layer for processing
-    log.info("Combined JSON: %s", str(response_data))
-    #try:
-    api_caller.update_response(parameters=parameters, data=response_data)
-    #except Exception as error:
-    #    status_message = {"Error": "There was an error when attempting to save new responses:\n{}".format(error)}
-    #    return render_template("./edit_form/EditForm.html", survey=inqcode, period=period, ruref=ruref,
-    #                           data=definition, contributor_details=contributor_data['data'][0], responses=form_response,
-    #                           validation={}, status_message=json.dumps(status_message))
+    log.info("Output JSON: %s", str(json_output))
+    api_caller.update_response(parameters=parameters, data=json_output)
 
-    status_message = "New responses saved successfully"
     # Get the refreshed data from the responses table
-    ## form_responses = discovery_service.form_response(parameters=url_connect)
     form_responses = api_caller_pl.form_response(parameters=parameters)
 
     return render_template(
@@ -107,4 +88,12 @@ def edit_form(inqcode, period, ruref):
         contributor_details=contributor_data['data'][0],
         responses=json.loads(form_responses),
         validation={},
-        status_message=json.dumps(status_message))
+        status_message=json.dumps('New responses saved successfully'))
+
+
+def extract_responses(data) -> dict:
+    output = []
+    for key in data.keys():
+        if key != "action":
+            output.append({'question': key, 'response': data[key]})
+    return output

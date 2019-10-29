@@ -1,9 +1,5 @@
 from collections import OrderedDict
-from wtforms import (
-    StringField,
-    Form,
-)  # validators <-- Re-add when/if validation is required
-
+from wtforms import StringField, Form
 
 # ###################################### UTILITY FUNCTIONS ###########################################
 # Create class for forms dynamically
@@ -11,7 +7,6 @@ def create_form_class(iterable):
     var_dict = {}
     for variable_name in iterable:
         print("adding {} to dict".format(variable_name))
-        # var_dict[variable_name] = StringField("{}".format(variable_name), [validators.DataRequired()])
         var_dict[variable_name] = StringField("{}".format(variable_name))
     class_output = type("SearchSelect", (Form,), var_dict)
     # At this point we have a class that analogous to SearchForm
@@ -79,7 +74,6 @@ def str_to_bool(string_to_convert):
         return False
     raise ValueError
 
-
 def decompose_data(data: dict) -> dict:
     """
     :param data: Dictionary of the form {"qCode:Number|inst:Number":"Response"}
@@ -112,43 +106,12 @@ def build_json(data):
 
 
 def get_user():
-    # For the moment, this just returns getLogin(), in the future this will get a cookie from the browser
+    # In the future this will get a cookie from the browser
     return "fisdba"
-
-
-# def forms_connect_to_eureka(parameters):
-#     from app.setup import discovery_service
-
-#     # This was moved here because it's used in a couple of different forms
-#     try:
-#         return (
-#             discovery_service.form_definition(parameters),
-#             discovery_service.contributor_search_without_paging(parameters),
-#             discovery_service.form_response(parameters),
-#         )
-#     except URLError as error:
-#         return render_template("UrlNotFoundError.html", error_message=error)
-
-#     except timeout as error:
-#         return render_template("TimeOutError.html", error_message=error)
-
-
-# def forms_connect_to_eureka_validation(url):
-#     from app.setup import discovery_service
-
-#     # This was moved here because it's used in a couple of different forms
-#     try:
-#         return discovery_service.get_validation(url, "validation-persistence-layer")
-#     except URLError as error:
-#         return render_template("UrlNotFoundError.html", error_message=error)
-
-#     except timeout as error:
-#         return render_template("TimeOutError.html", error_message=error)
 
 
 def build_links(links_list, name_of_link):
     """
-
     :param links_list: List, name_of_link: String
     :return: String
     Takes a list of links which and returns the correct one depending on parameter

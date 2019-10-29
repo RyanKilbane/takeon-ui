@@ -70,7 +70,7 @@
                     <div>
                         {{ datum["displayQuestionNumber"] }}<strong> {{ datum["displayText"] }}</strong>
                         <br>
-                        <input name="questionCode:{{ datum['questionCode'] }}|instance:0"
+                        <input name="{{ datum['questionCode'] }}"
                                value="{{ responses[datum['questionCode']]['response'] }}" type="number"
                                class="input input--text input-type__input">
                         <span style="color:red">{{ datum["questionCode"] }}</span>
