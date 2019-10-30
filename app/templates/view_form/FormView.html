@@ -206,39 +206,40 @@
 
     <div class="wrapper">
         <div class="response-split">
-            <!-- Accordion -->
-            <!--
+            Accordion -->
             <h3>Validation</h3>
             {% for output in validation %}
-            {% if output["validationFormEntity"]["severity"] == "E" %}
-                <button class="accordion-legacy" style="background-color:#D0021B" id="questionCode:
-                {{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>
-                {{ output["validationFormEntity"]["questionCode"] }}</strong>
-                      <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
+            {% if output["validationformByValidationid"]["severity"] == "E" %}
+                <button class="accordion-legacy" style="background-color:#D0021B" id="primaryquestion:
+                {{ output['validationformByValidationid']['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                {{ output["validationformByValidationid"]["primaryquestion"] }}</strong>
+                      <strong>{{ output["validationformByValidationid"]["validationrulebyRule"]["name"] }}</strong>
                 </button>
                 <div class="panel-legacy">
-                    <b>Validation ID: {{ output["validationFormEntity"]["validationid"] }}</b><br>
+                    <b>Validation ID: {{ output["validationformByValidationid"]["validationid"] }}</b><br>
                     <b>Formula: {{ output["formula"] }}</b><br>
+                    <b>Triggered: {{ output["triggered"] }}</b>
+                    <b>Instance: {{ output["instance"] }}</b>
                     <br>
-                    <b>Overridden by: </b>{{ contributor_details['lastUpdatedBy'] }}<br>
-                    <b>Overridden date:</b>{{ contributor_details['lastUpdatedDate'] }}
+                    <b>Overridden by: </b>{{ allValidationoutputs['lastUpdatedBy'] }}<br>
+                    <b>Overridden date:</b>{{ allValidationoutputs['lastUpdatedDate'] }}
                 </div>
             {% else %}
-                <button class="accordion-legacy" style="background-color:#FE781F" id="questionCode:
-                {{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>
-                {{ output["validationFormEntity"]["questionCode"] }}</strong>
-                    <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
+                <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
+                {{ output['validationformByValidationid']['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                {{ output["validationformByValidationid"]["primaryquestion"] }}</strong>
+                    <strong>{{ output["validationformByValidationid"]["validationruleByRule"]["name"] }}</strong>
                 </button>
                 <div class="panel-legacy">
-                    <b>Validation ID: {{ output["validationFormEntity"]["validationid"] }}</b><br>
+                    <b>Validation ID: {{ output["validationformByValidationid"]["validationid"] }}</b><br>
                     <b>Formula: {{ output["formula"] }}</b><br>
                     <br>
-                    <b>Overridden by: </b>{{ contributor_details['lastUpdatedBy'] }}<br>
-                    <b>Overridden date:</b>{{ contributor_details['lastUpdatedDate'] }}
+                    <b>Overridden by: </b>{{ allValidationoutputs['lastUpdatedBy'] }}<br>
+                    <b>Overridden date:</b>{{ allValidationoutputs['lastUpdatedDate'] }}
                 </div>
             {% endif %}
             {% endfor %}]
-            -->
+           
         </div>
     </div>
 
