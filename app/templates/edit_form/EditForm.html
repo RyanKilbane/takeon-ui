@@ -13,7 +13,7 @@
 
 {% block content %}
 
-
+    <!--
     <div id="lockedInfo" style="display:none">
         <div class="panel panel--error panel--simple">
             <div class="panel__error">
@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-
+    -->
 
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
@@ -70,7 +70,7 @@
                     <div>
                         {{ datum["displayQuestionNumber"] }}<strong> {{ datum["displayText"] }}</strong>
                         <br>
-                        <input name="questionCode:{{ datum['questionCode'] }}|instance:0"
+                        <input name="{{ datum['questionCode'] }}"
                                value="{{ responses[datum['questionCode']]['response'] }}" type="number"
                                class="input input--text input-type__input">
                         <span style="color:red">{{ datum["questionCode"] }}</span>
@@ -143,6 +143,7 @@
         }
     </script>
 
+    <!--
     <script>
         var isLockedBy = "{{ locked }}"
         if (isLockedBy != "") {
@@ -153,7 +154,7 @@
         }
         document.getElementById("SectionA").style.display = "block"
     </script>
-
+    -->
 
     <script>
         var acc = document.getElementsByClassName("accordion-legacy");

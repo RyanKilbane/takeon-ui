@@ -12,7 +12,7 @@
 <br>
 {% block content %}
 
-
+    <!--
     <div id="lockedInfo" style="display:none">
         <div class="panel panel--error panel--simple">
             <div class="panel__error">
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-
+    -->
 
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
@@ -271,6 +271,7 @@
         document.getElementById("defaultOpen").click();
     </script>
 
+    <!--
     <script>
         var isLockedBy = "{{ locked }}"
         if (isLockedBy != "") {
@@ -278,10 +279,10 @@
             document.getElementById("editFormButton").style.color = "grey";
             var bar = document.getElementById("lockedInfo");
             bar.style.display = "block";
-        }
+        }  
         document.getElementById("SectionA").style.display = "block"
     </script>
-
+    -->
 
     <script>
         var acc = document.getElementsByClassName("accordion-legacy");

@@ -11,18 +11,18 @@ login_form_blueprint = Blueprint(name='login_form', import_name=__name__)
 # ######################################## FLASK ENDPOINTS ######################################
 #################################################################################################
 @login_form_blueprint.errorhandler(404)
-def not_found(e):
-    return render_template('./error_templates/404.html', message_header=e), 404
+def not_found(error):
+    return render_template('./error_templates/404.html', message_header=error), 404
 
 
 @login_form_blueprint.errorhandler(403)
-def not_auth(e):
-    return render_template('./error_templates/403.html', message_header=e), 403
+def not_auth(error):
+    return render_template('./error_templates/403.html', message_header=error), 403
 
 
 @login_form_blueprint.errorhandler(500)
-def internal_server_error(e):
-    return render_template('./error_templates/500.html', message_header=e), 500
+def internal_server_error(error):
+    return render_template('./error_templates/500.html', message_header=error), 500
 
 @login_form_blueprint.route('/login', methods=['GET', 'POST'])
 def login_form():
