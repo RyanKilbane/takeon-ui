@@ -64,6 +64,11 @@ class ApiRequest:
             return mock_next_page(url_connect=parameters).text
         return self.request_get(endpoint="/contributor/qlSearch", parameters=parameters).text
 
+    def validation_outputs(self, parameters):
+        if self.mock:
+            return mock_get_validation(url_connect=parameters).text
+        return self.request_get(endpoint="/validation/validationoutput", parameters=parameters).text
+
 
 
 class TakeonApiException(Exception):
