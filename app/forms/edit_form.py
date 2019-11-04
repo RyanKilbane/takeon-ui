@@ -32,10 +32,12 @@ def edit_form(inqcode, period, ruref):
     question_definition = api_caller.form_definition(parameters=parameters)
     contributor_details = api_caller.contributor_search(parameters=parameters)
     form_responses = api_caller_pl.form_response(parameters=parameters)
+    validation_outputs = api_caller.validation_outputs(parameters=parameters)
 
     # load the json to turn it into a usable form
     contributor_data = json.loads(contributor_details)
     form_response = json.loads(form_responses)
+    validations = json.loads(validation_outputs)
 
     # Only run the following code if the UI has submitted a POST request
     if request.method != "POST":
@@ -48,7 +50,7 @@ def edit_form(inqcode, period, ruref):
             data=json.loads(question_definition),
             contributor_details=contributor_data['data'][0],
             responses=form_response,
-            validation={},
+            validation=validations,
             status_message=json.dumps(""))
 
 
@@ -87,7 +89,7 @@ def edit_form(inqcode, period, ruref):
         data=json.loads(question_definition),
         contributor_details=contributor_data['data'][0],
         responses=json.loads(form_responses),
-        validation={},
+        validation=validations,
         status_message=json.dumps('New responses saved successfully'))
 
 
