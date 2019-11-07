@@ -74,7 +74,9 @@ def edit_form(inqcode, period, ruref):
 
     # Send the data to the business layer for processing
     log.info("Output JSON: %s", str(json_output))
-    api_caller.update_response(parameters=parameters, data=json_output)
+    # api_caller.update_response(parameters=parameters, data=json_output)
+    # New API call for save in business layer which uses GraphQL
+    api_caller.save_response(parameters=parameters, data=json_output)
 
     # Get the refreshed data from the responses table
     form_responses = api_caller_pl.form_response(parameters=parameters)
