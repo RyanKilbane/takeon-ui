@@ -12,7 +12,7 @@
 <br>
 {% block content %}
 
-
+    <!--
     <div id="lockedInfo" style="display:none">
         <div class="panel panel--error panel--simple">
             <div class="panel__error">
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-
+    -->
 
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
@@ -198,49 +198,51 @@
                     </p>
                     <br>
                     <br>
-                </div>
+                </div> 
             {% endfor %}
+            <div class="wrapper">
+                <div class="response-split">
+                    <!--- Accordion --->
+                    <h3 class="u-fs-l">Validation</h3>
+                    {% for output in validation['validation_outputs'] %}
+                    {% if output["severity"] == "E" %}
+                        <button class="accordion-legacy" style="background-color:#D0021B" id="primaryquestion:
+                        {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                        {{ output["primaryquestion"] }}</strong>
+                              <strong>{{ output["name"] }}</strong>
+                        </button>
+                        <div class="panel-legacy">
+                            <b>Validation ID: {{ output["validationid"] }}</b><br>
+                            <b>Formula: {{ output["formula"] }}</b><br>
+                            <b>Triggered: {{ output["triggered"] }}</b></br>
+                            <b>Instance: {{ output["instance"] }}</b>
+                            <br>
+                            <b>Overridden by: </b>{{ output['lastUpdatedBy'] }}<br>
+                            <b>Overridden date:</b>{{ output['lastUpdatedDate'] }}
+                        </div>
+                    {% else %}
+                        <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
+                        {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                        {{ output["primaryquestion"] }}</strong>
+                            <strong>{{ output["name"] }}</strong>
+                        </button>
+                        <div class="panel-legacy">
+                            <b>Validation ID: {{ output["validationid"] }}</b><br>
+                            <b>Formula: {{ output["formula"] }}</b><br>
+                            <b>Triggered: {{ output["triggered"] }}</b></br>
+                            <b>Instance: {{ output["instance"] }}</b>
+                            <br>
+                            <b>Overridden by: </b>{{ output['lastUpdatedBy'] }}<br>
+                            <b>Overridden date:</b>{{ output['lastUpdatedDate'] }}
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+                   
+                </div>
+            </div>
         </div>
     </div>
 
-
-    <div class="wrapper">
-        <div class="response-split">
-            <!-- Accordion -->
-            <!--
-            <h3>Validation</h3>
-            {% for output in validation %}
-            {% if output["validationFormEntity"]["severity"] == "E" %}
-                <button class="accordion-legacy" style="background-color:#D0021B" id="questionCode:
-                {{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>
-                {{ output["validationFormEntity"]["questionCode"] }}</strong>
-                      <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
-                </button>
-                <div class="panel-legacy">
-                    <b>Validation ID: {{ output["validationFormEntity"]["validationid"] }}</b><br>
-                    <b>Formula: {{ output["formula"] }}</b><br>
-                    <br>
-                    <b>Overridden by: </b>{{ contributor_details['lastUpdatedBy'] }}<br>
-                    <b>Overridden date:</b>{{ contributor_details['lastUpdatedDate'] }}
-                </div>
-            {% else %}
-                <button class="accordion-legacy" style="background-color:#FE781F" id="questionCode:
-                {{ output['validationFormEntity']['questionCode'] }}|instance:{{ output['instance'] }}"><strong>
-                {{ output["validationFormEntity"]["questionCode"] }}</strong>
-                    <strong>{{ output["validationFormEntity"]["validationRuleEntity"]["description"] }}</strong>
-                </button>
-                <div class="panel-legacy">
-                    <b>Validation ID: {{ output["validationFormEntity"]["validationid"] }}</b><br>
-                    <b>Formula: {{ output["formula"] }}</b><br>
-                    <br>
-                    <b>Overridden by: </b>{{ contributor_details['lastUpdatedBy'] }}<br>
-                    <b>Overridden date:</b>{{ contributor_details['lastUpdatedDate'] }}
-                </div>
-            {% endif %}
-            {% endfor %}]
-            -->
-        </div>
-    </div>
 
     <div class="mainContent">
     <form>
@@ -270,6 +272,7 @@
         document.getElementById("defaultOpen").click();
     </script>
 
+    <!--
     <script>
         var isLockedBy = "{{ locked }}"
         if (isLockedBy != "") {
@@ -277,10 +280,10 @@
             document.getElementById("editFormButton").style.color = "grey";
             var bar = document.getElementById("lockedInfo");
             bar.style.display = "block";
-        }
+        }  
         document.getElementById("SectionA").style.display = "block"
     </script>
-
+    -->
 
     <script>
         var acc = document.getElementsByClassName("accordion-legacy");

@@ -18,4 +18,5 @@ EXPOSE 5000
 COPY --from=builder /install /usr/local
 COPY . /TakeOnUi
 WORKDIR /TakeOnUi
-CMD python application.py runserver
+ENV PYTHONUNBUFFERED=0
+CMD python -u application.py runserver
