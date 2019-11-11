@@ -59,6 +59,16 @@ class ApiRequest:
             parameters=parameters
             ).text
 
+    def save_response(self, parameters, data):
+        if self.mock:
+            return None
+        return self.request_put(
+            endpoint="/response/save",
+            data=bytes(json.dumps(data), encoding="utf-8"),
+            headers={"Content-Type": "Application/Json"},
+            parameters=parameters
+            ).text
+
     def graphql_post(self, parameters):
         if self.mock:
             return mock_next_page(url_connect=parameters).text
