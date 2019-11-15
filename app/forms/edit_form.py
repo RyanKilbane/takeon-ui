@@ -33,14 +33,15 @@ def edit_form(inqcode, period, ruref):
     contributor_details = api_caller.contributor_search(parameters=parameters)
     # form_responses = api_caller_pl.form_response(parameters=parameters)
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
-    view_forms_gql = api_caller.view_form_responses(parameters=parameters)
+    view_forms = api_caller.view_form_responses(parameters=parameters)
+
 
 
     # load the json to turn it into a usable form
     contributor_data = json.loads(contributor_details)
     # form_response = json.loads(form_responses)
     validations = json.loads(validation_outputs)
-    view_form_data = json.loads(view_forms_gql)
+    view_form_data = json.loads(view_forms)
 
     # Only run the following code if the UI has submitted a POST request
     if request.method != "POST":
@@ -50,9 +51,8 @@ def edit_form(inqcode, period, ruref):
             survey=inqcode,
             period=period,
             ruref=ruref,
-            data=json.loads(question_definition),
+            data=view_form_data,
             contributor_details=contributor_data['data'][0],
-            responses=view_form_data,
             validation=validations,
             status_message=json.dumps(""))
 
@@ -89,9 +89,8 @@ def edit_form(inqcode, period, ruref):
         survey=inqcode,
         period=period,
         ruref=ruref,
-        data=json.loads(question_definition),
+        data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        responses=json.loads(view_forms_gql),
         validation=validations,
         status_message=json.dumps('New responses saved successfully'))
 

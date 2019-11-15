@@ -29,23 +29,19 @@ def view_form(inqcode, period, ruref):
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
 
-    question_definition = api_caller.form_definition(parameters=parameters)
+    # question_definition = api_caller.form_definition(parameters=parameters)
     contributor_details = api_caller.contributor_search(parameters=parameters)
     # form_responses = api_caller_pl.form_response(parameters=parameters)
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
-    view_forms_gql = api_caller.view_form_responses(parameters=parameters)
+    view_forms = api_caller.view_form_responses(parameters=parameters)
 
-    definition = json.loads(question_definition)
+    # definition = json.loads(question_definition)
     contributor_data = json.loads(contributor_details)
     # form_response = json.loads(form_responses)
     validations = json.loads(validation_outputs)
-    view_form_data = json.loads(view_forms_gql)
-    log.info("view form data" + str(view_form_data))
-    # log.info("Form Definition: %s", definition)
-    # log.info("Form Response: %s", form_response)
-    # log.info("Contributor Details: %s", contributor_data)
-    # log.info("Contributor Details[0]: %s", contributor_data['data'][0])
-    # log.info("View Form: %s", view_form_gql)
+    view_form_data = json.loads(view_forms)
+    log.info("Contributor Details: %s", contributor_data)
+    log.info("Contributor Details[0]: %s", contributor_data['data'][0])
 
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST":
@@ -58,7 +54,7 @@ def view_form(inqcode, period, ruref):
             survey=inqcode,
             period=period,
             ruref=ruref,
-            data=definition,
+            data=view_form_data,
             contributor_details=contributor_data['data'][0])
 
     return render_template(
@@ -66,7 +62,6 @@ def view_form(inqcode, period, ruref):
         survey=inqcode,
         period=period,
         ruref=ruref,
-        data=definition,
+        data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        responses=view_form_data,
         validation=validations)
