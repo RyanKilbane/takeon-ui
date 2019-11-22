@@ -31,7 +31,7 @@ class ApiRequest:
     def view_form_responses(self, parameters):
         if self.mock:
             return mock_get_validation(url_connect=parameters).text
-        return self.request_get(endpoint="/viewform/qlSearch", parameters=parameters).text
+        return self.request_get(endpoint="/viewform/responses", parameters=parameters).text
 
     def contributor_search(self, parameters):
         if self.mock:
