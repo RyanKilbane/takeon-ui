@@ -27,7 +27,11 @@ class ApiRequest:
 
     def request_put(self, endpoint, parameters, data, headers):
         return requests.put(self.build_endpoint(endpoint, parameters), data=data, headers=headers)
-
+    
+    def view_form_responses(self, parameters):
+        if self.mock:
+            return mock_get_validation(url_connect=parameters).text
+        return self.request_get(endpoint="/viewform/responses", parameters=parameters).text
 
     def contributor_search(self, parameters):
         if self.mock:
@@ -78,9 +82,6 @@ class ApiRequest:
         if self.mock:
             return mock_get_validation(url_connect=parameters).text
         return self.request_get(endpoint="/validation/validationoutput", parameters=parameters).text
-
-
-
 class TakeonApiException(Exception):
     status_code = 400
 

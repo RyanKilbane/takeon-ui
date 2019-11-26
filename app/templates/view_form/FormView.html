@@ -183,17 +183,17 @@
         </div>
 
         <div id="SectionA" class="tabcontent">
-            {% for datum in data %}
+            {% for datum in data['view_form_responses'] %}
                 <div>
                     <p class="field">
-                        <label class="label">{{ datum["displayQuestionNumber"] }}
-                            <strong>{{ datum["displayText"] }}</strong>
+                        <label class="label">{{ datum["displayquestionnumber"] }}
+                            <strong>{{ datum["displaytext"] }}</strong>
                             <br>
-                            <span class="label__description" style="color:red">{{ datum["questionCode"] }}</span>
+                            <span class="label__description" style="color:red">{{ datum["questioncode"] }}</span>
                         </label>
-                        <input name="response:{{ datum['questionCode'] }}"
-                               value="{{ responses[datum['questionCode']]['response'] }}"
-                               id="questionCode:{{ datum['questionCode'] }}|instance:{{ datum['instance'] }}"
+                        <input name="response:{{ datum['questioncode'] }}"
+                               value="{{datum['response']}}"
+                               id="questioncode:{{ datum['questioncode'] }}|instance:{{ datum['instance'] }}"
                                class="input input--text input-type__input" readonly>
                     </p>
                     <br>
