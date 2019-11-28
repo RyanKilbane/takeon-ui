@@ -38,6 +38,7 @@ def view_form(inqcode, period, ruref):
     view_form_data = json.loads(view_forms)
     log.info("Contributor Details: %s", contributor_data)
     log.info("Contributor Details[0]: %s", contributor_data['data'][0])
+    log.info("View Form Data: %s", view_form_data)
 
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST":
