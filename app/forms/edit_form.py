@@ -29,7 +29,6 @@ def edit_form(inqcode, period, ruref):
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
 
-    #question_definition = api_caller.form_definition(parameters=parameters)
     contributor_details = api_caller.contributor_search(parameters=parameters)
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
     view_forms = api_caller.view_form_responses(parameters=parameters)
