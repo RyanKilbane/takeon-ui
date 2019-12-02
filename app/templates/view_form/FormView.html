@@ -31,7 +31,7 @@
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
 
-            <h1>{{ contributor_details['enterprisename'] }}</h1>
+            <h1>{{ contributor_details['referencename'] }}</h1>
             <p><b>Reference:</b> {{ contributor_details['reference'] }}
                 <b>Period:</b> {{ contributor_details['period'] }}
                 <b>Survey:</b> {{ contributor_details['survey'] }}
@@ -217,8 +217,8 @@
                             <b>Triggered: {{ output["triggered"] }}</b></br>
                             <b>Instance: {{ output["instance"] }}</b>
                             <br>
-                            <b>Overridden by: </b>{{ output['lastUpdatedBy'] }}<br>
-                            <b>Overridden date:</b>{{ output['lastUpdatedDate'] }}
+                            <b>Overridden by: </b>{{ output['lastupdatedby'] }}<br>
+                            <b>Overridden date:</b>{{ output['lastupdateddate'] }}
                         </div>
                     {% else %}
                         <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
@@ -232,8 +232,8 @@
                             <b>Triggered: {{ output["triggered"] }}</b></br>
                             <b>Instance: {{ output["instance"] }}</b>
                             <br>
-                            <b>Overridden by: </b>{{ output['lastUpdatedBy'] }}<br>
-                            <b>Overridden date:</b>{{ output['lastUpdatedDate'] }}
+                            <b>Overridden by: </b>{{ output['lastupdatedby'] }}<br>
+                            <b>Overridden date:</b>{{ output['lastupdateddate'] }}
                         </div>
                     {% endif %}
                     {% endfor %}
