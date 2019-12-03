@@ -43,202 +43,71 @@
 
     <div class="mainContent">
         <form method="post" id="save">
-            <button class="btn btn--small" type="submit" id="editFormButton" value="saveForm" name="action"
-                    onclick="submitForm()">
-                <span class="btn__inner">Edit</span></button>
-        </form>
-        <br>
-
-        <nav class="section-nav" id="" aria-label="Section menu">
-            <ul class="section-nav__list" aria-label="">
-                <li class="section-nav__item ">
-                    <a class="section-nav__link" onclick="openTab(event, 'SectionA')" id="defaultOpen">Section A</a>
-                </li>
-                <li class="section-nav__item ">
-                    <a class="section-nav__link" onclick="openTab(event, 'SectionB')">Section B</a>
-                </li>
-                <li class="section-nav__item ">
-                    <a class="section-nav__link" onclick="openTab(event, 'SectionC')">Section C</a>
-                </li>
-                <li class="section-nav__item ">
-                    <a class="section-nav__link" onclick="openTab(event, 'SectionD')">Section D</a>
-                </li>
-            </ul>
-        </nav>
-        <br>
-
-        <div id="SectionB" class="tabcontent">
-            <form>
-                <p class="field">
-                    <label class="label" for="suffixed-LastYearSales">How much did You make from sales last year?
-                        <br>
-                        <span class="label__description" style="color:red">Q1452</span>
-                    </label>
-                    <span class="input-type">
-                        <span class="input-type__inner">
-                            <input type="number" class="input input--text input-type__input" title="LastYearSales"
-                                   inputmode="numeric" autocomplete="off" required="true">
-                        </span>
-                    </span>
-                </p>
-
-                <p class="field">
-                    <label class="label" for="suffixed-ResearchSpend">How much did You spend on research and design?
-                        <br>
-                        <span class="label__description" style="color:red">Q0658</span>
-                    </label>
-                    <span class="input-type">
-                        <span class="input-type__inner">
-                            <input type="number" class="input input--text input-type__input" title="ResearchSpend"
-                                   inputmode="numeric" autocomplete="off" required="true">
-                        </span>
-                    </span>
-                </p>
-
-                <p class="field">
-                    <label class="label" for="suffixed-InternetSpeed"> How fast is Your internet connection?
-                        <br>
-                        <span class="label__description" style="color:red">Q9542</span>
-                    </label>
-                    <span class="input-type">
-                        <span class="input-type__inner">
-                            <select name="InternetSpeed" class="input input--select input-type__input">
-                                <option value="1MB">< 1 MB</option>
-                                <option value="5MB">Between 1-5 MB</option>
-                                <option value="10MB">Between 6-10 MB</option>
-                                <option value="20MB">Between 11-20 MB</option>
-                            </select>
-                        </span>
-                    </span>
-                </p>
-
-                <p class="field">
-                    <label class="label" for="suffixed-WebSales">Total amount of web sales
-                        <br>
-                        <span class="label__description" style="color:red">Q3541</span>
-                    </label>
-                    <span class="input-type">
-                        <span class="input-type__inner">
-                            <input type="number" class="input input--text input-type__input" title="WebSales"
-                                   inputmode="numeric" autocomplete="off" required="true">
-                        </span>
-                    </span>
-                </p>
-
-                <p class="field">
-                    <label class="label" for="suffixed-malePercentage">Percentage of Male employees in a technical role
-                        <br>
-                        <span class="label__description" style="color:red">Q3251</span>
-                    </label>
-                    <span class="input-type">
-                        <span class="input-type__inner">
-                            <input type="number" class="input input--text input-type__input input--w-4"
-                                   title="MalePercentage" pattern="[0-9]*" inputmode="numeric" autocomplete="off"
-                                   required="true">
-                            <abbr class="input-type__type" aria-hidden="true" title="%">%</abbr>
-                        </span>
-                    </span>
-                </p>
-
-                <p class="field">
-                    <label class="label" for="suffixed-femalePercentage">Percentage of Female employees in a technical
-                        role
-                        <br>
-                        <span class="label__description" style="color:red">Q7415</span>
-
-                    </label>
-                    <span class="input-type">
-                        <span class="input-type__inner">
-                            <input type="number" class="input input--text input-type__input input--w-4"
-                                   title="femalePercentage" pattern="[0-9]*" inputmode="numeric" autocomplete="off"
-                                   required="true">
-                            <abbr class="input-type__type" aria-hidden="true" title="%">%</abbr>
-                        </span>
-                    </span>
-                </p>
+                <button class="btn btn--small" type="submit" id="editFormButton" value="saveForm" name="action"
+                        onclick="submitForm()">
+                    <span class="btn__inner">Edit</span></button>
             </form>
             <br>
-        </div>
 
-        <!-- Tab content -->
-        <div id="Details" class="tabcontent">
-            <h3>Details</h3>
-            <div style="overflow:auto">
-                <table id="ResultsTable" class="table table__dense">
-                    <tbody>
-                    <!-- for each record, render each data value -->
-                    {% for record in contributor_details.keys() %}
-                        <tr class="table--row">
-                            <!-- Use .values() method to get values from each row dict -->
-                            <td class="table--cell">{{ record }}</td>
-                            <td class="table--cell">{{ contributor_details[record] }}</td>
-                        </tr>
+            <div class="grid">
+                <div class="grid__col col-6@m ">
+                    {% for datum in data['view_form_responses'] %}
+                        <div>
+                            <p class="field">
+                                <label class="label">{{ datum["displayquestionnumber"] }}
+                                    <strong>{{ datum["displaytext"] }}</strong>
+                                    <br>
+                                    <span class="label__description" style="color:red">{{ datum["questioncode"] }}</span>
+                                </label>
+                                <input name="response:{{ datum['questioncode'] }}"
+                                        value="{{datum['response']}}"
+                                        id="questioncode:{{ datum['questioncode'] }}|instance:{{ datum['instance'] }}"
+                                        class="input input--text input-type__input" readonly>
+                            </p>
+                            <br>
+                            <br>
+                        </div> 
                     {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                </div>
 
-        <div id="SectionA" class="tabcontent">
-            {% for datum in data['view_form_responses'] %}
-                <div>
-                    <p class="field">
-                        <label class="label">{{ datum["displayquestionnumber"] }}
-                            <strong>{{ datum["displaytext"] }}</strong>
-                            <br>
-                            <span class="label__description" style="color:red">{{ datum["questioncode"] }}</span>
-                        </label>
-                        <input name="response:{{ datum['questioncode'] }}"
-                               value="{{datum['response']}}"
-                               id="questioncode:{{ datum['questioncode'] }}|instance:{{ datum['instance'] }}"
-                               class="input input--text input-type__input" readonly>
-                    </p>
-                    <br>
-                    <br>
-                </div> 
-            {% endfor %}
-            <div class="wrapper">
-                <div class="response-split">
-                    <!--- Accordion --->
-                    <h3 class="u-fs-l">Validation</h3>
-                    {% for output in validation['validation_outputs'] %}
-                    {% if output["severity"] == "E" %}
-                        <button class="accordion-legacy" style="background-color:#D0021B" id="primaryquestion:
-                        {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
-                        {{ output["primaryquestion"] }}</strong>
-                              <strong>{{ output["name"] }}</strong>
-                        </button>
-                        <div class="panel-legacy">
-                            <b>Validation ID: {{ output["validationid"] }}</b><br>
-                            <b>Formula: {{ output["formula"] }}</b><br>
-                            <b>Triggered: {{ output["triggered"] }}</b></br>
-                            <b>Instance: {{ output["instance"] }}</b>
-                            <br>
-                            <b>Overridden by: </b>{{ output['lastupdatedby'] }}<br>
-                            <b>Overridden date:</b>{{ output['lastupdateddate'] }}
+                <div class="grid__col col-6@m ">
+                    <div id="accordion" class="accordion">
+                        <div class="wrapper">
+                            <div class="response-split">
+                                <!--- Accordion --->
+                                <h3 class="u-fs-l">Validation</h3>
+                                {% for output in validation['validation_outputs'] %}
+                                {% if output["severity"] == "E" %}
+                                    <button class="accordion-legacy" style="background-color:#D0021B" id="primaryquestion:
+                                    {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                                    {{ output["primaryquestion"] }}</strong>
+                                            <strong>{{ output["name"] }}</strong>
+                                    </button>
+                                    <div class="panel-legacy">
+                                        <b>Validation ID: {{ output["validationid"] }}</b><br>
+                                        <b>Formula: {{ output["formula"] }}</b><br>
+                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                    </div>
+                                {% else %}
+                                    <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
+                                    {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                                    {{ output["primaryquestion"] }}</strong>
+                                        <strong>{{ output["name"] }}</strong>
+                                    </button>
+                                    <div class="panel-legacy">
+                                        <b>Validation ID: {{ output["validationid"] }}</b><br>
+                                        <b>Formula: {{ output["formula"] }}</b><br>
+                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                    </div>
+                                {% endif %}
+                                {% endfor %}
+                                
+                            </div>
                         </div>
-                    {% else %}
-                        <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
-                        {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
-                        {{ output["primaryquestion"] }}</strong>
-                            <strong>{{ output["name"] }}</strong>
-                        </button>
-                        <div class="panel-legacy">
-                            <b>Validation ID: {{ output["validationid"] }}</b><br>
-                            <b>Formula: {{ output["formula"] }}</b><br>
-                            <b>Triggered: {{ output["triggered"] }}</b></br>
-                            <b>Instance: {{ output["instance"] }}</b>
-                            <br>
-                            <b>Overridden by: </b>{{ output['lastupdatedby'] }}<br>
-                            <b>Overridden date:</b>{{ output['lastupdateddate'] }}
-                        </div>
-                    {% endif %}
-                    {% endfor %}
-                   
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
     <div class="mainContent">
