@@ -74,34 +74,33 @@
                     <div id="accordion" class="accordion">
                         <div class="wrapper">
                             <div class="response-split">
-                                <!--- Accordion --->
-                                <h3 class="u-fs-l">Validation</h3>
-                                {% for output in validation['validation_outputs'] %}
-                                {% if output["severity"] == "E" %}
-                                    <button class="accordion-legacy" style="background-color:#D0021B" id="primaryquestion:
-                                    {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
-                                    {{ output["primaryquestion"] }}</strong>
-                                            <strong>{{ output["name"] }}</strong>
-                                    </button>
-                                    <div class="panel-legacy">
-                                        <b>Validation ID: {{ output["validationid"] }}</b><br>
-                                        <b>Formula: {{ output["formula"] }}</b><br>
-                                        <b>Triggered: {{ output["triggered"] }}</b></br>
-                                    </div>
-                                {% else %}
-                                    <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
-                                    {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
-                                    {{ output["primaryquestion"] }}</strong>
-                                        <strong>{{ output["name"] }}</strong>
-                                    </button>
-                                    <div class="panel-legacy">
-                                        <b>Validation ID: {{ output["validationid"] }}</b><br>
-                                        <b>Formula: {{ output["formula"] }}</b><br>
-                                        <b>Triggered: {{ output["triggered"] }}</b></br>
-                                    </div>
-                                {% endif %}
-                                {% endfor %}
-                                
+                                <fieldset class="fieldset">
+                                    <legend class="fieldset__legend">What Validations would you like to override?
+                                    </legend>
+                                    <p class="checkboxes__label">Select all that apply</p>
+                                    {% for output in validation['validation_outputs'] %}
+                                    <span class="checkboxes__items">
+                                                  <p class="checkboxes__item">
+                                      <span class="checkbox ">
+                                          <input
+                                              type="checkbox"
+                                              id="bacon"
+                                              class="checkbox__input js-checkbox "
+                                              value="bacon"
+                                          >
+                                          <label id="bacon-label" class="checkbox__label " for="bacon">
+                                            <strong>{{ output["primaryquestion"] }}</strong></br>
+                                            <strong>{{ output["name"] }}</strong></br>
+                                            <b>Validation ID: {{ output["validationid"] }}</b></br>
+                                            <b>Formula: {{ output["formula"] }}</b></br>
+                                            <b>Triggered: {{ output["triggered"] }}</b></br>
+                                          </label>
+                                      </span>
+                                    </p>
+                                    <br>
+                                    </span>
+                                  </fieldset>
+                                  {% endfor %}
                             </div>
                         </div>
                     </div>
