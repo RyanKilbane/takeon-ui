@@ -48,7 +48,7 @@ def view_form(inqcode, period, ruref):
         print("validate!!!!!")
     if request.method == "POST" and request.form['action'] == 'override':
         # override logic goes here
-        print("Override!!!!")
+        print(request.form.getlist('test'))
 
     # if form_response is empty, then we have a blank form and so return just the definition
     if not view_form_data:
