@@ -41,8 +41,14 @@ def view_form(inqcode, period, ruref):
     log.info("View Form Data: %s", view_form_data)
 
     # if there is a request method called then there's been a request for edit form
-    if request.method == "POST":
+    if request.method == "POST" and request.form['action'] == "saveForm":
         return redirect(url_for("edit_form.edit_form", ruref=ruref, inqcode=inqcode, period=period))
+    if request.method == "POST" and request.form['action'] == "validate":
+        # validation logic goes here
+        print("validate!!!!!")
+    if request.method == "POST" and request.form['action'] == 'override':
+        # override logic goes here
+        print("Override!!!!")
 
     # if form_response is empty, then we have a blank form and so return just the definition
     if not view_form_data:
