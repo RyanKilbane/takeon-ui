@@ -76,7 +76,7 @@
                     <div id="accordion" class="accordion">
                         <div class="wrapper">
                             <div class="response-split">
-                                <form method="POST" action=""></form>
+                                <form method="POST">
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend">What Validations would you like to override?
                                     </legend>
@@ -208,25 +208,42 @@
     <script>
        function override() {
            var checkboxes = document.getElementsByName("test");
-           var reference = document.getElementById("ref").textContent;
-           var period = document.getElementById("period").textContent;
-           var survey = document.getElementById("survey").textContent;
+           var reference  = document.getElementById("ref").textContent;
+           var period     = document.getElementById("period").textContent;
+           var survey     = document.getElementById("survey").textContent;
            console.log(reference, period, survey)
            console.log(checkboxes)
            var checkboxes_checked = []
+           var checkboxes_output  = {}
            for(var i = 0; i < checkboxes.length; i++) {
                 console.log(i)
                 if(checkboxes[i].checked) {
+                    var checkbox = {}
+                    checkbox["validationoutputid"] = checkboxes[i].id
+                    checkbox["override"]           = true
                     console.log(checkboxes[i].id)
-                    checkboxes_checked.push(checkboxes[i].id)
+                    checkboxes_checked.push(checkbox)
                 }
            }
-           console.log(checkboxes_checked)
-           postToFlask(checkboxes_checked)
+           checkboxes_output['reference'] = reference
+           checkboxes_output['period']    = period
+           checkboxes_output['survey']    = survey
+           checkboxes_output['data']      = checkboxes_checked
+           console.log(checkboxes_output)
+           postToFlask(checkboxes_output)
        }
+    </script>
 
+    <script>
        function postToFlask(checkboxes_checked) {
-           $.post("receiver", checkboxes_checked, function(){})
+           var js_data = JSON.stringify(checkboxes_checked)
+           $.ajax({
+               url: 'receiver',
+               type: 'post',
+               contentType: 'application/json',
+               dataType: 'json',
+               data: js_data
+           })
        }
     </script>
 

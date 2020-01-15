@@ -1,5 +1,5 @@
 import json
-from flask import url_for, redirect, render_template, Blueprint, request
+from flask import url_for, redirect, render_template, Blueprint, request, jsonify
 from app.utilities.helpers import build_uri
 from app.setup import log, api_caller, api_caller_pl
 
@@ -46,15 +46,6 @@ def view_form(inqcode, period, ruref):
     if request.method == "POST" and request.form['action'] == "validate":
         # validation logic goes here
         print("validate!!!!!")
-    if request.method == "POST" and request.form['action'] == 'override':
-        # override logic goes here
-        print("Override logic")
-        print(request.form.getlist('test'))
-        print(request.form.get("test"))
-        test_checked = request.form.get("test") != None
-        print(test_checked)
-        checked = 'test' in request.form
-        print(checked)
 
     # if form_response is empty, then we have a blank form and so return just the definition
     if not view_form_data:
@@ -77,7 +68,9 @@ def view_form(inqcode, period, ruref):
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/receiver', methods = ['POST'])
+#@app.route('/receiver', methods= ['POST'])
 def worker(inqcode, period, ruref):
-    data = request.data
+    data = request.json
     print(data)
-    return "hello"
+    # print(jsonify(data))
+    return jsonify(data)
