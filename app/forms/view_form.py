@@ -48,7 +48,13 @@ def view_form(inqcode, period, ruref):
         print("validate!!!!!")
     if request.method == "POST" and request.form['action'] == 'override':
         # override logic goes here
+        print("Override logic")
         print(request.form.getlist('test'))
+        print(request.form.get("test"))
+        test_checked = request.form.get("test") != None
+        print(test_checked)
+        checked = 'test' in request.form
+        print(checked)
 
     # if form_response is empty, then we have a blank form and so return just the definition
     if not view_form_data:
@@ -68,3 +74,10 @@ def view_form(inqcode, period, ruref):
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
         validation=validations)
+
+
+@view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/receiver', methods = ['POST'])
+def worker(inqcode, period, ruref):
+    data = request.data
+    print(data)
+    return "hello"

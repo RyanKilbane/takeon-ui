@@ -32,10 +32,12 @@
         <div class="panel__body">
 
             <h1>{{ contributor_details['referencename'] }}</h1>
-            <p><b>Reference:</b> {{ contributor_details['reference'] }}
-                <b>Period:</b> {{ contributor_details['period'] }}
-                <b>Survey:</b> {{ contributor_details['survey'] }}
-                <b>Status:</b> {{ contributor_details['status'] }} </p>
+            <p>
+                <b>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
+                <b>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
+                <b>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
+                <b>Status:</b> {{ contributor_details['status'] }} 
+            </p>
         </div>
     </div>
     <br>
@@ -74,6 +76,7 @@
                     <div id="accordion" class="accordion">
                         <div class="wrapper">
                             <div class="response-split">
+                                <form method="POST" action=""></form>
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend">What Validations would you like to override?
                                     </legend>
@@ -102,6 +105,7 @@
                                     {% endfor %}
                                     </span>
                                   </fieldset>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -117,16 +121,24 @@
             <br>
         </button>
 
-        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
+        <button class="btn btn--small" 
+                type="submit" 
+                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
+                value='validate' 
+                name='action'>
             <span class="btn__inner">Validate</span>
             <br>
         </button>
 
-        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action'>
+        <button class="btn btn--small" 
+                type="submit" 
+                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
+                value='override' 
+                name='action'
+                onclick="override()">
             <span class="btn__inner">Override</span>
             <br>
         </button>
-
     </form>
     </div>
 
@@ -189,6 +201,33 @@
         var index;
         var responseElements = inputElements.filter(element => document.querySelector('[id^="questionCode"]'));
         window.alert(responseElements);
+    </script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+       function override() {
+           var checkboxes = document.getElementsByName("test");
+           var reference = document.getElementById("ref").textContent;
+           var period = document.getElementById("period").textContent;
+           var survey = document.getElementById("survey").textContent;
+           console.log(reference, period, survey)
+           console.log(checkboxes)
+           var checkboxes_checked = []
+           for(var i = 0; i < checkboxes.length; i++) {
+                console.log(i)
+                if(checkboxes[i].checked) {
+                    console.log(checkboxes[i].id)
+                    checkboxes_checked.push(checkboxes[i].id)
+                }
+           }
+           console.log(checkboxes_checked)
+           postToFlask(checkboxes_checked)
+       }
+
+       function postToFlask(checkboxes_checked) {
+           $.post("receiver", checkboxes_checked, function(){})
+       }
     </script>
 
 
