@@ -243,6 +243,12 @@
                     checkbox["override"]           = true
                     checkbox["user"]               = "fisdba"
                     checkboxes_checked.push(checkbox)
+                } else {
+                    var checkbox = {}
+                    checkbox["validationoutputid"] = checkboxes[i].id
+                    checkbox["override"]           = false
+                    checkbox["user"]               = "fisdba"
+                    checkboxes_checked.push(checkbox)
                 }
            }
            checkboxes_output['reference']          = reference
