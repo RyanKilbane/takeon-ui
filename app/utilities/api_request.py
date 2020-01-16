@@ -87,9 +87,10 @@ class ApiRequest:
             return mock_get_validation(url_connect=parameters).text
         return self.request_get(endpoint="/validation/validationoutput", parameters=parameters).text
 
-    def validation_overrides(self, parameters, data, headers):
+    def validation_overrides(self, parameters, data):
         print("validation_overrides")
-        return self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers=headers)
+        # self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers=headers)
+        return self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers={"Content-Type": "Application/Json"}).text
 
 class TakeonApiException(Exception):
     status_code = 400

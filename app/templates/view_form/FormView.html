@@ -83,25 +83,48 @@
                                     <p class="checkboxes__label">Select all that apply</p>
                                     <span class="checkboxes__items">
                                     {% for output in validation['validation_outputs'] %}
-                                                  <p class="checkboxes__item">
-                                      <span class="checkbox ">
-                                          <input
-                                              type="checkbox"
-                                              id="{{validationoutputid}}"
-                                              class="checkbox__input js-checkbox "
-                                              value="{{validationoutputid}}"
-                                              name="override-checkbox"
-                                          >
-                                          <label id="{{validationoutputid}}-label" class="checkbox__label " for="{{validationoutputid}}">
-                                            <strong>{{ output["primaryquestion"] }}</strong></br>
-                                            <strong>{{ output["name"] }}</strong></br>
-                                            <b>Validation ID: {{ output["validationid"] }}</b></br>
-                                            <b>Formula: {{ output["formula"] }}</b></br>
-                                            <b>Triggered: {{ output["triggered"] }}</b></br>
-                                          </label>
-                                      </span>
-                                    </p>
-                                    <br>
+                                        {% if output['overridden'] == True %}
+                                                    <p class="checkboxes__item">
+                                        <span class="checkbox ">
+                                            <input
+                                                type="checkbox"
+                                                id="{{output['validationoutputid']}}"
+                                                class="checkbox__input js-checkbox "
+                                                value="{{output['validationoutputid']}}"
+                                                name="override-checkbox"
+                                                checked
+                                            >
+                                            <label id="{{output['validationoutputid']}}"-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                <strong>{{ output["primaryquestion"] }}</strong></br>
+                                                <strong>{{ output["name"] }}</strong></br>
+                                                <b>Validation ID: {{ output["validationid"] }}</b></br>
+                                                <b>Formula: {{ output["formula"] }}</b></br>
+                                                <b>Triggered: {{ output["triggered"] }}</b></br>
+                                            </label>
+                                        </span>
+                                        </p>
+                                        <br>
+                                        {% else %}
+                                            <p class="checkboxes__item">
+                                                <span class="checkbox ">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="{{output['validationoutputid']}}"
+                                                        class="checkbox__input js-checkbox "
+                                                        value="{{output['validationoutputid']}}"
+                                                        name="override-checkbox"
+                                                    >
+                                                    <label id="{{output['validationoutputid']}}"-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                        <strong>{{ output["primaryquestion"] }}</strong></br>
+                                                        <strong>{{ output["name"] }}</strong></br>
+                                                        <b>Validation ID: {{ output["validationid"] }}</b></br>
+                                                        <b>Formula: {{ output["formula"] }}</b></br>
+                                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                                    </label>
+                                                </span>
+                                                </p>
+                                                <br>
+                                        {% endif %}
                                     {% endfor %}
                                     </span>
                                   </fieldset>
@@ -214,7 +237,6 @@
            var checkboxes_checked = []
            var checkboxes_output  = {}
            for(var i = 0; i < checkboxes.length; i++) {
-                console.log(i)
                 if(checkboxes[i].checked) {
                     var checkbox = {}
                     checkbox["validationoutputid"] = checkboxes[i].id
