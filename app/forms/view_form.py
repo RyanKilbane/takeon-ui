@@ -1,5 +1,5 @@
 import json
-from flask import url_for, redirect, render_template, Blueprint, request, jsonify
+from flask import url_for, redirect, render_template, Blueprint, request
 from app.utilities.helpers import build_uri
 from app.setup import log, api_caller, api_caller_pl
 
@@ -39,6 +39,7 @@ def view_form(inqcode, period, ruref):
     log.info("Contributor Details: %s", contributor_data)
     log.info("Contributor Details[0]: %s", contributor_data['data'][0])
     log.info("View Form Data: %s", view_form_data)
+    log.info("Validations output: %s", validations)
 
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST" and request.form['action'] == "saveForm":
@@ -68,9 +69,11 @@ def view_form(inqcode, period, ruref):
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/receiver', methods = ['POST'])
-#@app.route('/receiver', methods= ['POST'])
 def worker(inqcode, period, ruref):
     data = request.json
-    print(data)
-    # print(jsonify(data))
-    return jsonify(data)
+    # convert dict to json
+    json_data = json.loads(json.dumps(data))
+    print("Before api call")
+    api_caller.validation_overrides(parameters='', data=json_data, headers='application/json')
+    print("After api call")
+    return redirect(url_for("view_form", ruref=ruref, inqcode=inqcode, period=period))

@@ -87,12 +87,12 @@
                                       <span class="checkbox ">
                                           <input
                                               type="checkbox"
-                                              id="bacon-{{loop.index}}"
+                                              id="{{validationoutputid}}"
                                               class="checkbox__input js-checkbox "
-                                              value="bacon-{{loop.index}}"
-                                              name="test"
+                                              value="{{validationoutputid}}"
+                                              name="override-checkbox"
                                           >
-                                          <label id="{{loop.index}}-label" class="checkbox__label " for="bacon-{{loop.index}}">
+                                          <label id="{{validationoutputid}}-label" class="checkbox__label " for="{{validationoutputid}}">
                                             <strong>{{ output["primaryquestion"] }}</strong></br>
                                             <strong>{{ output["name"] }}</strong></br>
                                             <b>Validation ID: {{ output["validationid"] }}</b></br>
@@ -207,12 +207,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
        function override() {
-           var checkboxes = document.getElementsByName("test");
+           var checkboxes = document.getElementsByName("override-checkbox");
            var reference  = document.getElementById("ref").textContent;
            var period     = document.getElementById("period").textContent;
            var survey     = document.getElementById("survey").textContent;
-           console.log(reference, period, survey)
-           console.log(checkboxes)
            var checkboxes_checked = []
            var checkboxes_output  = {}
            for(var i = 0; i < checkboxes.length; i++) {
@@ -221,15 +219,14 @@
                     var checkbox = {}
                     checkbox["validationoutputid"] = checkboxes[i].id
                     checkbox["override"]           = true
-                    console.log(checkboxes[i].id)
+                    checkbox["user"]               = "fisdba"
                     checkboxes_checked.push(checkbox)
                 }
            }
-           checkboxes_output['reference'] = reference
-           checkboxes_output['period']    = period
-           checkboxes_output['survey']    = survey
-           checkboxes_output['data']      = checkboxes_checked
-           console.log(checkboxes_output)
+           checkboxes_output['reference']          = reference
+           checkboxes_output['period']             = period
+           checkboxes_output['survey']             = survey
+           checkboxes_output['validation_outputs'] = checkboxes_checked
            postToFlask(checkboxes_output)
        }
     </script>
