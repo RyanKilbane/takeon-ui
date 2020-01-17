@@ -1,10 +1,14 @@
 import json
+import os
+import requests
+import time
 from flask import url_for, redirect, render_template, Blueprint, request
-from app.utilities.helpers import build_uri, get_secret
+from app.utilities.helpers import build_uri
 from app.setup import log, api_caller, api_caller_pl
 
 view_form_blueprint = Blueprint(name='view_form', import_name=__name__, url_prefix='/contributor_search')
-
+url = os.getenv('API_URL')
+api_key = os.getenv('API_KEY')
 
 # Flask Endpoints
 @view_form_blueprint.errorhandler(404)
@@ -46,11 +50,16 @@ def view_form(inqcode, period, ruref):
         return redirect(url_for("edit_form.edit_form", ruref=ruref, inqcode=inqcode, period=period))
 
     if request.method == "POST" and request.form['action'] == "validate":
-        print('Hello')
-        url = get_secret("/takeon/validation-trigger/API")['validation-trigger-API-URL']
-        print('URL' + url)
-        api_key = get_secret("/takeon/validation-trigger/API")['API-Key']
-        print('API KEY' + api_key)
+        json_data = {"survey": inqcode, "period": period, "reference": ruref, "bpmId":"0"}
+        header = {"x-api-key": api_key}
+
+        response = requests.post(url, data=json.dumps(json_data), headers=header)
+        time.sleep(5)
+        log.info("Response from SQS: %s", response.text)
+        log.info("Status Code from SQS: %s", response.status_code)
+
+        return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
+
 
     if request.method == "POST" and request.form['action'] == 'override':
         # override logic goes here
