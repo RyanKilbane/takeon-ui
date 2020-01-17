@@ -68,17 +68,12 @@ def view_form(inqcode, period, ruref):
         validation=validations)
 
 
-@view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/receiver', methods=['POST'])
-def worker(inqcode, period, ruref):
+@view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
+def override_validations(inqcode, period, ruref):
     json_data = request.json
-    # convert dict to json
-    # json_data = json.loads(json.dumps(data))
-    print(type(json_data))
-    print(json_data)
+    print("Checkbox checked data: " + json_data)
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
-    print("Before api call")
     api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
-    print("After api call")
     return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))

@@ -94,7 +94,7 @@
                                                 name="override-checkbox"
                                                 checked
                                             >
-                                            <label id="{{output['validationoutputid']}}"-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
                                                 <strong>{{ output["primaryquestion"] }}</strong></br>
                                                 <strong>{{ output["name"] }}</strong></br>
                                                 <b>Validation ID: {{ output["validationid"] }}</b></br>
@@ -114,7 +114,7 @@
                                                         value="{{output['validationoutputid']}}"
                                                         name="override-checkbox"
                                                     >
-                                                    <label id="{{output['validationoutputid']}}"-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                    <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
                                                         <strong>{{ output["primaryquestion"] }}</strong></br>
                                                         <strong>{{ output["name"] }}</strong></br>
                                                         <b>Validation ID: {{ output["validationid"] }}</b></br>
@@ -263,7 +263,7 @@
        function postToFlask(checkboxes_checked) {
            var js_data = JSON.stringify(checkboxes_checked)
            $.ajax({
-               url: 'receiver',
+               url: 'override-validations',
                type: 'post',
                contentType: 'application/json',
                dataType: 'json',
