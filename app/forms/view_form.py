@@ -1,4 +1,5 @@
 import json
+import time
 from flask import url_for, redirect, render_template, Blueprint, request
 from app.utilities.helpers import build_uri
 from app.setup import log, api_caller, api_caller_pl
@@ -71,9 +72,11 @@ def view_form(inqcode, period, ruref):
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
 def override_validations(inqcode, period, ruref):
     json_data = request.json
-    print("Checkbox checked data: " + json_data)
+    print("Checkbox checked data: " + str(json_data))
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
     api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
-    return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
+    time.sleep(2)
+    return view_form(inqcode, period, ruref)
+    # return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
