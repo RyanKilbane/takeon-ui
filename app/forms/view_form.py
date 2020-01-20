@@ -1,5 +1,6 @@
 import json
 import time
+import requests
 from flask import url_for, redirect, render_template, Blueprint, request
 from app.utilities.helpers import build_uri
 from app.setup import log, api_caller, api_caller_pl
@@ -76,7 +77,12 @@ def override_validations(inqcode, period, ruref):
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
-    api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
-    time.sleep(2)
-    return view_form(inqcode, period, ruref)
-    # return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
+    response = api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
+    # print(response.status_code)
+    print(response)
+    bl_response = json.loads(response)
+    if 'Success' in bl_response:
+        return view_form(inqcode, period, ruref)
+    else:
+        time.sleep(2)
+        return view_form(inqcode, period, ruref)

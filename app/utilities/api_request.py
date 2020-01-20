@@ -29,7 +29,6 @@ class ApiRequest:
         return requests.put(self.build_endpoint(endpoint, parameters), data=data, headers=headers)
 
     def request_post(self, endpoint, parameters, data, headers):
-        print("request_post")
         return requests.post(self.build_endpoint(endpoint, parameters), data=data, headers=headers)
     
     def view_form_responses(self, parameters):
@@ -88,7 +87,6 @@ class ApiRequest:
         return self.request_get(endpoint="/validation/validationoutput", parameters=parameters).text
 
     def validation_overrides(self, parameters, data):
-        print("validation_overrides")
         # self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers=headers)
         return self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers={"Content-Type": "Application/Json"}).text
 
