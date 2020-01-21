@@ -82,6 +82,20 @@
                                     </legend>
                                     <p class="checkboxes__label">Select all that apply</p>
                                     <span class="checkboxes__items">
+                                        <p class="checkboxes__item">
+                                            <span class="checkbox ">
+                                                <input
+                                                    type="checkbox"
+                                                    id="select-all"
+                                                    class="checkbox__input js-checkbox "
+                                                    value="Select All"
+                                                    name="select-all-checkbox"
+                                                    onclick="select_all(this)"
+                                                >
+                                            <label id="select_all" class="checkbox__label" for="select-all">
+                                                <strong>Select All</strong><br>
+                                            </label>
+                                            </span></p>
                                     {% for output in validation['validation_outputs'] %}
                                         {% if output['overridden'] == True %}
                                                     <p class="checkboxes__item">
@@ -262,11 +276,21 @@
                type: 'post',
                contentType: 'application/json',
                dataType: 'json',
-               data: js_data
+               data: js_data,
+               async: false
            })
         //    event.preventDefault();
            })
            
+    </script>
+
+    <script>
+        function select_all(source) {
+            checkboxes = document.getElementsByName("override-checkbox");
+            for(var i=0; i < checkboxes.length; i++){
+                checkboxes[i].checked = source.checked;
+            }
+        }
     </script>
 
     <br>
