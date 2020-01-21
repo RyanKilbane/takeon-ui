@@ -67,8 +67,7 @@ def view_form(inqcode, period, ruref):
         ruref=ruref,
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        validation=validations,
-        name='Matt')
+        validation=validations)
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
@@ -78,13 +77,25 @@ def override_validations(inqcode, period, ruref):
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
-    response = api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
-    # print(response.status_code)
-    print(response)
-    bl_response = json.loads(response)
-    if 'Success' in bl_response:
-        print('view form called from override')
-        return view_form(inqcode, period, ruref)
-    else:
-        time.sleep(2)
-        return view_form(inqcode, period, ruref)
+    api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
+    # return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
+    # return view_form(inqcode, period, ruref)
+    url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
+    parameters = build_uri(url_parameters)
+
+    contributor_details = api_caller.contributor_search(parameters=parameters)
+    validation_outputs = api_caller.validation_outputs(parameters=parameters)
+    view_forms = api_caller.view_form_responses(parameters=parameters)
+
+    contributor_data = json.loads(contributor_details)
+    validations = json.loads(validation_outputs)
+    view_form_data = json.loads(view_forms)
+    
+    return render_template(
+        template_name_or_list="./view_form/FormView.html",
+        survey=inqcode,
+        period=period,
+        ruref=ruref,
+        data=view_form_data,
+        contributor_details=contributor_data['data'][0],
+        validation=validations)

@@ -36,8 +36,7 @@
                 <b>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
                 <b>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
                 <b>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
-                <b>Status:</b> {{ contributor_details['status'] }} 
-                <b>Name:</b> {{ name }} 
+                <b>Status:</b> {{ contributor_details['status'] }}
             </p>
         </div>
     </div>
@@ -159,7 +158,7 @@
                 class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
                 value='override' 
                 name='action'
-                onclick="override()">
+                id='override_button'>
             <span class="btn__inner">Override</span>
             <br>
         </button>
@@ -230,8 +229,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
-       function override() {
-           var checkboxes = document.getElementsByName("override-checkbox");
+        var override_button = document.getElementById("override_button")
+        override_button.addEventListener("click", function() 
+        {var checkboxes = document.getElementsByName("override-checkbox");
            var reference  = document.getElementById("ref").textContent;
            var period     = document.getElementById("period").textContent;
            var survey     = document.getElementById("survey").textContent;
@@ -252,28 +252,22 @@
                     checkboxes_checked.push(checkbox)
                 }
            }
-           checkboxes_output['reference']          = reference
-           checkboxes_output['period']             = period
-           checkboxes_output['survey']             = survey
-           checkboxes_output['validation_outputs'] = checkboxes_checked
-           postToFlask(checkboxes_output)
-       }
-    </script>
-
-    <script>
-       function postToFlask(checkboxes_checked) {
-           var js_data = JSON.stringify(checkboxes_checked)
-           $.ajax({
+            checkboxes_output['reference']          = reference
+            checkboxes_output['period']             = period
+            checkboxes_output['survey']             = survey
+            checkboxes_output['validation_outputs'] = checkboxes_checked
+            var js_data = JSON.stringify(checkboxes_output)
+            $.ajax({
                url: 'override-validations',
                type: 'post',
                contentType: 'application/json',
                dataType: 'json',
-               data: js_data,
-               async: false
+               data: js_data
            })
-       }
+        //    event.preventDefault();
+           })
+           
     </script>
-
 
     <br>
     <br>
