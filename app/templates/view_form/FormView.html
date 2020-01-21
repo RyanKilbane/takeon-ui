@@ -37,6 +37,7 @@
                 <b>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
                 <b>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
                 <b>Status:</b> {{ contributor_details['status'] }} 
+                <b>Name:</b> {{ name }} 
             </p>
         </div>
     </div>
@@ -267,7 +268,8 @@
                type: 'post',
                contentType: 'application/json',
                dataType: 'json',
-               data: js_data
+               data: js_data,
+               async: false
            })
        }
     </script>

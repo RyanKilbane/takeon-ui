@@ -67,7 +67,8 @@ def view_form(inqcode, period, ruref):
         ruref=ruref,
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        validation=validations)
+        validation=validations,
+        name='Matt')
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
@@ -82,6 +83,7 @@ def override_validations(inqcode, period, ruref):
     print(response)
     bl_response = json.loads(response)
     if 'Success' in bl_response:
+        print('view form called from override')
         return view_form(inqcode, period, ruref)
     else:
         time.sleep(2)
