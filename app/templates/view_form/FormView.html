@@ -77,11 +77,13 @@
                         <div class="wrapper">
                             <div class="response-split">
                                 <form method="POST">
+                                    {% if validation['validation_outputs']|length > 1 %}
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend">What Validations would you like to override?
                                     </legend>
                                     <p class="checkboxes__label">Select all that apply</p>
                                     <span class="checkboxes__items">
+                                        
                                         <p class="checkboxes__item">
                                             <span class="checkbox ">
                                                 <input
@@ -142,6 +144,7 @@
                                     {% endfor %}
                                     </span>
                                   </fieldset>
+                                  {% endif %}
                                 </form>
                             </div>
                         </div>
@@ -279,7 +282,6 @@
                data: js_data,
                async: false
            })
-        //    event.preventDefault();
            })
            
     </script>
