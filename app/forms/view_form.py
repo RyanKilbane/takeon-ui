@@ -53,7 +53,6 @@ def view_form(inqcode, period, ruref):
         log.info('save validation button pressed')
         json_data = {"survey": inqcode, "period": period, "reference": ruref, "bpmId":"0"}
         header = {"x-api-key": api_key}
-        header = ""
         try:
             response = requests.post(url, data=json.dumps(json_data), headers=header)
             log.info("Response from SQS: %s", response.text)
