@@ -8,7 +8,7 @@ from app.setup import log, api_caller
 
 view_form_blueprint = Blueprint(name='view_form', import_name=__name__, url_prefix='/contributor_search')
 url = os.getenv('API_URL')
-#api_key = os.getenv('API_KEY')
+api_key = os.getenv('API_KEY')
 
 # Flask Endpoints
 @view_form_blueprint.errorhandler(404)
@@ -49,28 +49,22 @@ def view_form(inqcode, period, ruref):
         return redirect(url_for("edit_form.edit_form", ruref=ruref, inqcode=inqcode, period=period))
 
     #validate button logic
-    api_key = "ckjnckzxlkcnskm"
-    #api_url = "https://wrong_url.com"
     if request.method == "POST" and request.form['action'] == "validate":
-        print(f'save validation button pressed')
+        log.info('save validation button pressed')
         json_data = {"survey": inqcode, "period": period, "reference": ruref, "bpmId":"0"}
         header = {"x-api-key": api_key}
-    try:
-        response = requests.post(url, data=json.dumps(json_data), headers=header)
-        log.info("Response from SQS: %s", response.text)
-        log.info("Status Code from SQS: %s", response.status_code)
-    except HTTPError as http_err:
-        response = http_err
-        print(f'URL error occurred: {http_err}')
-    except ConnectionError as connection_err:
-        response = connection_err
-        print(f'API request error occured: {connection_err}')
-    except Exception as e:
-        response = e
-        print(f'Error with call to validation: {e}')
-    else:
-        print('Call to validation is successful')
-        return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))  
+        header = ""
+        try:
+            response = requests.post(url, data=json.dumps(json_data), headers=header)
+            log.info("Response from SQS: %s", response.text)
+            log.info("Status Code from SQS: %s", response.status_code)
+        except HTTPError as http_err:
+            response = http_err
+            log.info('URL error occurred: %s', http_err)
+        except ConnectionError as connection_err:
+            response = connection_err
+            log.info('API request error occured: %s', connection_err)
+        return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
 
     if request.method == "POST" and request.form['action'] == 'override':
         # override logic goes here
