@@ -56,7 +56,6 @@ def view_form(inqcode, period, ruref):
         header = {"x-api-key": api_key}
         status_message = 'Validation Run Successfully'
         try:
-            #response = requests.post(url, data=json.dumps(json_data), headers=header)
             response = api_caller.run_validation(url, json.dumps(json_data), header)
             log.info("Response from SQS: %s", response)
         except HTTPError as http_err:
@@ -74,10 +73,6 @@ def view_form(inqcode, period, ruref):
             status_message=json.dumps(status_message),
             contributor_details=contributor_data['data'][0],
             validation=validations)
-
-    if request.method == "POST" and request.form['action'] == 'override':
-        # override logic goes here
-        print(request.form.getlist('test'))
 
     # if form_response is empty, then we have a blank form and so return just the definition
     if not view_form_data:
