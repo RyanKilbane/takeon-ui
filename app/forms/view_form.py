@@ -3,8 +3,8 @@ import os
 import requests
 from flask import url_for, redirect, render_template, Blueprint, request
 from requests.exceptions import HTTPError
-from app.utilities.helpers import build_uri
-from app.setup import log, api_caller
+from app.utilities.helpers import build_uri, get_user
+from app.setup import log, api_caller, api_caller_pl
 
 view_form_blueprint = Blueprint(name='view_form', import_name=__name__, url_prefix='/contributor_search')
 url = os.getenv('API_URL')
@@ -82,7 +82,8 @@ def view_form(inqcode, period, ruref):
             period=period,
             ruref=ruref,
             data=view_form_data,
-            contributor_details=contributor_data['data'][0])
+            contributor_details=contributor_data['data'][0],
+            user=get_user())
 
     return render_template(
         template_name_or_list="./view_form/FormView.html",
@@ -92,7 +93,8 @@ def view_form(inqcode, period, ruref):
         data=view_form_data,
         status_message=json.dumps(""),
         contributor_details=contributor_data['data'][0],
-        validation=validations)
+        validation=validations,
+        user=get_user())
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
@@ -122,4 +124,5 @@ def override_validations(inqcode, period, ruref):
         ruref=ruref,
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        validation=validations)
+        validation=validations,
+        user=get_user())
