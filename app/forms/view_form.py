@@ -57,7 +57,7 @@ def view_form(inqcode, period, ruref):
             ruref=ruref,
             data=view_form_data,
             contributor_details=contributor_data['data'][0],
-            user = get_user())
+            user=get_user())
 
     return render_template(
         template_name_or_list="./view_form/FormView.html",
@@ -67,7 +67,7 @@ def view_form(inqcode, period, ruref):
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
         validation=validations,
-        user = get_user())
+        user=get_user())
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
@@ -77,8 +77,6 @@ def override_validations(inqcode, period, ruref):
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
-    user = json.dumps(get_user())
-    print("user: " + user)
 
     api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
@@ -100,4 +98,4 @@ def override_validations(inqcode, period, ruref):
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
         validation=validations,
-        user=user)
+        user=get_user())
