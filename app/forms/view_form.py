@@ -54,17 +54,26 @@ def view_form(inqcode, period, ruref):
         log.info('save validation button pressed')
         json_data = {"survey": inqcode, "period": period, "reference": ruref, "bpmId":"0"}
         header = {"x-api-key": api_key}
+        status_message = 'Validation Run Successfully'
         try:
             response = requests.post(url, data=json.dumps(json_data), headers=header)
             log.info("Response from SQS: %s", response.text)
             log.info("Status Code from SQS: %s", response.status_code)
         except HTTPError as http_err:
-            response = http_err
+            status_message = "Http Error. Unable to call URL"
             log.info('URL error occurred: %s', http_err)
         except ConnectionError as connection_err:
-            response = connection_err
+            status_message = "Connection Error. Unable to Connect to API Gateway"
             log.info('API request error occured: %s', connection_err)
-        return redirect(url_for("view_form.view_form", ruref=ruref, inqcode=inqcode, period=period))
+        return render_template(
+            template_name_or_list="./view_form/FormView.html",
+            survey=inqcode,
+            period=period,
+            ruref=ruref,
+            data=view_form_data,
+            status_message=json.dumps(status_message),
+            contributor_details=contributor_data['data'][0],
+            validation=validations)
 
     if request.method == "POST" and request.form['action'] == 'override':
         # override logic goes here
@@ -86,6 +95,7 @@ def view_form(inqcode, period, ruref):
         period=period,
         ruref=ruref,
         data=view_form_data,
+        status_message=json.dumps(""),
         contributor_details=contributor_data['data'][0],
         validation=validations)
 
@@ -109,7 +119,7 @@ def override_validations(inqcode, period, ruref):
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
     view_form_data = json.loads(view_forms)
-    
+
     return render_template(
         template_name_or_list="./view_form/FormView.html",
         survey=inqcode,
