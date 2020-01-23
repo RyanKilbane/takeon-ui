@@ -1,6 +1,6 @@
 import json
 from flask import url_for, redirect, render_template, Blueprint, request
-from app.utilities.helpers import build_uri
+from app.utilities.helpers import build_uri, get_user
 from app.setup import log, api_caller, api_caller_pl
 
 view_form_blueprint = Blueprint(name='view_form', import_name=__name__, url_prefix='/contributor_search')
@@ -56,7 +56,8 @@ def view_form(inqcode, period, ruref):
             period=period,
             ruref=ruref,
             data=view_form_data,
-            contributor_details=contributor_data['data'][0])
+            contributor_details=contributor_data['data'][0],
+            user = get_user())
 
     return render_template(
         template_name_or_list="./view_form/FormView.html",
@@ -65,7 +66,8 @@ def view_form(inqcode, period, ruref):
         ruref=ruref,
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        validation=validations)
+        validation=validations,
+        user = get_user())
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
@@ -75,6 +77,8 @@ def override_validations(inqcode, period, ruref):
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
+    user = json.dumps(get_user())
+    print("user: " + user)
 
     api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
@@ -95,4 +99,5 @@ def override_validations(inqcode, period, ruref):
         ruref=ruref,
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        validation=validations)
+        validation=validations,
+        user=user)

@@ -95,9 +95,9 @@
                                                     onclick="select_all(this)"
                                                 >
                                             <label id="select_all" class="checkbox__label" for="select-all">
-                                                <strong>Select All</strong><br>
+                                                <strong>Select All</strong>
                                             </label>
-                                            </span></p>
+                                            </span></p><br>
                                     {% for output in validation['validation_outputs'] %}
                                         {% if output['overridden'] == True %}
                                                     <p class="checkboxes__item">
@@ -252,6 +252,7 @@
            var reference  = document.getElementById("ref").textContent;
            var period     = document.getElementById("period").textContent;
            var survey     = document.getElementById("survey").textContent;
+           var user       = '{{ user }}';
            var checkboxes_checked = []
            var checkboxes_output  = {}
            for(var i = 0; i < checkboxes.length; i++) {
@@ -259,13 +260,13 @@
                     var checkbox = {}
                     checkbox["validationoutputid"] = checkboxes[i].id
                     checkbox["override"]           = true
-                    checkbox["user"]               = "fisdba"
+                    checkbox["user"]               = user
                     checkboxes_checked.push(checkbox)
                 } else {
                     var checkbox = {}
                     checkbox["validationoutputid"] = checkboxes[i].id
                     checkbox["override"]           = false
-                    checkbox["user"]               = "fisdba"
+                    checkbox["user"]               = user
                     checkboxes_checked.push(checkbox)
                 }
            }
