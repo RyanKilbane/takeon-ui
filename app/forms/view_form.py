@@ -56,9 +56,9 @@ def view_form(inqcode, period, ruref):
         header = {"x-api-key": api_key}
         status_message = 'Validation Run Successfully'
         try:
-            response = requests.post(url, data=json.dumps(json_data), headers=header)
-            log.info("Response from SQS: %s", response.text)
-            log.info("Status Code from SQS: %s", response.status_code)
+            #response = requests.post(url, data=json.dumps(json_data), headers=header)
+            response = api_caller.run_validation(url, json.dumps(json_data), header)
+            log.info("Response from SQS: %s", response)
         except HTTPError as http_err:
             status_message = "Http Error. Unable to call URL"
             log.info('URL error occurred: %s', http_err)
