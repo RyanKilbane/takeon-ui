@@ -7,7 +7,6 @@
 .mainContent {
     padding-left: 22px;
     padding-right: 16px;
-    padding-top: 20px;
 }
 
 .capitalisation{
@@ -36,4 +35,8 @@
     top: 25px;
     bottom: -1px;
     position: relative;
+}
+
+.paddingSection{
+    padding-top: 20px;
 }

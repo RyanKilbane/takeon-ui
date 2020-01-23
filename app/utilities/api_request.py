@@ -27,6 +27,9 @@ class ApiRequest:
 
     def request_put(self, endpoint, parameters, data, headers):
         return requests.put(self.build_endpoint(endpoint, parameters), data=data, headers=headers)
+
+    def request_post(self, endpoint, parameters, data, headers):
+        return requests.post(self.build_endpoint(endpoint, parameters), data=data, headers=headers)
     
     def view_form_responses(self, parameters):
         if self.mock:
@@ -82,6 +85,11 @@ class ApiRequest:
         if self.mock:
             return mock_get_validation(url_connect=parameters).text
         return self.request_get(endpoint="/validation/validationoutput", parameters=parameters).text
+
+    def validation_overrides(self, parameters, data):
+        # self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers=headers)
+        return self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers={"Content-Type": "Application/Json"}).text
+
 class TakeonApiException(Exception):
     status_code = 400
 
