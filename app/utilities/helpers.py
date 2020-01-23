@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from wtforms import StringField, Form
 
+
 # ###################################### UTILITY FUNCTIONS ###########################################
 # Create class for forms dynamically
 def create_form_class(iterable):
@@ -73,6 +74,7 @@ def str_to_bool(string_to_convert):
     if string_to_convert == "False":
         return False
     raise ValueError
+
 
 def decompose_data(data: dict) -> dict:
     """
