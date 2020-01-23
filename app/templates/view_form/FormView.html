@@ -32,10 +32,12 @@
         <div class="panel__body">
 
             <h1>{{ contributor_details['referencename'] }}</h1>
-            <p><b>Reference:</b> {{ contributor_details['reference'] }}
-                <b>Period:</b> {{ contributor_details['period'] }}
-                <b>Survey:</b> {{ contributor_details['survey'] }}
-                <b>Status:</b> {{ contributor_details['status'] }} </p>
+            <p>
+                <b>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
+                <b>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
+                <b>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
+                <b>Status:</b> {{ contributor_details['status'] }}
+            </p>
         </div>
     </div>
     <br>
@@ -74,34 +76,76 @@
                     <div id="accordion" class="accordion">
                         <div class="wrapper">
                             <div class="response-split">
+                                <form method="POST">
+                                    {% if validation['validation_outputs']|length > 1 %}
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend">What Validations would you like to override?
                                     </legend>
                                     <p class="checkboxes__label">Select all that apply</p>
                                     <span class="checkboxes__items">
+                                        
+                                        <p class="checkboxes__item">
+                                            <span class="checkbox ">
+                                                <input
+                                                    type="checkbox"
+                                                    id="select-all"
+                                                    class="checkbox__input js-checkbox "
+                                                    value="Select All"
+                                                    name="select-all-checkbox"
+                                                    onclick="select_all(this)"
+                                                >
+                                            <label id="select_all" class="checkbox__label" for="select-all">
+                                                <strong>Select All</strong><br>
+                                            </label>
+                                            </span></p>
                                     {% for output in validation['validation_outputs'] %}
-                                                  <p class="checkboxes__item">
-                                      <span class="checkbox ">
-                                          <input
-                                              type="checkbox"
-                                              id="bacon-{{loop.index}}"
-                                              class="checkbox__input js-checkbox "
-                                              value="bacon-{{loop.index}}"
-                                              name="test"
-                                          >
-                                          <label id="{{loop.index}}-label" class="checkbox__label " for="bacon-{{loop.index}}">
-                                            <strong>{{ output["primaryquestion"] }}</strong></br>
-                                            <strong>{{ output["name"] }}</strong></br>
-                                            <b>Validation ID: {{ output["validationid"] }}</b></br>
-                                            <b>Formula: {{ output["formula"] }}</b></br>
-                                            <b>Triggered: {{ output["triggered"] }}</b></br>
-                                          </label>
-                                      </span>
-                                    </p>
-                                    <br>
+                                        {% if output['overridden'] == True %}
+                                                    <p class="checkboxes__item">
+                                        <span class="checkbox ">
+                                            <input
+                                                type="checkbox"
+                                                id="{{output['validationoutputid']}}"
+                                                class="checkbox__input js-checkbox "
+                                                value="{{output['validationoutputid']}}"
+                                                name="override-checkbox"
+                                                checked
+                                            >
+                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                <strong>{{ output["primaryquestion"] }}</strong></br>
+                                                <strong>{{ output["name"] }}</strong></br>
+                                                <b>Validation ID: {{ output["validationid"] }}</b></br>
+                                                <b>Formula: {{ output["formula"] }}</b></br>
+                                                <b>Triggered: {{ output["triggered"] }}</b></br>
+                                            </label>
+                                        </span>
+                                        </p>
+                                        <br>
+                                        {% else %}
+                                            <p class="checkboxes__item">
+                                                <span class="checkbox ">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="{{output['validationoutputid']}}"
+                                                        class="checkbox__input js-checkbox "
+                                                        value="{{output['validationoutputid']}}"
+                                                        name="override-checkbox"
+                                                    >
+                                                    <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                        <strong>{{ output["primaryquestion"] }}</strong></br>
+                                                        <strong>{{ output["name"] }}</strong></br>
+                                                        <b>Validation ID: {{ output["validationid"] }}</b></br>
+                                                        <b>Formula: {{ output["formula"] }}</b></br>
+                                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                                    </label>
+                                                </span>
+                                                </p>
+                                                <br>
+                                        {% endif %}
                                     {% endfor %}
                                     </span>
                                   </fieldset>
+                                  {% endif %}
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -117,16 +161,24 @@
             <br>
         </button>
 
-        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
+        <button class="btn btn--small" 
+                type="submit" 
+                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
+                value='validate' 
+                name='action'>
             <span class="btn__inner">Validate</span>
             <br>
         </button>
 
-        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action'>
+        <button class="btn btn--small" 
+                type="submit" 
+                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
+                value='override' 
+                name='action'
+                id='override_button'>
             <span class="btn__inner">Override</span>
             <br>
         </button>
-
     </form>
     </div>
 
@@ -191,6 +243,57 @@
         window.alert(responseElements);
     </script>
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        var override_button = document.getElementById("override_button")
+        override_button.addEventListener("click", function() 
+        {var checkboxes = document.getElementsByName("override-checkbox");
+           var reference  = document.getElementById("ref").textContent;
+           var period     = document.getElementById("period").textContent;
+           var survey     = document.getElementById("survey").textContent;
+           var checkboxes_checked = []
+           var checkboxes_output  = {}
+           for(var i = 0; i < checkboxes.length; i++) {
+                if(checkboxes[i].checked) {
+                    var checkbox = {}
+                    checkbox["validationoutputid"] = checkboxes[i].id
+                    checkbox["override"]           = true
+                    checkbox["user"]               = "fisdba"
+                    checkboxes_checked.push(checkbox)
+                } else {
+                    var checkbox = {}
+                    checkbox["validationoutputid"] = checkboxes[i].id
+                    checkbox["override"]           = false
+                    checkbox["user"]               = "fisdba"
+                    checkboxes_checked.push(checkbox)
+                }
+           }
+            checkboxes_output['reference']          = reference
+            checkboxes_output['period']             = period
+            checkboxes_output['survey']             = survey
+            checkboxes_output['validation_outputs'] = checkboxes_checked
+            var js_data = JSON.stringify(checkboxes_output)
+            $.ajax({
+               url: 'override-validations',
+               type: 'post',
+               contentType: 'application/json',
+               dataType: 'json',
+               data: js_data,
+               async: false
+           })
+           })
+           
+    </script>
+
+    <script>
+        function select_all(source) {
+            checkboxes = document.getElementsByName("override-checkbox");
+            for(var i=0; i < checkboxes.length; i++){
+                checkboxes[i].checked = source.checked;
+            }
+        }
+    </script>
 
     <br>
     <br>

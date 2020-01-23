@@ -43,6 +43,7 @@ def view_form(inqcode, period, ruref):
     log.info("Contributor Details: %s", contributor_data)
     log.info("Contributor Details[0]: %s", contributor_data['data'][0])
     log.info("View Form Data: %s", view_form_data)
+    log.info("Validations output: %s", validations)
 
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST" and request.form['action'] == "saveForm":
@@ -79,6 +80,36 @@ def view_form(inqcode, period, ruref):
             data=view_form_data,
             contributor_details=contributor_data['data'][0])
 
+    return render_template(
+        template_name_or_list="./view_form/FormView.html",
+        survey=inqcode,
+        period=period,
+        ruref=ruref,
+        data=view_form_data,
+        contributor_details=contributor_data['data'][0],
+        validation=validations)
+
+
+@view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
+def override_validations(inqcode, period, ruref):
+    json_data = request.json
+    log.info("Checkbox checked data: %s", str(json_data))
+    ruref = json_data['reference']
+    inqcode = json_data['survey']
+    period = json_data['period']
+
+    api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
+    url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
+    parameters = build_uri(url_parameters)
+
+    contributor_details = api_caller.contributor_search(parameters=parameters)
+    validation_outputs = api_caller.validation_outputs(parameters=parameters)
+    view_forms = api_caller.view_form_responses(parameters=parameters)
+
+    contributor_data = json.loads(contributor_details)
+    validations = json.loads(validation_outputs)
+    view_form_data = json.loads(view_forms)
+    
     return render_template(
         template_name_or_list="./view_form/FormView.html",
         survey=inqcode,
