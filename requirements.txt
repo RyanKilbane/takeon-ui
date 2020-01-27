@@ -38,7 +38,7 @@ pyasn1-modules==0.2.6
 PyJWT==1.7.1
 pylint==2.3.1
 pylint-runner==0.5.4
-pytest==5.0.1
+pytest==5.3.4
 pytest-cov==2.7.1
 python-dateutil==2.8.0
 PyYAML==5.1.2
@@ -46,7 +46,7 @@ requests==2.22.0
 requests-mock==1.6.0
 requests-oauthlib==1.2.0
 rsa==4.0
-setuptools-scm==3.3.3
+setuptools-scm==3.4.3
 six==1.12.0
 typed-ast==1.4.0
 urllib3==1.25.3
