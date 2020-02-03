@@ -24,4 +24,4 @@ ENV PYTHONUNBUFFERED=0
 COPY gunicorn_config.py /gunicorn_config.py
 #EXPOSE 5000
 
-ENTRYPOINT ["/usr/local/bin/gunicorn", "--config", "/TakeOnUi/gunicorn_config.py", "application:TakeOnUi/app"]
+ENTRYPOINT ["/usr/local/bin/gunicorn", "--config", "/TakeOnUi/gunicorn_config.py", "application:app"]
