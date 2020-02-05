@@ -18,7 +18,7 @@ EXPOSE 5000
 COPY --from=builder /install /usr/local
 COPY . /TakeOnUi
 WORKDIR /TakeOnUi
-ENV PYTHONUNBUFFERED=
+ENV PYTHONUNBUFFERED=0
 #GUnicorn config file
 COPY gunicorn_config.py /gunicorn_config.py
 
