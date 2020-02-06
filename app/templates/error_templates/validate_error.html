@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Problem {% endblock title %}
+
+
+{% block page_header %}
+
+    <h1 class="main_heading">Take-on</h1>
+
+{% endblock page_header %}
+
+<br>
+{% block content %}
+
+    <div class="mainContent">
+        <main class="page__main">
+            <h1>There is a problem with the Validation button</h1>
+            <div class="panel panel--info panel--simple">
+                <div class="panel__body">
+                    <p>Here's the error:
+                        <br>
+                        <strong class="u-fs-l u-mt-s u-d-b">{{ message_header }}</strong>
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+{% endblock content %}
