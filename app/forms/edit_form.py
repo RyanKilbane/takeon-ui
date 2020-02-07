@@ -45,6 +45,8 @@ def edit_form(inqcode, period, ruref):
             filtered_validations.append(validation)
     filtered_validation_outputs['validation_outputs'] = filtered_validations
 
+    log.info("Validations output edit: %s", validations)
+    log.info("Filtered Validations output edit: %s", filtered_validation_outputs)
     # Only run the following code if the UI has submitted a POST request
     if request.method != "POST":
         # Render the screen
@@ -88,6 +90,16 @@ def edit_form(inqcode, period, ruref):
     # Get the refreshed data from the responses table
     view_forms_gql = api_caller.view_form_responses(parameters=parameters)
 
+    validations = json.loads(validation_outputs)
+    filtered_validations = []
+    filtered_validation_outputs = {}
+    for validation in validations['validation_outputs']:
+        if validation['triggered']:
+            filtered_validations.append(validation)
+    filtered_validation_outputs['validation_outputs'] = filtered_validations
+
+    log.info("Validations output edit 2: %s", validations)
+    log.info("Filtered Validations output edit 2: %s", filtered_validation_outputs)
     return render_template(
         "./edit_form/EditForm.html",
         survey=inqcode,
