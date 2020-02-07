@@ -117,7 +117,8 @@ def general_search_screen_post():
 def next_page():
     log.info("Next page")
     newpage = request.json["cursor"]
-    parameters = "graphql;" + f";startCursor={newpage}" + ";first=10"
+    search_parameters = request.json["search_params"]
+    parameters = "graphql;" + f";startCursor={newpage}" + f";{search_parameters}" + ";first=10"
     return change_page(parameters)
 
 
@@ -125,7 +126,8 @@ def next_page():
 def previous_page():
     log.info("Previous page")
     newpage = request.json["cursor"]
-    parameters = "graphql;" + f";endCursor={newpage}" + ";last=10"
+    search_parameters = request.json["search_params"]
+    parameters = "graphql;" + f";startCursor={newpage}" + f";{search_parameters}" + ";first=10"
     return change_page(parameters)
 
 
