@@ -33,12 +33,17 @@ def edit_form(inqcode, period, ruref):
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
     view_forms = api_caller.view_form_responses(parameters=parameters)
 
-
-
     # load the json to turn it into a usable form
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
     view_form_data = json.loads(view_forms)
+
+    filtered_validations = []
+    filtered_validation_outputs = {}
+    for validation in validations['validation_outputs']:
+        if validation['triggered']:
+            filtered_validations.append(validation)
+    filtered_validation_outputs['validation_outputs'] = filtered_validations
 
     # Only run the following code if the UI has submitted a POST request
     if request.method != "POST":
@@ -50,7 +55,7 @@ def edit_form(inqcode, period, ruref):
             ruref=ruref,
             data=view_form_data,
             contributor_details=contributor_data['data'][0],
-            validation=validations,
+            validation=filtered_validations,
             status_message=json.dumps(""))
 
 
@@ -90,7 +95,7 @@ def edit_form(inqcode, period, ruref):
         ruref=ruref,
         data=json.loads(view_forms_gql),
         contributor_details=contributor_data['data'][0],
-        validation=validations,
+        validation=filtered_validations,
         status_message=json.dumps('New responses saved successfully'))
 
 
