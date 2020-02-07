@@ -45,8 +45,6 @@ def edit_form(inqcode, period, ruref):
             filtered_validations.append(validation)
     filtered_validation_outputs['validation_outputs'] = filtered_validations
 
-    log.info("Validations output edit: %s", validations)
-    log.info("Filtered Validations output edit: %s", filtered_validation_outputs)
     # Only run the following code if the UI has submitted a POST request
     if request.method != "POST":
         # Render the screen
@@ -57,7 +55,7 @@ def edit_form(inqcode, period, ruref):
             ruref=ruref,
             data=view_form_data,
             contributor_details=contributor_data['data'][0],
-            validation=filtered_validations,
+            validation=filtered_validation_outputs,
             status_message=json.dumps(""))
 
 
@@ -98,8 +96,6 @@ def edit_form(inqcode, period, ruref):
             filtered_validations.append(validation)
     filtered_validation_outputs['validation_outputs'] = filtered_validations
 
-    log.info("Validations output edit 2: %s", validations)
-    log.info("Filtered Validations output edit 2: %s", filtered_validation_outputs)
     return render_template(
         "./edit_form/EditForm.html",
         survey=inqcode,
@@ -107,7 +103,7 @@ def edit_form(inqcode, period, ruref):
         ruref=ruref,
         data=json.loads(view_forms_gql),
         contributor_details=contributor_data['data'][0],
-        validation=filtered_validations,
+        validation=filtered_validation_outputs,
         status_message=json.dumps('New responses saved successfully'))
 
 
