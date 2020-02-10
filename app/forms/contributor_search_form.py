@@ -127,7 +127,7 @@ def previous_page():
     log.info("Previous page")
     newpage = request.json["cursor"]
     search_parameters = request.json["search_params"]
-    parameters = "graphql;" + f";startCursor={newpage}" + f";{search_parameters}" + ";first=10"
+    parameters = "graphql;" + f";endCursor={newpage}" + f";{search_parameters}" + ";last=10"
     return change_page(parameters)
 
 
