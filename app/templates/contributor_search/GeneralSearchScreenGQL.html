@@ -145,41 +145,21 @@
 
         function nextPage(){
             console.log(getCursor(whichCursor="next", pagingInfo=pageData))
-            search_criteria = document.getElementsByClassName("input-type__inner");
-            console.log("Search Criteria = " + search_criteria)
-            search_parameters = ""
-            for (var i = 0; i < search_criteria.length; i++) {
-                field = search_criteria[i].getElementsByClassName("input input--text input-type__input input--w-11")[0].id
-                value = search_criteria[i].getElementsByClassName("input input--text input-type__input input--w-11")[0].value
-                if (value != "") {
-                    search_parameters += field + "=" + value + ";"
-                }
-            }
             $.ajax({
                 type: 'POST',
                 url: "/contributor_search/Contributor/next",
                 contentType: "application/json",
-                data: JSON.stringify({cursor: getCursor(whichCursor="next", pagingInfo=pageData), "search_params": search_parameters})
+                data: JSON.stringify({cursor: getCursor(whichCursor="next", pagingInfo=pageData), "search_params": "{{ parameters }}"})
             }).done(updateResultsTable);
         }
         $('#next_button').on('click', nextPage)
         function prevPage(){
             console.log(getCursor(whichCursor="next", pagingInfo=pageData))
-            search_criteria = document.getElementsByClassName("input-type__inner");
-            console.log("Search Criteria = " + search_criteria)
-            search_parameters = ""
-            for (var i = 0; i < search_criteria.length; i++) {
-                field = search_criteria[i].getElementsByClassName("input input--text input-type__input input--w-11")[0].id
-                value = search_criteria[i].getElementsByClassName("input input--text input-type__input input--w-11")[0].value
-                if (value != "") {
-                    search_parameters += field + "=" + value + ";"
-                }
-            }
             $.ajax({
                 type: 'POST',
                 url: "/contributor_search/Contributor/previous",
                 contentType: "application/json",
-                data: JSON.stringify({cursor: getCursor(whichCursor="prev", pagingInfo=pageData), "search_params": search_parameters})
+                data: JSON.stringify({cursor: getCursor(whichCursor="prev", pagingInfo=pageData), "search_params": "{{ parameters }}"})
             }).done(updateResultsTable);
         }
         $('#prev_button').on('click', prevPage)
