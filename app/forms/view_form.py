@@ -16,11 +16,9 @@ api_key = os.getenv('API_KEY')
 def not_found(error):
     return render_template('./error_templates/404.html', message_header=error), 404
 
-
 @view_form_blueprint.errorhandler(403)
 def not_auth(error):
     return render_template('./error_templates/403.html', message_header=error), 403
-
 
 @view_form_blueprint.errorhandler(500)
 def internal_server_error(error):
@@ -62,11 +60,18 @@ def view_form(inqcode, period, ruref):
             response = api_caller.run_validation(url, json.dumps(json_data), header)
             log.info("Response from SQS: %s", response)
         except HTTPError as http_err:
-            status_message = "Http Error. Unable to call URL"
-            log.info('URL error occurred: %s', http_err)
+           status_message = "Http Error. Unable to call URL"
+           log.info('URL error occurred: %s', http_err)
         except ConnectionError as connection_err:
             status_message = "Connection Error. Unable to Connect to API Gateway"
             log.info('API request error occured: %s', connection_err)
+        except Exception as e:
+            status_message = 'Validation Error. Kubernetes secret does not exist or is incorrect'
+            log.info('Validation Error Occurred: %s', e)
+            return render_template(
+                template_name_or_list="./error_templates/validate_error.html",
+                error=e
+            )
         return render_template(
             template_name_or_list="./view_form/FormView.html",
             survey=inqcode,

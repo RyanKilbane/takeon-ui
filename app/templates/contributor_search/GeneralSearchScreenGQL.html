@@ -149,16 +149,17 @@
                 type: 'POST',
                 url: "/contributor_search/Contributor/next",
                 contentType: "application/json",
-                data: JSON.stringify({cursor: getCursor(whichCursor="next", pagingInfo=pageData)})
+                data: JSON.stringify({cursor: getCursor(whichCursor="next", pagingInfo=pageData), "search_params": "{{ parameters }}"})
             }).done(updateResultsTable);
         }
         $('#next_button').on('click', nextPage)
         function prevPage(){
+            console.log(getCursor(whichCursor="next", pagingInfo=pageData))
             $.ajax({
                 type: 'POST',
                 url: "/contributor_search/Contributor/previous",
                 contentType: "application/json",
-                data: JSON.stringify({cursor: getCursor(whichCursor="prev", pagingInfo=pageData)})
+                data: JSON.stringify({cursor: getCursor(whichCursor="prev", pagingInfo=pageData), "search_params": "{{ parameters }}"})
             }).done(updateResultsTable);
         }
         $('#prev_button').on('click', prevPage)
@@ -177,7 +178,7 @@
             else if (whichCursor == "prev"){
                 return pageInfo["startCursor"];
             }
-            else if (whichCUrsor == false){
+            else if (whichCursor == false){
                 return null;
             }
         }
