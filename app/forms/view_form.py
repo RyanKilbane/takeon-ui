@@ -3,7 +3,8 @@ import os
 import requests
 from flask import url_for, redirect, render_template, Blueprint, request
 from requests.exceptions import HTTPError
-from app.utilities.helpers import build_uri, get_user, filter_validations
+from app.utilities.helpers import build_uri, get_user
+from app.utilities.filter_validations import filter_validations
 from app.setup import log, api_caller, api_caller_pl
 
 view_form_blueprint = Blueprint(name='view_form', import_name=__name__, url_prefix='/contributor_search')

@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, request, render_template, redirect, url_for
-from app.utilities.helpers import build_uri, get_user, filter_validations
+from app.utilities.helpers import build_uri, get_user
+from app.utilities.filter_validations import filter_validations
 from app.setup import log, api_caller, api_caller_pl
 
 edit_form_blueprint = Blueprint(name='edit_form', import_name=__name__, url_prefix='/contributor_search')
