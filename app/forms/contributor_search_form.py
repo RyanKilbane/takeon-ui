@@ -95,6 +95,7 @@ def general_search_screen_post():
     clean_parameters = clean_search_parameters(mutable_form)
 
     url_connect = build_uri(clean_parameters)
+    parameters = url_connect
     url_connect += ";first=10"
     print("url connect: {}".format(url_connect))
 
@@ -110,6 +111,7 @@ def general_search_screen_post():
         header=output_data[0],
         fields=dict(form.__dict__["_fields"]),
         links=data.page_info,
+        parameters=parameters
     )
 
 
@@ -117,7 +119,8 @@ def general_search_screen_post():
 def next_page():
     log.info("Next page")
     newpage = request.json["cursor"]
-    parameters = "graphql;" + f";startCursor={newpage}" + ";first=10"
+    search_parameters = request.json["search_params"]
+    parameters = "graphql;" + f";startCursor={newpage}" + f";{search_parameters}" + ";first=10"
     return change_page(parameters)
 
 
@@ -125,7 +128,8 @@ def next_page():
 def previous_page():
     log.info("Previous page")
     newpage = request.json["cursor"]
-    parameters = "graphql;" + f";endCursor={newpage}" + ";last=10"
+    search_parameters = request.json["search_params"]
+    parameters = "graphql;" + f";endCursor={newpage}" + f";{search_parameters}" + ";last=10"
     return change_page(parameters)
 
 
