@@ -19,4 +19,7 @@ COPY --from=builder /install /usr/local
 COPY . /TakeOnUi
 WORKDIR /TakeOnUi
 ENV PYTHONUNBUFFERED=0
-CMD python -u application.py runserver
+#GUnicorn config file
+COPY gunicorn_config.py /gunicorn_config.py
+
+ENTRYPOINT ["/usr/local/bin/gunicorn", "--config", "/TakeOnUi/gunicorn_config.py", "application:application"]
