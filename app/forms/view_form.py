@@ -3,7 +3,7 @@ import os
 import requests
 from flask import url_for, redirect, render_template, Blueprint, request
 from requests.exceptions import HTTPError
-from app.utilities.helpers import build_uri, get_user
+from app.utilities.helpers import build_uri, get_user, filter_validations
 from app.setup import log, api_caller, api_caller_pl
 
 view_form_blueprint = Blueprint(name='view_form', import_name=__name__, url_prefix='/contributor_search')
@@ -39,18 +39,13 @@ def view_form(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
-    filtered_validations = []
-    filtered_validation_outputs = {}
-    for validation in validations['validation_outputs']:
-        if validation['triggered']:
-            filtered_validations.append(validation)
-    filtered_validation_outputs['validation_outputs'] = filtered_validations
+
     view_form_data = json.loads(view_forms)
     log.info("Contributor Details: %s", contributor_data)
     log.info("Contributor Details[0]: %s", contributor_data['data'][0])
     log.info("View Form Data: %s", view_form_data)
     log.info("Validations output: %s", validations)
-    log.info("Filtered Validations output: %s", filtered_validation_outputs)
+    log.info("Filtered Validations output: %s", filter_validations(validations))
 
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST" and request.form['action'] == "saveForm":
@@ -79,7 +74,7 @@ def view_form(inqcode, period, ruref):
             data=view_form_data,
             status_message=json.dumps(status_message),
             contributor_details=contributor_data['data'][0],
-            validation=filtered_validation_outputs)
+            validation=filter_validations(validations))
 
     # if form_response is empty, then we have a blank form and so return just the definition
     if not view_form_data:
@@ -100,7 +95,7 @@ def view_form(inqcode, period, ruref):
         data=view_form_data,
         status_message=json.dumps(""),
         contributor_details=contributor_data['data'][0],
-        validation=filtered_validation_outputs,
+        validation=filter_validations(validations),
         user=get_user())
 
 
@@ -122,12 +117,7 @@ def override_validations(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
-    filtered_validations = []
-    filtered_validation_outputs = {}
-    for validation in validations['validation_outputs']:
-        if validation['triggered']:
-            filtered_validations.append(validation)
-    filtered_validation_outputs['validation_outputs'] = filtered_validations
+
     view_form_data = json.loads(view_forms)
 
     return render_template(
@@ -137,5 +127,5 @@ def override_validations(inqcode, period, ruref):
         ruref=ruref,
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
-        validation=filtered_validation_outputs,
+        validation=filter_validations(validations),
         user=get_user())

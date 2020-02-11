@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, request, render_template, redirect, url_for
-from app.utilities.helpers import build_uri, get_user
+from app.utilities.helpers import build_uri, get_user, filter_validations
 from app.setup import log, api_caller, api_caller_pl
 
 edit_form_blueprint = Blueprint(name='edit_form', import_name=__name__, url_prefix='/contributor_search')
@@ -38,13 +38,6 @@ def edit_form(inqcode, period, ruref):
     validations = json.loads(validation_outputs)
     view_form_data = json.loads(view_forms)
 
-    filtered_validations = []
-    filtered_validation_outputs = {}
-    for validation in validations['validation_outputs']:
-        if validation['triggered']:
-            filtered_validations.append(validation)
-    filtered_validation_outputs['validation_outputs'] = filtered_validations
-
     # Only run the following code if the UI has submitted a POST request
     if request.method != "POST":
         # Render the screen
@@ -55,7 +48,7 @@ def edit_form(inqcode, period, ruref):
             ruref=ruref,
             data=view_form_data,
             contributor_details=contributor_data['data'][0],
-            validation=filtered_validation_outputs,
+            validation=filter_validations(validations),
             status_message=json.dumps(""))
 
 
@@ -88,14 +81,6 @@ def edit_form(inqcode, period, ruref):
     # Get the refreshed data from the responses table
     view_forms_gql = api_caller.view_form_responses(parameters=parameters)
 
-    validations = json.loads(validation_outputs)
-    filtered_validations = []
-    filtered_validation_outputs = {}
-    for validation in validations['validation_outputs']:
-        if validation['triggered']:
-            filtered_validations.append(validation)
-    filtered_validation_outputs['validation_outputs'] = filtered_validations
-
     return render_template(
         "./edit_form/EditForm.html",
         survey=inqcode,
@@ -103,7 +88,7 @@ def edit_form(inqcode, period, ruref):
         ruref=ruref,
         data=json.loads(view_forms_gql),
         contributor_details=contributor_data['data'][0],
-        validation=filtered_validation_outputs,
+        validation=filter_validations(validations),
         status_message=json.dumps('New responses saved successfully'))
 
 
