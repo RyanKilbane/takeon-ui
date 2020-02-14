@@ -65,29 +65,29 @@
                             <!--- Accordion --->
                             <h3 class="u-fs-l">Validation</h3>
                             {% for output in validation['validation_outputs'] %}
-                            {% if output["severity"] == "E" %}
-                                <button class="accordion-legacy" style="background-color:#D0021B" id="primaryquestion:
-                                {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
-                                {{ output["primaryquestion"] }}</strong>
+                                {% if output["severity"] == "E" %}
+                                    <button class="accordion-legacy" style="background-color:#D0021B" id="primaryquestion:
+                                    {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                                    {{ output["primaryquestion"] }}</strong>
+                                            <strong>{{ output["name"] }}</strong>
+                                    </button>
+                                    <div class="panel-legacy">
+                                        <b>Validation ID: {{ output["validationid"] }}</b><br>
+                                        <b>Formula: {{ output["formula"] }}</b><br>
+                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                    </div>
+                                {% else %}
+                                    <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
+                                    {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
+                                    {{ output["primaryquestion"] }}</strong>
                                         <strong>{{ output["name"] }}</strong>
-                                </button>
-                                <div class="panel-legacy">
-                                    <b>Validation ID: {{ output["validationid"] }}</b><br>
-                                    <b>Formula: {{ output["formula"] }}</b><br>
-                                    <b>Triggered: {{ output["triggered"] }}</b></br>
-                                </div>
-                            {% else %}
-                                <button class="accordion-legacy" style="background-color:#FE781F" id="primaryquestion:
-                                {{ output['primaryquestion'] }}|instance:{{ output['instance'] }}"><strong>
-                                {{ output["primaryquestion"] }}</strong>
-                                    <strong>{{ output["name"] }}</strong>
-                                </button>
-                                <div class="panel-legacy">
-                                    <b>Validation ID: {{ output["validationid"] }}</b><br>
-                                    <b>Formula: {{ output["formula"] }}</b><br>
-                                    <b>Triggered: {{ output["triggered"] }}</b></br>
-                                </div>
-                            {% endif %}
+                                    </button>
+                                    <div class="panel-legacy">
+                                        <b>Validation ID: {{ output["validationid"] }}</b><br>
+                                        <b>Formula: {{ output["formula"] }}</b><br>
+                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                             
                         </div>

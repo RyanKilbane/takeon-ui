@@ -1,6 +1,7 @@
 import json
 from flask import Blueprint, request, render_template, redirect, url_for
 from app.utilities.helpers import build_uri, get_user
+from app.utilities.filter_validations import filter_validations
 from app.setup import log, api_caller, api_caller_pl
 
 edit_form_blueprint = Blueprint(name='edit_form', import_name=__name__, url_prefix='/contributor_search')
@@ -33,8 +34,6 @@ def edit_form(inqcode, period, ruref):
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
     view_forms = api_caller.view_form_responses(parameters=parameters)
 
-
-
     # load the json to turn it into a usable form
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
@@ -50,7 +49,7 @@ def edit_form(inqcode, period, ruref):
             ruref=ruref,
             data=view_form_data,
             contributor_details=contributor_data['data'][0],
-            validation=validations,
+            validation=filter_validations(validations),
             status_message=json.dumps(""))
 
 
@@ -90,7 +89,7 @@ def edit_form(inqcode, period, ruref):
         ruref=ruref,
         data=json.loads(view_forms_gql),
         contributor_details=contributor_data['data'][0],
-        validation=validations,
+        validation=filter_validations(validations),
         status_message=json.dumps('New responses saved successfully'))
 
 
