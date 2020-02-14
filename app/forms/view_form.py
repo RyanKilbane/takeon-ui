@@ -45,7 +45,41 @@ def view_form(inqcode, period, ruref):
 
     # if there is a request method called then there's been a request for edit form
     if request.method == "POST" and request.form['action'] == "saveForm":
-        return redirect(url_for("edit_form.edit_form", ruref=ruref, inqcode=inqcode, period=period))
+        log.info('Starting form save')
+
+        # Extract response data from UI elements
+        log.info('SUF: %s', request.form)
+        
+        response_data = extract_responses(request.form)
+        log.info('Response data: %s', response_data)
+
+        # Build up JSON structure to save
+        json_output = {}
+        json_output["responses"] = response_data
+        json_output["user"] = get_user()
+        json_output["reference"] = ruref
+        json_output["period"] = period
+        json_output["survey"] = inqcode
+
+        # Send the data to the business layer for processing
+        log.info("Output JSON: %s", str(json_output))
+        # api_caller.update_response(parameters=parameters, data=json_output)
+        # New API call for save in business layer which uses GraphQL
+        api_caller.save_response(parameters=parameters, data=json_output)
+
+        # Get the refreshed data from the responses table
+        view_forms_gql = api_caller.view_form_responses(parameters=parameters)
+
+        return render_template(
+            "./view_form/FormView.html",
+            survey=inqcode,
+            period=period,
+            ruref=ruref,
+            data=json.loads(view_forms_gql),
+            contributor_details=contributor_data['data'][0],
+            validation=validations,
+            status_message=json.dumps('New responses saved successfully'))
+
 
     #validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
@@ -131,3 +165,10 @@ def override_validations(inqcode, period, ruref):
         contributor_details=contributor_data['data'][0],
         validation=validations,
         user=get_user())
+
+def extract_responses(data) -> dict:
+    output = []
+    for key in data.keys():
+        if key != "action":
+            output.append({'question': key, 'response': data[key], 'instance': 0})
+    return output

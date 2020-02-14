@@ -11,23 +11,6 @@
 
 <br>
 {% block content %}
-
-    <!--
-    <div id="lockedInfo" style="display:none">
-        <div class="panel panel--error panel--simple">
-            <div class="panel__error">
-                <div class="u-fs-r--b">Form locked</div>
-            </div>
-            <div class="panel__body">
-                <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been
-                    checked
-                    back in.
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
 
@@ -42,94 +25,64 @@
     </div>
     <br>
 
-
     <div class="mainContent">
-        <form method="post" id="save" action="">
-                <button class="btn btn--small" type="submit" id="editFormButton" value="saveForm" name="action"
-                        onclick="submitForm()">
-                    <span class="btn__inner">Edit</span></button>
-            </form>
-            <br>
-
-            <div class="grid">
-                <div class="grid__col col-6@m paddingSection">
+        <div class="grid">
+            <div class="grid__col col-6@m paddingSection">
+                <form method="post">
                     {% for datum in data['view_form_responses'] %}
                         <div>
-                            <p class="field">
-                                <label class="label">{{ datum["displayquestionnumber"] }}
-                                    <strong>{{ datum["displaytext"] }}</strong>
-                                    <br>
-                                    <span class="label__description" style="color:red">{{ datum["questioncode"] }}</span>
-                                </label>
-                                <input name="response:{{ datum['questioncode'] }}"
-                                        value="{{datum['response']}}"
-                                        id="questioncode:{{ datum['questioncode'] }}|instance:{{ datum['instance'] }}"
-                                        class="input input--text input-type__input" readonly>
-                            </p>
+                            {{ datum["displayquestionnumber"] }}<strong> {{ datum["displaytext"] }}</strong>
+                            <br>
+                            <input name="{{ datum['questioncode'] }}"
+                                    value="{{ datum['response'] }}" type="number"
+                                    class="input input--text input-type__input">
+                            <span style="color:red">{{ datum["questioncode"] }}</span>
                             <br>
                             <br>
-                        </div> 
+                        </div>
                     {% endfor %}
-                </div>
+                </form>
+            </div>
 
-                <div class="grid__col col-6@m paddingSection">
-                    <div id="accordion" class="accordion">
-                        <div class="wrapper">
-                            <div class="response-split">
-                                <form method="POST">
-                                    {% if validation['validation_outputs']|length > 1 %}
+            <div class="grid__col col-6@m paddingSection">
+                <div id="accordion" class="accordion">
+                    <div class="wrapper">
+                        <div class="response-split">
+                            <form method="POST">
+                                {% if validation['validation_outputs']|length > 1 %}
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend">What Validations would you like to override?
                                     </legend>
                                     <p class="checkboxes__label">Select all that apply</p>
                                     <span class="checkboxes__items">
-                                        
                                         <p class="checkboxes__item">
                                             <span class="checkbox ">
-                                                <input
-                                                    type="checkbox"
-                                                    id="select-all"
-                                                    class="checkbox__input js-checkbox "
-                                                    value="Select All"
-                                                    name="select-all-checkbox"
-                                                    onclick="select_all(this)"
-                                                >
-                                            <label id="select_all" class="checkbox__label" for="select-all">
-                                                <strong>Select All</strong>
-                                            </label>
-                                            </span></p><br>
+                                                <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
+                                                <label id="select_all" class="checkbox__label" for="select-all">
+                                                    <strong>Select All</strong>
+                                                </label>
+                                            </span>
+                                        </p>
+                                        <br>
                                     {% for output in validation['validation_outputs'] %}
                                         {% if output['overridden'] == True %}
-                                                    <p class="checkboxes__item">
-                                        <span class="checkbox ">
-                                            <input
-                                                type="checkbox"
-                                                id="{{output['validationoutputid']}}"
-                                                class="checkbox__input js-checkbox "
-                                                value="{{output['validationoutputid']}}"
-                                                name="override-checkbox"
-                                                checked
-                                            >
-                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
-                                                <strong>{{ output["primaryquestion"] }}</strong></br>
-                                                <strong>{{ output["name"] }}</strong></br>
-                                                <b>Validation ID: {{ output["validationid"] }}</b></br>
-                                                <b>Formula: {{ output["formula"] }}</b></br>
-                                                <b>Triggered: {{ output["triggered"] }}</b></br>
-                                            </label>
-                                        </span>
+                                        <p class="checkboxes__item">
+                                            <span class="checkbox ">
+                                                <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox" checked>
+                                                <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                    <strong>{{ output["primaryquestion"] }}</strong></br>
+                                                    <strong>{{ output["name"] }}</strong></br>
+                                                    <b>Validation ID: {{ output["validationid"] }}</b></br>
+                                                    <b>Formula: {{ output["formula"] }}</b></br>
+                                                    <b>Triggered: {{ output["triggered"] }}</b></br>
+                                                </label>
+                                            </span>
                                         </p>
                                         <br>
                                         {% else %}
                                             <p class="checkboxes__item">
                                                 <span class="checkbox ">
-                                                    <input
-                                                        type="checkbox"
-                                                        id="{{output['validationoutputid']}}"
-                                                        class="checkbox__input js-checkbox "
-                                                        value="{{output['validationoutputid']}}"
-                                                        name="override-checkbox"
-                                                    >
+                                                    <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox">
                                                     <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
                                                         <strong>{{ output["primaryquestion"] }}</strong></br>
                                                         <strong>{{ output["name"] }}</strong></br>
@@ -138,102 +91,45 @@
                                                         <b>Triggered: {{ output["triggered"] }}</b></br>
                                                     </label>
                                                 </span>
-                                                </p>
-                                                <br>
+                                            </p>
+                                            <br>
                                         {% endif %}
                                     {% endfor %}
                                     </span>
-                                  </fieldset>
-                                  {% endif %}
-                                </form>
-                            </div>
+                                </fieldset>
+                                {% endif %}
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
     <div class="mainContent">
     <form method="POST" action="">
+
+        <button class="btn btn--small" type="submit" id="saveFormButton" value="saveForm" name="action">
+            <span class="btn__inner">Save</span>
+        </button>
+
+
+        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
+            <span class="btn__inner">Validate</span>
+        </button>
+
+        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action' id='override_button'>
+            <span class="btn__inner">Override</span>
+        </button>
+
         <button class="btn btn--small" type="submit" value="close this window" onclick="self.close()">
             <span class="btn__inner">Exit</span>
-            <br>
-        </button>
-
-        <button class="btn btn--small" 
-                type="submit" 
-                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
-                value='validate' 
-                name='action'>
-            <span class="btn__inner">Validate</span>
-            <br>
-        </button>
-
-        <button class="btn btn--small" 
-                type="submit" 
-                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
-                value='override' 
-                name='action'
-                id='override_button'>
-            <span class="btn__inner">Override</span>
-            <br>
         </button>
     </form>
     </div>
 
-
-    <script>
-        function openTab(evt, details) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(details).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-
-        document.getElementById("defaultOpen").click();
-    </script>
-
-    <!--
-    <script>
-        var isLockedBy = "{{ locked }}"
-        if (isLockedBy != "") {
-            document.getElementById("editFormButton").disabled = true;
-            document.getElementById("editFormButton").style.color = "grey";
-            var bar = document.getElementById("lockedInfo");
-            bar.style.display = "block";
-        }  
-        document.getElementById("SectionA").style.display = "block"
-    </script>
-    -->
-
-    <script>
-        var acc = document.getElementsByClassName("accordion-legacy");
-        var i;
-
-        for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function () {
-                /* Toggle between adding and removing the "active" class,
-                to highlight the button that controls the panel */
-                this.classList.toggle("active");
-
-                /* Toggle between hiding and showing the active panel */
-                var panel = this.nextElementSibling;
-                if (panel.style.display === "block") {
-                    panel.style.display = "none";
-                } else {
-                    panel.style.display = "block";
-                }
-            });
-        }
-    </script>
+    <br>
 
     <script>
         var regex = new RegExp('(.+\|.+_)');
@@ -306,10 +202,5 @@
             alert(statusMessage);
         }
     </script>
-
-    <br>
-    <br>
-    <br>
-    <br>
 
 {% endblock content %}

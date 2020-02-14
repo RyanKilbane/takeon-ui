@@ -12,23 +12,6 @@
 
 
 {% block content %}
-
-    <!--
-    <div id="lockedInfo" style="display:none">
-        <div class="panel panel--error panel--simple">
-            <div class="panel__error">
-                <div class="u-fs-r--b">Form locked</div>
-            </div>
-            <div class="panel__body">
-                <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been
-                    checked
-                    back in.
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
 
@@ -126,19 +109,6 @@
             evt.currentTarget.className += " active";
         }
     </script>
-
-    <!--
-    <script>
-        var isLockedBy = "{{ locked }}"
-        if (isLockedBy != "") {
-            document.getElementById("saveFormButton").disabled = true;
-            document.getElementById("saveFormButton").style.color = "grey";
-            var bar = document.getElementById("lockedInfo");
-            bar.style.display = "block";
-        }
-        document.getElementById("SectionA").style.display = "block"
-    </script>
-    -->
 
     <script>
         var acc = document.getElementsByClassName("accordion-legacy");
