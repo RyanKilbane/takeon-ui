@@ -5,5 +5,5 @@
 for i in {1..18}; do
     now=`date`
     echo "Test: $i , Current DateTime: $now"
-    python3 selenium_test.py &
+    python3 load_check.py &
     done
