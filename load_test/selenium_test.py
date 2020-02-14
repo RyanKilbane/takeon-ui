@@ -37,7 +37,7 @@ driver.find_element_by_xpath(reference_search).send_keys(config_test.REFERENCE)
 
 driver.find_element_by_xpath(second_search_button).click()
 
-view_form_button = '//*[@id="search_results_body"]/tr[1]/td[1]/a/button'
+view_form_button = '//*[@id="search_results_body"]/tr[2]/td[1]/a/button'
 driver.find_element_by_xpath(view_form_button).click()
 # driver.implicitly_wait(10)
 # time.sleep(10)
