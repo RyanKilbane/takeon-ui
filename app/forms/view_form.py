@@ -44,41 +44,40 @@ def view_form(inqcode, period, ruref):
     log.info("Validations output: %s", validations)
 
     # if there is a request method called then there's been a request for edit form
-    if request.method == "POST" and request.form['action'] == "saveForm":
-        log.info('Starting form save')
-
-        # Extract response data from UI elements
-        log.info('SUF: %s', request.form)
+    # if request.method == "POST" and request.form['action'] == "saveForm":
+    #     log.info('Starting form save')
         
-        response_data = extract_responses(request.form)
-        log.info('Response data: %s', response_data)
+    #     response_data = extract_responses(request.form)
+    #     log.info('Response data: %s', response_data)
 
-        # Build up JSON structure to save
-        json_output = {}
-        json_output["responses"] = response_data
-        json_output["user"] = get_user()
-        json_output["reference"] = ruref
-        json_output["period"] = period
-        json_output["survey"] = inqcode
+    #     # Build up JSON structure to save
+    #     json_output = {}
+    #     json_output["responses"] = response_data
+    #     json_output["user"] = get_user()
+    #     json_output["reference"] = ruref
+    #     json_output["period"] = period
+    #     json_output["survey"] = inqcode
 
-        # Send the data to the business layer for processing
-        log.info("Output JSON: %s", str(json_output))
-        # api_caller.update_response(parameters=parameters, data=json_output)
-        # New API call for save in business layer which uses GraphQL
-        api_caller.save_response(parameters=parameters, data=json_output)
+    #     # Send the data to the business layer for processing
+    #     log.info("Output JSON: %s", str(json_output))
+    #     # api_caller.update_response(parameters=parameters, data=json_output)
+    #     # New API call for save in business layer which uses GraphQL
+    #     api_caller.save_response(parameters=parameters, data=json_output)
 
-        # Get the refreshed data from the responses table
-        view_forms_gql = api_caller.view_form_responses(parameters=parameters)
+    #     # Get the refreshed data from the responses table
+    #     view_forms_gql = api_caller.view_form_responses(parameters=parameters)
 
-        return render_template(
-            "./view_form/FormView.html",
-            survey=inqcode,
-            period=period,
-            ruref=ruref,
-            data=json.loads(view_forms_gql),
-            contributor_details=contributor_data['data'][0],
-            validation=validations,
-            status_message=json.dumps('New responses saved successfully'))
+    #     log.info('DB: %s', view_forms_gql)
+
+    #     return render_template(
+    #         "./view_form/FormView.html",
+    #         survey=inqcode,
+    #         period=period,
+    #         ruref=ruref,
+    #         data=json.loads(view_forms_gql),
+    #         contributor_details=contributor_data['data'][0],
+    #         validation=validations,
+    #         status_message=json.dumps('New responses saved successfully'))
 
 
     #validate button logic
@@ -166,9 +165,35 @@ def override_validations(inqcode, period, ruref):
         validation=validations,
         user=get_user())
 
-def extract_responses(data) -> dict:
-    output = []
-    for key in data.keys():
-        if key != "action":
-            output.append({'question': key, 'response': data[key], 'instance': 0})
-    return output
+
+
+@view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
+def save_responses(inqcode, period, ruref):
+    json_data = request.json
+    log.info("save response: %s", str(json_data))
+    ruref = json_data['reference']
+    inqcode = json_data['survey']
+    period = json_data['period']
+
+    api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
+    url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
+    parameters = build_uri(url_parameters)
+
+    contributor_details = api_caller.contributor_search(parameters=parameters)
+    validation_outputs = api_caller.validation_outputs(parameters=parameters)
+    view_forms = api_caller.view_form_responses(parameters=parameters)
+
+    contributor_data = json.loads(contributor_details)
+    validations = json.loads(validation_outputs)
+    view_form_data = json.loads(view_forms)
+
+    return render_template(
+        template_name_or_list="./view_form/FormView.html",
+        survey=inqcode,
+        period=period,
+        ruref=ruref,
+        data=view_form_data,
+        contributor_details=contributor_data['data'][0],
+        validation=validations,
+        user=get_user(),
+        status_message=json.dumps('New responses saved successfully'))

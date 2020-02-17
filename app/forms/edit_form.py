@@ -62,6 +62,8 @@ def edit_form(inqcode, period, ruref):
 
     log.info('Starting form save')
 
+    log.info('SUF: %s', request.form)
+
     # Extract response data from UI elements
     response_data = extract_responses(request.form)
     log.info('Response data: %s', response_data)

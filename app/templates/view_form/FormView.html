@@ -28,7 +28,7 @@
     <div class="mainContent">
         <div class="grid">
             <div class="grid__col col-6@m paddingSection">
-                <form method="post">
+                <form method="post" id="responseForm">
                     {% for datum in data['view_form_responses'] %}
                         <div>
                             {{ datum["displayquestionnumber"] }}<strong> {{ datum["displaytext"] }}</strong>
@@ -114,7 +114,6 @@
             <span class="btn__inner">Save</span>
         </button>
 
-
         <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
             <span class="btn__inner">Validate</span>
         </button>
@@ -131,19 +130,19 @@
 
     <br>
 
-    <script>
+    <!-- <script>
         var regex = new RegExp('(.+\|.+_)');
         var inputElements = document.getElementsByTagName('input');
         var index;
-        var responseElements = inputElements.filter(element => document.querySelector('[id^="questionCode"]'));
+        var responseElements = inputElements.filter(element => document.querySelector('[id^="questioncode"]'));
         window.alert(responseElements);
-    </script>
+    </script> -->
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
         var override_button = document.getElementById("override_button")
-        override_button.addEventListener("click", function() 
+        override_button.addEventListener("click", function()
         {var checkboxes = document.getElementsByName("override-checkbox");
            var reference  = document.getElementById("ref").textContent;
            var period     = document.getElementById("period").textContent;
@@ -201,6 +200,41 @@
         else {
             alert(statusMessage);
         }
+    </script>
+
+    <script>
+        var saveFormButton = document.getElementById("saveFormButton")
+        saveFormButton.addEventListener("click", function()
+        {response_form = document.getElementById("responseForm");
+        console.log("Response Form = " + response_form)
+        var edited_response_data = []
+        var reference  = document.getElementById("ref").textContent;
+        var period     = document.getElementById("period").textContent;
+        var survey     = document.getElementById("survey").textContent;
+        for (var i = 0; i < response_form.length; i++){
+            var question_response = {}
+            console.log(response_form.elements[i].name);
+            console.log(response_form.elements[i].value);
+            question_number = response_form.elements[i].name
+            value = response_form.elements[i].value
+            question_response['reference'] = reference
+            question_response['period'] = period
+            question_response['survey'] = survey
+            question_response['question'] = question_number
+            question_response['response'] = value
+            edited_response_data.push(question_response)
+            }
+        var js_data = JSON.stringify(edited_response_data)
+        $.ajax({
+            url: 'save-responses',
+            type: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: js_data,
+            async: false
+        })
+        })
+
     </script>
 
 {% endblock content %}
