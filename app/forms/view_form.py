@@ -171,13 +171,15 @@ def override_validations(inqcode, period, ruref):
 def save_responses(inqcode, period, ruref):
     json_data = request.json
     log.info("save response: %s", str(json_data))
-    ruref = json_data['reference']
-    inqcode = json_data['survey']
-    period = json_data['period']
-
-    api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
+    ruref = json_data[0]['reference']
+    inqcode = json_data[0]['survey']
+    period = json_data[0]['period']
+    del json_data[0]
+    log.info("save response: %s", str(json_data))
     url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
+
+    api_caller.save_response(parameters=parameters, data=json.dumps(json_data))
 
     contributor_details = api_caller.contributor_search(parameters=parameters)
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
@@ -186,6 +188,8 @@ def save_responses(inqcode, period, ruref):
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
     view_form_data = json.loads(view_forms)
+
+    
 
     return render_template(
         template_name_or_list="./view_form/FormView.html",
