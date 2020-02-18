@@ -166,7 +166,6 @@ def override_validations(inqcode, period, ruref):
         user=get_user())
 
 
-
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
 def save_responses(inqcode, period, ruref):
     json_data = request.json

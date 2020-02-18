@@ -210,11 +210,11 @@
         var reference  = document.getElementById("ref").textContent;
         var period     = document.getElementById("period").textContent;
         var survey     = document.getElementById("survey").textContent;
-        var ref_per_sur = {}
+        var contributor_data = {}
         var edited_response_data = []
-        ref_per_sur['reference'] = reference
-        ref_per_sur['period'] = period
-        ref_per_sur['survey'] = survey
+        contributor_data['reference'] = reference
+        contributor_data['period'] = period
+        contributor_data['survey'] = survey
         for (var i = 0; i < response_form.length; i++){
             var question_response = {}
             console.log(response_form.elements[i].name);
@@ -226,8 +226,8 @@
             question_response['instance'] = 0
             edited_response_data.push(question_response)
             }
-        ref_per_sur['responses'] = edited_response_data
-        var js_data = JSON.stringify(ref_per_sur)
+            contributor_data['responses'] = edited_response_data
+        var js_data = JSON.stringify(contributor_data)
         $.ajax({
             url: 'save-responses',
             type: 'post',
@@ -237,7 +237,6 @@
             async: false
         })
         })
-
     </script>
 
 {% endblock content %}
