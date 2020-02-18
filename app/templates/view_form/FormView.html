@@ -207,15 +207,14 @@
         saveFormButton.addEventListener("click", function()
         {response_form = document.getElementById("responseForm");
         console.log("Response Form = " + response_form)
-        var edited_response_data = []
         var reference  = document.getElementById("ref").textContent;
         var period     = document.getElementById("period").textContent;
         var survey     = document.getElementById("survey").textContent;
         var ref_per_sur = {}
+        var edited_response_data = []
         ref_per_sur['reference'] = reference
         ref_per_sur['period'] = period
         ref_per_sur['survey'] = survey
-        edited_response_data.push(ref_per_sur)
         for (var i = 0; i < response_form.length; i++){
             var question_response = {}
             console.log(response_form.elements[i].name);
@@ -227,7 +226,8 @@
             question_response['instance'] = 0
             edited_response_data.push(question_response)
             }
-        var js_data = JSON.stringify(edited_response_data)
+        ref_per_sur['responses'] = edited_response_data
+        var js_data = JSON.stringify(ref_per_sur)
         $.ajax({
             url: 'save-responses',
             type: 'post',
