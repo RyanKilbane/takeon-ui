@@ -44,12 +44,12 @@
                 </form>
             </div>
 
-            <div class="grid__col col-6@m paddingSection">
-                <div id="accordion" class="accordion">
-                    <div class="wrapper">
-                        <div class="response-split">
-                            <form method="POST">
-                                {% if validation['validation_outputs']|length > 1 %}
+                <div class="grid__col col-6@m paddingSection">
+                    <div id="accordion" class="accordion">
+                        <div class="wrapper">
+                            <div class="response-split">
+                                <form method="POST">
+                                    {% if validation['validation_outputs']|length > 0 %}
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend">What Validations would you like to override?
                                     </legend>
