@@ -44,10 +44,6 @@ def add_blueprints(application):
     application.register_blueprint(search_screen_choice_blueprint)
     search_screen_choice_blueprint.config = application.config.copy()
 
-    # from app.forms.edit_form import edit_form_blueprint
-    # application.register_blueprint(edit_form_blueprint)
-    # edit_form_blueprint.config = application.config.copy()
-
     from app.forms.login_form import login_form_blueprint
     application.register_blueprint(login_form_blueprint)
     login_form_blueprint.config = application.config.copy()
