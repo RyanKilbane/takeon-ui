@@ -1,16 +1,16 @@
 import json
 import os
-import requests
-from flask import url_for, redirect, render_template, Blueprint, request
+from flask import render_template, Blueprint, request
 from requests.exceptions import HTTPError
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
-from app.setup import log, api_caller, api_caller_pl
+from app.setup import log, api_caller
 
 view_form_blueprint = Blueprint(
     name='view_form', import_name=__name__, url_prefix='/contributor_search')
 url = os.getenv('API_URL')
 api_key = os.getenv('API_KEY')
+form_view_template_HTML = "./view_form/FormView.html"
 
 # Flask Endpoints
 @view_form_blueprint.errorhandler(404)
@@ -76,7 +76,7 @@ def view_form(inqcode, period, ruref):
                 error=e
             )
         return render_template(
-            template_name_or_list="./view_form/FormView.html",
+            template_name_or_list=form_view_template_HTML,
             survey=inqcode,
             period=period,
             ruref=ruref,
@@ -86,7 +86,7 @@ def view_form(inqcode, period, ruref):
             validation=filter_validations(validations))
 
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
@@ -120,7 +120,7 @@ def override_validations(inqcode, period, ruref):
     view_form_data = json.loads(view_forms)
 
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
@@ -162,7 +162,7 @@ def save_responses(inqcode, period, ruref):
     view_form_data = json.loads(view_forms)
 
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
