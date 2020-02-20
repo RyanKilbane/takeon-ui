@@ -16,10 +16,10 @@
 
             <h1>{{ contributor_details['referencename'] }}</h1>
             <p>
-                <b>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
-                <b>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
-                <b>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
-                <b>Status:</b> {{ contributor_details['status'] }}
+                <strong>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
+                <strong>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
+                <strong>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
+                <strong>Status:</b> {{ contributor_details['status'] }}
             </p>
         </div>
     </div>
@@ -72,9 +72,9 @@
                                                 <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
                                                     <strong>{{ output["primaryquestion"] }}</strong></br>
                                                     <strong>{{ output["name"] }}</strong></br>
-                                                    <b>Validation ID: {{ output["validationid"] }}</b></br>
-                                                    <b>Formula: {{ output["formula"] }}</b></br>
-                                                    <b>Triggered: {{ output["triggered"] }}</b></br>
+                                                    <strong>Validation ID: {{ output["validationid"] }}</b></br>
+                                                    <strong>Formula: {{ output["formula"] }}</strong></br>
+                                                    <strong>Triggered: {{ output["triggered"] }}</strong></br>
                                                 </label>
                                             </span>
                                         </p>
@@ -86,9 +86,9 @@
                                                     <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
                                                         <strong>{{ output["primaryquestion"] }}</strong></br>
                                                         <strong>{{ output["name"] }}</strong></br>
-                                                        <b>Validation ID: {{ output["validationid"] }}</b></br>
-                                                        <b>Formula: {{ output["formula"] }}</b></br>
-                                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                                        <strong>Validation ID: {{ output["validationid"] }}</b></br>
+                                                        <strong>Formula: {{ output["formula"] }}</b></br>
+                                                        <strong>Triggered: {{ output["triggered"] }}</b></br>
                                                     </label>
                                                 </span>
                                             </p>

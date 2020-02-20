@@ -24,6 +24,7 @@ def not_auth(error):
 def internal_server_error(error):
     return render_template('./error_templates/500.html', message_header=error), 500
 
+
 @login_form_blueprint.route('/login', methods=['GET', 'POST'])
 def login_form():
     login = create_form_class(['Username', 'Password'])

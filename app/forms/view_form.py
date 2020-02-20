@@ -51,7 +51,7 @@ def view_form(inqcode, period, ruref):
     log.info("Filtered Validations output: %s",
              filter_validations(validations))
 
-    #validate button logic
+    # validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
         log.info('save validation button pressed')
         json_data = {"survey": inqcode, "period": period,
@@ -147,7 +147,6 @@ def save_responses(inqcode, period, ruref):
     json_output["reference"] = ruref
     json_output["period"] = period
     json_output["survey"] = inqcode
-
 
     # Send the data to the business layer for processing
     log.info("Output JSON: %s", str(json_output))
