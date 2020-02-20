@@ -5,6 +5,7 @@ from flask import url_for, redirect, render_template, Blueprint, request
 from requests.exceptions import HTTPError
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
+from app.utilities.check_status import check_status
 from app.setup import log, api_caller, api_caller_pl
 
 view_form_blueprint = Blueprint(
@@ -51,6 +52,9 @@ def view_form(inqcode, period, ruref):
     log.info("Filtered Validations output: %s",
              filter_validations(validations))
 
+    status = contributor_data['data'][0]['status']
+    status_colour = check_status(status)
+
     #validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
         log.info('save validation button pressed')
@@ -83,7 +87,8 @@ def view_form(inqcode, period, ruref):
             data=view_form_data,
             status_message=json.dumps(status_message),
             contributor_details=contributor_data['data'][0],
-            validation=filter_validations(validations))
+            validation=filter_validations(validations),
+            colour=status_colour)
 
     # if form_response is empty, then we have a blank form and so return just the definition
     if not view_form_data:
@@ -94,7 +99,8 @@ def view_form(inqcode, period, ruref):
             ruref=ruref,
             data=view_form_data,
             contributor_details=contributor_data['data'][0],
-            user=get_user())
+            user=get_user(),
+            colour=status_colour)
 
     return render_template(
         template_name_or_list="./view_form/FormView.html",
@@ -105,7 +111,8 @@ def view_form(inqcode, period, ruref):
         status_message=json.dumps(""),
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
-        user=get_user())
+        user=get_user(),
+        colour=status_colour)
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])

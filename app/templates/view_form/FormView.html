@@ -11,20 +11,17 @@
 
 <br>
 {% block content %}
-    <div class="panel panel--info panel--simple">
-        <div class="panel__body">
-
-            <h1>{{ contributor_details['referencename'] }}</h1>
-            <p>
-                <b>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
-                <b>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
-                <b>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
-                <b>Status:</b> {{ contributor_details['status'] }}
-            </p>
-        </div>
-    </div>
-    <br>
-
+    <dl class="metadata metadata__list grid grid--gutterless u-cf u-mb-s" title="Form details" aria-label="Form details">
+        <h1>{{ contributor_details['referencename'] }}</h1>
+        <dt class="metadata__term grid__col col-2@mu-mt-no">Reference:</dt>
+        <dd class="metadata__value grid__col col-10@mu-mt-no">{{ contributor_details['reference'] }}</dd>
+        <dt class="metadata__term grid__col col-2@mu-mt-no">Period:</dt>
+        <dd class="metadata__value grid__col col-10@mu-mt-no">{{ contributor_details['period'] }}</dd>
+        <dt class="metadata__term grid__col col-2@mu-mt-no">Survey:</dt>
+        <dd class="metadata__value grid__col col-10@mu-mt-no">{{ contributor_details['survey'] }}</dd>
+        <p class="u-bb u-pb-s"><span title="Status " class="{{ colour }}">{{ contributor_details['status'] }}</span>
+        
+   <br>
     <div class="mainContent">
         <div class="grid">
             <div class="grid__col col-6@m paddingSection">
