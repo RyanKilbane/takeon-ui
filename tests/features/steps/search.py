@@ -28,7 +28,7 @@ def step_impl(context, ref, period, survey):
         cols = rows[i].find_elements_by_tag_name("td")
         # Check to see if any references appear that shouldn't be there
         if(cols[context.columns["reference"]].text != ref):
-            failed.append("Column " + str(context.columns["reference"]) + " is "+
+            failed.append("Column " + str(context.columns["reference"]) + " is " +
                           str(cols[1].text) + " but expecting " + str(ref))
         elif (cols[context.columns["period"]].text == period and cols[context.columns["survey"]].text == survey):
             found = True

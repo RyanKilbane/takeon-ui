@@ -1,5 +1,5 @@
 from kubernetes import client, config
-from app.settings import PORT
+
 
 class KubernetesConfig:
     def __init__(self, service_name):

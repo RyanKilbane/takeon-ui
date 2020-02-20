@@ -9,6 +9,8 @@ from app.utilities.kubernetes_config import KubernetesConfig
 localhost_url = "http://localhost:8090/"
 mocked_validation_output = "mock_validation_outputs.json"
 json_application = "Application/Json"
+
+
 class ApiRequest:
     def __init__(self, service="business-layer", mocking=True):
         self.mock = mocking

@@ -5,6 +5,7 @@ from behave import given, when, then
 def step_impl(context, location):
     context.browser.get(location)
 
+
 @given(u'{name} column is {col}')
 def step_impl(context, name, col):
     try:
