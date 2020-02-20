@@ -85,17 +85,6 @@ def view_form(inqcode, period, ruref):
             contributor_details=contributor_data['data'][0],
             validation=filter_validations(validations))
 
-    # if form_response is empty, then we have a blank form and so return just the definition
-    if not view_form_data:
-        return render_template(
-            template_name_or_list="./view_form/BlankFormView.html",
-            survey=inqcode,
-            period=period,
-            ruref=ruref,
-            data=view_form_data,
-            contributor_details=contributor_data['data'][0],
-            user=get_user())
-
     return render_template(
         template_name_or_list="./view_form/FormView.html",
         survey=inqcode,
