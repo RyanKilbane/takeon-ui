@@ -70,8 +70,7 @@ class ApiRequest:
             endpoint="/Upsert/CompareResponses",
             data=bytes(json.dumps(data), encoding="utf-8"),
             headers={"Content-Type": json_application},
-            parameters=parameters
-            ).text
+            parameters=parameters).text
 
     def save_response(self, parameters, data):
         if self.mock:
@@ -80,8 +79,7 @@ class ApiRequest:
             endpoint="/response/save",
             data=bytes(json.dumps(data), encoding="utf-8"),
             headers={"Content-Type": json_application},
-            parameters=parameters
-            ).text
+            parameters=parameters).text
 
     def graphql_post(self, parameters):
         if self.mock:

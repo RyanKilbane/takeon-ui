@@ -4,7 +4,7 @@ from app.settings import PORT
 class KubernetesConfig:
     def __init__(self, service_name):
         self.service_name = service_name
-        config.load_incluster_config() # This throws an exception on failure?
+        config.load_incluster_config()  # This throws an exception on failure?
         self.client = client.CoreV1Api()
         self.namespace = open("/var/run/secrets/kubernetes.io/serviceaccount/namespace").read()
         print('Namespace: {}'.format(self.namespace))

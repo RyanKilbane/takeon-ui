@@ -1,7 +1,7 @@
-#import pytest
-#import requests
-#from app.utilities.kubernetes_config import KubernetesConfig
-#from requests.exceptions import HTTPError
+# import pytest
+# import requests
+# from app.utilities.kubernetes_config import KubernetesConfig
+# from requests.exceptions import HTTPError
 
 # class TestClass(object):
 #     # def test_call_api(self):
