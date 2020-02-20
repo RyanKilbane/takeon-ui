@@ -1,16 +1,16 @@
 import json
 import os
-import requests
-from flask import url_for, redirect, render_template, Blueprint, request
+from flask import render_template, Blueprint, request
 from requests.exceptions import HTTPError
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
-from app.setup import log, api_caller, api_caller_pl
+from app.setup import log, api_caller
 
 view_form_blueprint = Blueprint(
     name='view_form', import_name=__name__, url_prefix='/contributor_search')
 url = os.getenv('API_URL')
 api_key = os.getenv('API_KEY')
+form_view_template_HTML = "./view_form/FormView.html"
 
 # Flask Endpoints
 @view_form_blueprint.errorhandler(404)
@@ -51,10 +51,6 @@ def view_form(inqcode, period, ruref):
     log.info("Filtered Validations output: %s",
              filter_validations(validations))
 
-    # if there is a request method called then there's been a request for edit form
-    if request.method == "POST" and request.form['action'] == "saveForm":
-        return redirect(url_for("edit_form.edit_form", ruref=ruref, inqcode=inqcode, period=period))
-
     # validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
         log.info('save validation button pressed')
@@ -80,7 +76,7 @@ def view_form(inqcode, period, ruref):
                 error=e
             )
         return render_template(
-            template_name_or_list="./view_form/FormView.html",
+            template_name_or_list=form_view_template_HTML,
             survey=inqcode,
             period=period,
             ruref=ruref,
@@ -89,19 +85,8 @@ def view_form(inqcode, period, ruref):
             contributor_details=contributor_data['data'][0],
             validation=filter_validations(validations))
 
-    # if form_response is empty, then we have a blank form and so return just the definition
-    if not view_form_data:
-        return render_template(
-            template_name_or_list="./view_form/BlankFormView.html",
-            survey=inqcode,
-            period=period,
-            ruref=ruref,
-            data=view_form_data,
-            contributor_details=contributor_data['data'][0],
-            user=get_user())
-
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
@@ -135,7 +120,7 @@ def override_validations(inqcode, period, ruref):
     view_form_data = json.loads(view_forms)
 
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
@@ -143,3 +128,45 @@ def override_validations(inqcode, period, ruref):
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
         user=get_user())
+
+
+@view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
+def save_responses(inqcode, period, ruref):
+    json_data = request.json
+    log.info("save response: %s", str(json_data))
+    ruref = json_data['reference']
+    inqcode = json_data['survey']
+    period = json_data['period']
+    url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
+    parameters = build_uri(url_parameters)
+
+    # Build up JSON structure to save
+    json_output = {}
+    json_output["responses"] = json_data['responses']
+    json_output["user"] = get_user()
+    json_output["reference"] = ruref
+    json_output["period"] = period
+    json_output["survey"] = inqcode
+
+    # Send the data to the business layer for processing
+    log.info("Output JSON: %s", str(json_output))
+    api_caller.save_response(parameters=parameters, data=json_output)
+
+    contributor_details = api_caller.contributor_search(parameters=parameters)
+    validation_outputs = api_caller.validation_outputs(parameters=parameters)
+    view_forms = api_caller.view_form_responses(parameters=parameters)
+
+    contributor_data = json.loads(contributor_details)
+    validations = json.loads(validation_outputs)
+    view_form_data = json.loads(view_forms)
+
+    return render_template(
+        template_name_or_list=form_view_template_HTML,
+        survey=inqcode,
+        period=period,
+        ruref=ruref,
+        data=view_form_data,
+        contributor_details=contributor_data['data'][0],
+        validation=validations,
+        user=get_user(),
+        status_message=json.dumps('New responses saved successfully'))

@@ -5,10 +5,16 @@ from kubernetes.client.rest import ApiException
 from app.mock_suite import mock_suite
 from app.utilities.kubernetes_config import KubernetesConfig
 
+
+localhost_url = "http://localhost:8090/"
+mocked_validation_output = "mock_validation_outputs.json"
+json_application = "Application/Json"
+
+
 class ApiRequest:
     def __init__(self, service="business-layer", mocking=True):
         self.mock = mocking
-        #print('Mocking status: {}'.format(self.mock))
+        # print('Mocking status: {}'.format(self.mock))
         if not self.mock:
             self.kube = KubernetesConfig(service)
 
@@ -65,9 +71,8 @@ class ApiRequest:
         return self.request_put(
             endpoint="/Upsert/CompareResponses",
             data=bytes(json.dumps(data), encoding="utf-8"),
-            headers={"Content-Type": "Application/Json"},
-            parameters=parameters
-            ).text
+            headers={"Content-Type": json_application},
+            parameters=parameters).text
 
     def save_response(self, parameters, data):
         if self.mock:
@@ -75,9 +80,8 @@ class ApiRequest:
         return self.request_put(
             endpoint="/response/save",
             data=bytes(json.dumps(data), encoding="utf-8"),
-            headers={"Content-Type": "Application/Json"},
-            parameters=parameters
-            ).text
+            headers={"Content-Type": json_application},
+            parameters=parameters).text
 
     def graphql_post(self, parameters):
         if self.mock:
@@ -91,10 +95,11 @@ class ApiRequest:
 
     def validation_overrides(self, parameters, data):
         # self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers=headers)
-        return self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers={"Content-Type": "Application/Json"}).text
+        return self.request_post(endpoint="/validation/saveOverrides", parameters=parameters, data=data, headers={"Content-Type": json_application}).text
 
     def run_validation(self, endpoint, data, headers):
         return self.request_post_api_gateway(endpoint=endpoint, data=data, headers=headers).text
+
 
 class TakeonApiException(Exception):
     status_code = 400
@@ -112,13 +117,10 @@ class TakeonApiException(Exception):
         return output
 
 
-
-
-
 @requests_mock.Mocker()
 def mock_next_page(mock=None, url_connect=None):
     mocked_up_data = mock_suite.MockSuite("mock_graphql_api.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
@@ -126,7 +128,7 @@ def mock_next_page(mock=None, url_connect=None):
 @requests_mock.Mocker()
 def mock_form_definition(mock=None, url_connect=None):
     mocked_up_data = mock_suite.MockSuite("mock_form_definition.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
@@ -134,7 +136,7 @@ def mock_form_definition(mock=None, url_connect=None):
 @requests_mock.Mocker()
 def mock_contributor_search(mock=None, url_connect=None):
     mocked_up_data = mock_suite.MockSuite("mock_contributor_search.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
@@ -142,7 +144,7 @@ def mock_contributor_search(mock=None, url_connect=None):
 @requests_mock.Mocker()
 def mock_contributor_search_screen(mock=None, url_connect=None):
     mocked_up_data = mock_suite.MockSuite("mock_contributor_search.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
@@ -150,7 +152,7 @@ def mock_contributor_search_screen(mock=None, url_connect=None):
 @requests_mock.Mocker()
 def mock_form_response(mock=None, url_connect=None):
     mocked_up_data = mock_suite.MockSuite("mock_form_response.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
@@ -158,30 +160,30 @@ def mock_form_response(mock=None, url_connect=None):
 @requests_mock.Mocker()
 def mock_get_validation(mock=None, url_connect=None):
     mocked_up_data = mock_suite.MockSuite("mock_validation_outputs.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
 
 @requests_mock.Mocker()
 def mock_contributor_search_no_error(mock=None, url_connect=None):
-    mocked_up_data = mock_suite.MockSuite("mock_validation_outputs.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    mocked_up_data = mock_suite.MockSuite(mocked_validation_output).get_data()
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
 
 @requests_mock.Mocker()
 def mock_contributor_search_error_blank(mock=None, url_connect=None):
-    mocked_up_data = mock_suite.MockSuite("mock_validation_outputs.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    mocked_up_data = mock_suite.MockSuite(mocked_validation_output).get_data()
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)
 
 
 @requests_mock.Mocker()
 def mock_contributor_search_error_populated(mock=None, url_connect=None):
-    mocked_up_data = mock_suite.MockSuite("mock_validation_outputs.json").get_data()
-    url = "http://localhost:8090/" + url_connect
+    mocked_up_data = mock_suite.MockSuite(mocked_validation_output).get_data()
+    url = localhost_url + url_connect
     mock.get(url, text=mocked_up_data)
     return requests.get(url)

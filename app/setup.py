@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.INFO)
 api_caller = ApiRequest(service="business-layer", mocking=settings.MOCKING)
 api_caller_pl = ApiRequest(service="persistence-layer", mocking=settings.MOCKING)
 
+
 def create_app(setting_overrides=None):
     # Define the WSGI application object
     application = Flask(__name__, static_url_path='/s', static_folder='./static')
@@ -43,10 +44,6 @@ def add_blueprints(application):
     from app.forms.search_screen_choice import search_screen_choice_blueprint
     application.register_blueprint(search_screen_choice_blueprint)
     search_screen_choice_blueprint.config = application.config.copy()
-
-    from app.forms.edit_form import edit_form_blueprint
-    application.register_blueprint(edit_form_blueprint)
-    edit_form_blueprint.config = application.config.copy()
 
     from app.forms.login_form import login_form_blueprint
     application.register_blueprint(login_form_blueprint)

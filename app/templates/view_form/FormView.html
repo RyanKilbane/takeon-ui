@@ -11,66 +11,38 @@
 
 <br>
 {% block content %}
-
-    <!--
-    <div id="lockedInfo" style="display:none">
-        <div class="panel panel--error panel--simple">
-            <div class="panel__error">
-                <div class="u-fs-r--b">Form locked</div>
-            </div>
-            <div class="panel__body">
-                <div>This form is currently checked out by {{ locked }}. Editing will be disabled until it has been
-                    checked
-                    back in.
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-
     <div class="panel panel--info panel--simple">
         <div class="panel__body">
 
             <h1>{{ contributor_details['referencename'] }}</h1>
             <p>
-                <b>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
-                <b>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
-                <b>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
-                <b>Status:</b> {{ contributor_details['status'] }}
+                <strong>Reference:</b> <span id="ref">{{ contributor_details['reference'] }}</span>
+                <strong>Period:</b> <span id="period">{{ contributor_details['period'] }}</span>
+                <strong>Survey:</b> <span id="survey">{{ contributor_details['survey'] }}</span>
+                <strong>Status:</b> {{ contributor_details['status'] }}
             </p>
         </div>
     </div>
     <br>
 
-
     <div class="mainContent">
-        <form method="post" id="save" action="">
-                <button class="btn btn--small" type="submit" id="editFormButton" value="saveForm" name="action"
-                        onclick="submitForm()">
-                    <span class="btn__inner">Edit</span></button>
-            </form>
-            <br>
-
-            <div class="grid">
-                <div class="grid__col col-6@m paddingSection">
+        <div class="grid">
+            <div class="grid__col col-6@m paddingSection">
+                <form method="post" id="responseForm">
                     {% for datum in data['view_form_responses'] %}
                         <div>
-                            <p class="field">
-                                <label class="label">{{ datum["displayquestionnumber"] }}
-                                    <strong>{{ datum["displaytext"] }}</strong>
-                                    <br>
-                                    <span class="label__description" style="color:red">{{ datum["questioncode"] }}</span>
-                                </label>
-                                <input name="response:{{ datum['questioncode'] }}"
-                                        value="{{datum['response']}}"
-                                        id="questioncode:{{ datum['questioncode'] }}|instance:{{ datum['instance'] }}"
-                                        class="input input--text input-type__input" readonly>
-                            </p>
+                            {{ datum["displayquestionnumber"] }}<strong> {{ datum["displaytext"] }}</strong>
+                            <br>
+                            <input name="{{ datum['questioncode'] }}"
+                                    value="{{ datum['response'] }}" type="number"
+                                    class="input input--text input-type__input">
+                            <span style="color:red">{{ datum["questioncode"] }}</span>
                             <br>
                             <br>
-                        </div> 
+                        </div>
                     {% endfor %}
-                </div>
+                </form>
+            </div>
 
                 <div class="grid__col col-6@m paddingSection">
                     <div id="accordion" class="accordion">
@@ -83,171 +55,85 @@
                                     </legend>
                                     <p class="checkboxes__label">Select all that apply</p>
                                     <span class="checkboxes__items">
-                                        
                                         <p class="checkboxes__item">
                                             <span class="checkbox ">
-                                                <input
-                                                    type="checkbox"
-                                                    id="select-all"
-                                                    class="checkbox__input js-checkbox "
-                                                    value="Select All"
-                                                    name="select-all-checkbox"
-                                                    onclick="select_all(this)"
-                                                >
-                                            <label id="select_all" class="checkbox__label" for="select-all">
-                                                <strong>Select All</strong>
-                                            </label>
-                                            </span></p><br>
+                                                <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
+                                                <label id="select_all" class="checkbox__label" for="select-all">
+                                                    <strong>Select All</strong>
+                                                </label>
+                                            </span>
+                                        </p>
+                                        <br>
                                     {% for output in validation['validation_outputs'] %}
                                         {% if output['overridden'] == True %}
-                                                    <p class="checkboxes__item">
-                                        <span class="checkbox ">
-                                            <input
-                                                type="checkbox"
-                                                id="{{output['validationoutputid']}}"
-                                                class="checkbox__input js-checkbox "
-                                                value="{{output['validationoutputid']}}"
-                                                name="override-checkbox"
-                                                checked
-                                            >
-                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
-                                                <strong>{{ output["primaryquestion"] }}</strong></br>
-                                                <strong>{{ output["name"] }}</strong></br>
-                                                <b>Validation ID: {{ output["validationid"] }}</b></br>
-                                                <b>Formula: {{ output["formula"] }}</b></br>
-                                                <b>Triggered: {{ output["triggered"] }}</b></br>
-                                            </label>
-                                        </span>
+                                        <p class="checkboxes__item">
+                                            <span class="checkbox ">
+                                                <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox" checked>
+                                                <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                    <strong>{{ output["primaryquestion"] }}</strong></br>
+                                                    <strong>{{ output["name"] }}</strong></br>
+                                                    <strong>Validation ID: {{ output["validationid"] }}</b></br>
+                                                    <strong>Formula: {{ output["formula"] }}</strong></br>
+                                                    <strong>Triggered: {{ output["triggered"] }}</strong></br>
+                                                </label>
+                                            </span>
                                         </p>
                                         <br>
                                         {% else %}
                                             <p class="checkboxes__item">
                                                 <span class="checkbox ">
-                                                    <input
-                                                        type="checkbox"
-                                                        id="{{output['validationoutputid']}}"
-                                                        class="checkbox__input js-checkbox "
-                                                        value="{{output['validationoutputid']}}"
-                                                        name="override-checkbox"
-                                                    >
+                                                    <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox">
                                                     <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
                                                         <strong>{{ output["primaryquestion"] }}</strong></br>
                                                         <strong>{{ output["name"] }}</strong></br>
-                                                        <b>Validation ID: {{ output["validationid"] }}</b></br>
-                                                        <b>Formula: {{ output["formula"] }}</b></br>
-                                                        <b>Triggered: {{ output["triggered"] }}</b></br>
+                                                        <strong>Validation ID: {{ output["validationid"] }}</b></br>
+                                                        <strong>Formula: {{ output["formula"] }}</b></br>
+                                                        <strong>Triggered: {{ output["triggered"] }}</b></br>
                                                     </label>
                                                 </span>
-                                                </p>
-                                                <br>
+                                            </p>
+                                            <br>
                                         {% endif %}
                                     {% endfor %}
                                     </span>
-                                  </fieldset>
-                                  {% endif %}
-                                </form>
-                            </div>
+                                </fieldset>
+                                {% endif %}
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 
     <div class="mainContent">
     <form method="POST" action="">
+
+        <button class="btn btn--small" type="submit" id="saveFormButton" value="saveForm" name="action">
+            <span class="btn__inner">Save</span>
+        </button>
+
+        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
+            <span class="btn__inner">Validate</span>
+        </button>
+
+        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action' id='override_button'>
+            <span class="btn__inner">Override</span>
+        </button>
+
         <button class="btn btn--small" type="submit" value="close this window" onclick="self.close()">
             <span class="btn__inner">Exit</span>
-            <br>
-        </button>
-
-        <button class="btn btn--small" 
-                type="submit" 
-                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
-                value='validate' 
-                name='action'>
-            <span class="btn__inner">Validate</span>
-            <br>
-        </button>
-
-        <button class="btn btn--small" 
-                type="submit" 
-                class="btn btn-group__btn btn--loader js-loader js-submit-btn" 
-                value='override' 
-                name='action'
-                id='override_button'>
-            <span class="btn__inner">Override</span>
-            <br>
         </button>
     </form>
     </div>
 
-
-    <script>
-        function openTab(evt, details) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(details).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-
-        document.getElementById("defaultOpen").click();
-    </script>
-
-    <!--
-    <script>
-        var isLockedBy = "{{ locked }}"
-        if (isLockedBy != "") {
-            document.getElementById("editFormButton").disabled = true;
-            document.getElementById("editFormButton").style.color = "grey";
-            var bar = document.getElementById("lockedInfo");
-            bar.style.display = "block";
-        }  
-        document.getElementById("SectionA").style.display = "block"
-    </script>
-    -->
-
-    <script>
-        var acc = document.getElementsByClassName("accordion-legacy");
-        var i;
-
-        for (i = 0; i < acc.length; i++) {
-            acc[i].addEventListener("click", function () {
-                /* Toggle between adding and removing the "active" class,
-                to highlight the button that controls the panel */
-                this.classList.toggle("active");
-
-                /* Toggle between hiding and showing the active panel */
-                var panel = this.nextElementSibling;
-                if (panel.style.display === "block") {
-                    panel.style.display = "none";
-                } else {
-                    panel.style.display = "block";
-                }
-            });
-        }
-    </script>
-
-    <script>
-        var regex = new RegExp('(.+\|.+_)');
-        var inputElements = document.getElementsByTagName('input');
-        var index;
-        var responseElements = inputElements.filter(element => document.querySelector('[id^="questionCode"]'));
-        window.alert(responseElements);
-    </script>
-
+    <br>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script>
         var override_button = document.getElementById("override_button")
-        override_button.addEventListener("click", function() 
+        override_button.addEventListener("click", function()
         {var checkboxes = document.getElementsByName("override-checkbox");
            var reference  = document.getElementById("ref").textContent;
            var period     = document.getElementById("period").textContent;
@@ -307,9 +193,41 @@
         }
     </script>
 
-    <br>
-    <br>
-    <br>
-    <br>
+    <script>
+        var saveFormButton = document.getElementById("saveFormButton")
+        saveFormButton.addEventListener("click", function()
+        {response_form = document.getElementById("responseForm");
+        console.log("Response Form = " + response_form)
+        var reference  = document.getElementById("ref").textContent;
+        var period     = document.getElementById("period").textContent;
+        var survey     = document.getElementById("survey").textContent;
+        var contributor_data = {}
+        var edited_response_data = []
+        contributor_data['reference'] = reference
+        contributor_data['period'] = period
+        contributor_data['survey'] = survey
+        for (var i = 0; i < response_form.length; i++){
+            var question_response = {}
+            console.log(response_form.elements[i].name);
+            console.log(response_form.elements[i].value);
+            question_number = response_form.elements[i].name
+            value = response_form.elements[i].value
+            question_response['question'] = question_number
+            question_response['response'] = value
+            question_response['instance'] = 0
+            edited_response_data.push(question_response)
+            }
+            contributor_data['responses'] = edited_response_data
+        var js_data = JSON.stringify(contributor_data)
+        $.ajax({
+            url: 'save-responses',
+            type: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: js_data,
+            async: false
+        })
+        })
+    </script>
 
 {% endblock content %}
