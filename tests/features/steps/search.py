@@ -21,21 +21,21 @@ def step_impl(context, ref, period, survey):
     rows = table.find_elements_by_tag_name("tr")
 
     failed = []
-    # True if ref is found 
+    # True if ref is found
     found = False
     # Ignore the first row
     for i in range(1, len(rows)):
         cols = rows[i].find_elements_by_tag_name("td")
         # Check to see if any references appear that shouldn't be there
         if(cols[context.columns["reference"]].text != ref):
-            failed.append("Column "+str(context.columns["reference"])+" is " +
-                          str(cols[1].text)+" but expecting "+str(ref))
+            failed.append("Column " + str(context.columns["reference"]) + " is "+
+                          str(cols[1].text) + " but expecting " + str(ref))
         elif (cols[context.columns["period"]].text == period and cols[context.columns["survey"]].text == survey):
             found = True
     if(not found):
-        failed.append("Did not find "+str(ref))
+        failed.append("Did not find " + str(ref))
     if(len(failed) > 0):
-        assert False, "failed due to these reasons - "+str(failed)
+        assert False, "failed due to these reasons - " + str(failed)
 
 
 @then(u'no table should appear')
@@ -44,7 +44,6 @@ def step_impl(context):
     rows = table.find_elements_by_tag_name("tr")
     if(len(rows) > 1):
         assert False, "Survey table should not be shown"
-   
 
 
 @given(u'a {surveyId} has been entered into the survey search input')
