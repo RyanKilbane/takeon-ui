@@ -1,9 +1,4 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-import time
 import config_test
 
 # from datetime import datetime
@@ -19,7 +14,7 @@ driver = webdriver.Chrome(chromedriver_location)
 driver.get(config_test.UI_URL)
 main_window = driver.current_window_handle
 
-# Get the url of minikube flask url - Command in 
+# Get the url of minikube flask url - Command in
 
 search_button = '/html/body/div[2]/main/form/fieldset/span/button'
 second_search_button = '/html/body/section/div[2]/div/div/div/form/button'
@@ -38,9 +33,9 @@ driver.find_element_by_xpath(view_form_button).click()
 
 
 # Switch tab to the new tab, which we will assume is the next one on the right
-#driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.TAB)
+# driver.find_element_by_tag_name('body').send_keys(Keys.CONTROL + Keys.TAB)
 driver.switch_to.window(driver.window_handles[1])
-#driver.switch_to.window(main_window)
+# driver.switch_to.window(main_window)
 
 ids = driver.find_elements_by_xpath('//*[@id]')
 # for ii in ids:
