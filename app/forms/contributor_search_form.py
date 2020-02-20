@@ -65,8 +65,6 @@ def landing_page():
 
 # ####################### SIMPLE SEARCH SCREEN, EXPOSES ALL FIELDS #############################
 @contributor_search_blueprint.route("/Contributor/searchSelection", methods=["GET", "POST"])
-
-
 # Selection options, just pull out the values that have been selected, join
 # them all together in a semi-colon delimited string
 def general_search_screen_selection():
