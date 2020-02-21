@@ -4,6 +4,7 @@ from flask import render_template, Blueprint, request
 from requests.exceptions import HTTPError
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
+from app.utilities.check_status import check_status
 from app.setup import log, api_caller
 
 view_form_blueprint = Blueprint(
@@ -42,6 +43,8 @@ def view_form(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
+    status = contributor_data['data'][0]['status']
+    status_colour = check_status(status)
 
     view_form_data = json.loads(view_forms)
     log.info("Contributor Details: %s", contributor_data)
@@ -83,7 +86,8 @@ def view_form(inqcode, period, ruref):
             data=view_form_data,
             status_message=json.dumps(status_message),
             contributor_details=contributor_data['data'][0],
-            validation=filter_validations(validations))
+            validation=filter_validations(validations),
+            status_colour=status_colour)
 
     return render_template(
         template_name_or_list=form_view_template_HTML,
@@ -94,7 +98,8 @@ def view_form(inqcode, period, ruref):
         status_message=json.dumps(""),
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
-        user=get_user())
+        user=get_user(),
+        status_colour=status_colour)
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
@@ -116,6 +121,8 @@ def override_validations(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
+    status = contributor_data['data'][0]['status']
+    status_colour = check_status(status)
 
     view_form_data = json.loads(view_forms)
 
@@ -127,7 +134,8 @@ def override_validations(inqcode, period, ruref):
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
-        user=get_user())
+        user=get_user(),
+        status_colour=status_colour)
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
@@ -137,7 +145,8 @@ def save_responses(inqcode, period, ruref):
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
-    url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
+    url_parameters = dict(
+        zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
 
     # Build up JSON structure to save
@@ -159,6 +168,8 @@ def save_responses(inqcode, period, ruref):
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
     view_form_data = json.loads(view_forms)
+    status = contributor_data['data'][0]['status']
+    status_colour = check_status(status)
 
     return render_template(
         template_name_or_list=form_view_template_HTML,
@@ -169,4 +180,5 @@ def save_responses(inqcode, period, ruref):
         contributor_details=contributor_data['data'][0],
         validation=validations,
         user=get_user(),
-        status_message=json.dumps('New responses saved successfully'))
+        status_message=json.dumps('New responses saved successfully'),
+        status_colour=status_colour)
