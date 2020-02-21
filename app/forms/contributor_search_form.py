@@ -19,6 +19,7 @@ from app.utilities.api_request import TakeonApiException
 
 contributor_search_blueprint = Blueprint(name="contributor_search", import_name=__name__, url_prefix="/contributor_search")
 contributor_search_blueprint_post = Blueprint(name="contributor_search_post", import_name=__name__, url_prefix="/contributor_search")
+error_500 = "./error_templates/500.html"
 
 # headers here double as url parameters
 headers = ["reference", "period", "survey", "status", "formId"]
@@ -39,21 +40,21 @@ def not_auth(error):
 
 @contributor_search_blueprint.errorhandler(500)
 def internal_server_error(error):
-    return render_template("./error_templates/500.html", message_header=error), 500
+    return render_template(error_500, message_header=error), 500
 
 
 @contributor_search_blueprint.errorhandler(TakeonApiException)
 def handle_invalid_usage(error):
     display = 'Service Error. Please contact support'
     log.info('Exception caught: %s', error.message)
-    return render_template("./error_templates/500.html", message_header=display), 400
+    return render_template(error_500, message_header=display), 400
 
 
 @contributor_search_blueprint.app_errorhandler(Exception)
 def handle_unexpected_error(error):
     log.info('Unexpected exception caught: %s', error)
     display = 'Unexpected service Error! Please contact support'
-    return render_template("./error_templates/500.html", message_header=display), 500
+    return render_template(error_500, message_header=display), 500
 
 
 @contributor_search_blueprint.route("/")
@@ -64,8 +65,6 @@ def landing_page():
 
 # ####################### SIMPLE SEARCH SCREEN, EXPOSES ALL FIELDS #############################
 @contributor_search_blueprint.route("/Contributor/searchSelection", methods=["GET", "POST"])
-
-
 # Selection options, just pull out the values that have been selected, join
 # them all together in a semi-colon delimited string
 def general_search_screen_selection():

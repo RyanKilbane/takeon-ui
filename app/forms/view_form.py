@@ -11,6 +11,7 @@ view_form_blueprint = Blueprint(
     name='view_form', import_name=__name__, url_prefix='/contributor_search')
 url = os.getenv('API_URL')
 api_key = os.getenv('API_KEY')
+form_view_template_HTML = "./view_form/FormView.html"
 
 # Flask Endpoints
 @view_form_blueprint.errorhandler(404)
@@ -53,8 +54,6 @@ def view_form(inqcode, period, ruref):
     log.info("Filtered Validations output: %s",
              filter_validations(validations))
 
-    
-
     # validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
         log.info('save validation button pressed')
@@ -80,7 +79,7 @@ def view_form(inqcode, period, ruref):
                 error=e
             )
         return render_template(
-            template_name_or_list="./view_form/FormView.html",
+            template_name_or_list=form_view_template_HTML,
             survey=inqcode,
             period=period,
             ruref=ruref,
@@ -91,7 +90,7 @@ def view_form(inqcode, period, ruref):
             status_colour=status_colour)
 
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
@@ -128,7 +127,7 @@ def override_validations(inqcode, period, ruref):
     view_form_data = json.loads(view_forms)
 
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
@@ -173,7 +172,7 @@ def save_responses(inqcode, period, ruref):
     status_colour = check_status(status)
 
     return render_template(
-        template_name_or_list="./view_form/FormView.html",
+        template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
