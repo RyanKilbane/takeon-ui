@@ -33,6 +33,8 @@ def internal_server_error(error):
 def view_form(inqcode, period, ruref):
     log.info("View_Form -- START --")
 
+    log.info("Request.form: %s", request.form)
+
     url_parameters = dict(
         zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
@@ -123,12 +125,14 @@ def override_validations(inqcode, period, ruref):
 
     view_form_data = json.loads(view_forms)
 
+    response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
+
     return render_template(
         template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
-        data=view_form_data,
+        data=response_and_validations,
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
         user=get_user())
@@ -164,12 +168,14 @@ def save_responses(inqcode, period, ruref):
     validations = json.loads(validation_outputs)
     view_form_data = json.loads(view_forms)
 
+    response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
+
     return render_template(
         template_name_or_list=form_view_template_HTML,
         survey=inqcode,
         period=period,
         ruref=ruref,
-        data=view_form_data,
+        data=response_and_validations,
         contributor_details=contributor_data['data'][0],
         validation=validations,
         user=get_user(),

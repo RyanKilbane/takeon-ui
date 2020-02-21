@@ -3,6 +3,7 @@
 def combine_response_validations(view_form_data, validations):
     combined_array = []
     for i in view_form_data['view_form_responses']:
+        overridden_count = 0
         combined_output = {}
         validation_info_array = []
         qcode = i['questioncode']
@@ -18,7 +19,13 @@ def combine_response_validations(view_form_data, validations):
                 validation_failure['overridden'] = j['overridden']
                 validation_failure['validationoutputid'] = j['validationoutputid']
                 validation_failure['triggered'] = j['triggered']
+                if j['overridden'] == True:
+                    overridden_count += 1
                 validation_info_array.append(validation_failure)
+            if overridden_count == len(validation_info_array):
+                combined_output['panel'] = 'panel--info'
+            else:
+                combined_output['panel'] = 'panel--error'
         combined_output['validation_info'] = validation_info_array
         combined_array.append(combined_output)
     combined_dictionary_output = {}
