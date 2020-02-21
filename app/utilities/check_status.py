@@ -3,7 +3,7 @@ def check_status(status):
         'No form sent'          : 'status status--dead',
         'Form sent out'         : 'status status--info',
         'Saved - run validation': 'status status--error',
-        'Check needed'          : 'status status--error',
+        'Validations Triggered' : 'status status--error',
         'Clear'                 : 'status status--success',
         'Clear - overidden'     : 'status status--success'
     }
