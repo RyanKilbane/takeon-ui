@@ -7,4 +7,4 @@ def check_status(status):
         'Clear'                 : 'status status--success',
         'Clear - overidden'     : 'status status--success'
     }
-    return status_code.get(status, 'status status--dead')
+    return status_code.get(status, 'status status--info')

@@ -1,12 +1,11 @@
 import json
 import os
-import requests
-from flask import url_for, redirect, render_template, Blueprint, request
+from flask import render_template, Blueprint, request
 from requests.exceptions import HTTPError
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
 from app.utilities.check_status import check_status
-from app.setup import log, api_caller, api_caller_pl
+from app.setup import log, api_caller
 
 view_form_blueprint = Blueprint(
     name='view_form', import_name=__name__, url_prefix='/contributor_search')
@@ -43,6 +42,8 @@ def view_form(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
+    status = contributor_data['data'][0]['status']
+    status_colour = check_status(status)
 
     view_form_data = json.loads(view_forms)
     log.info("Contributor Details: %s", contributor_data)
@@ -52,10 +53,9 @@ def view_form(inqcode, period, ruref):
     log.info("Filtered Validations output: %s",
              filter_validations(validations))
 
-    status = contributor_data['data'][0]['status']
-    status_colour = check_status(status)
+    
 
-    #validate button logic
+    # validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
         log.info('save validation button pressed')
         json_data = {"survey": inqcode, "period": period,
@@ -88,19 +88,7 @@ def view_form(inqcode, period, ruref):
             status_message=json.dumps(status_message),
             contributor_details=contributor_data['data'][0],
             validation=filter_validations(validations),
-            colour=status_colour)
-
-    # if form_response is empty, then we have a blank form and so return just the definition
-    if not view_form_data:
-        return render_template(
-            template_name_or_list="./view_form/BlankFormView.html",
-            survey=inqcode,
-            period=period,
-            ruref=ruref,
-            data=view_form_data,
-            contributor_details=contributor_data['data'][0],
-            user=get_user(),
-            colour=status_colour)
+            status_colour=status_colour)
 
     return render_template(
         template_name_or_list="./view_form/FormView.html",
@@ -112,7 +100,7 @@ def view_form(inqcode, period, ruref):
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
         user=get_user(),
-        colour=status_colour)
+        status_colour=status_colour)
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
@@ -134,6 +122,8 @@ def override_validations(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
+    status = contributor_data['data'][0]['status']
+    status_colour = check_status(status)
 
     view_form_data = json.loads(view_forms)
 
@@ -145,7 +135,8 @@ def override_validations(inqcode, period, ruref):
         data=view_form_data,
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
-        user=get_user())
+        user=get_user(),
+        status_colour=status_colour)
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
@@ -155,7 +146,8 @@ def save_responses(inqcode, period, ruref):
     ruref = json_data['reference']
     inqcode = json_data['survey']
     period = json_data['period']
-    url_parameters = dict(zip(["survey", "period", "reference"], [inqcode, period, ruref]))
+    url_parameters = dict(
+        zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
 
     # Build up JSON structure to save
@@ -165,7 +157,6 @@ def save_responses(inqcode, period, ruref):
     json_output["reference"] = ruref
     json_output["period"] = period
     json_output["survey"] = inqcode
-
 
     # Send the data to the business layer for processing
     log.info("Output JSON: %s", str(json_output))
@@ -178,6 +169,8 @@ def save_responses(inqcode, period, ruref):
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
     view_form_data = json.loads(view_forms)
+    status = contributor_data['data'][0]['status']
+    status_colour = check_status(status)
 
     return render_template(
         template_name_or_list="./view_form/FormView.html",
@@ -188,4 +181,5 @@ def save_responses(inqcode, period, ruref):
         contributor_details=contributor_data['data'][0],
         validation=validations,
         user=get_user(),
-        status_message=json.dumps('New responses saved successfully'))
+        status_message=json.dumps('New responses saved successfully'),
+        status_colour=status_colour)
