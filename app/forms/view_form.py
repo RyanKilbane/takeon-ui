@@ -4,6 +4,7 @@ from flask import render_template, Blueprint, request
 from requests.exceptions import HTTPError
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
+from app.utilities.combine_response_validations import combine_response_validations
 from app.setup import log, api_caller
 
 view_form_blueprint = Blueprint(
@@ -42,14 +43,17 @@ def view_form(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
-
     view_form_data = json.loads(view_forms)
+
+    response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
+
     log.info("Contributor Details: %s", contributor_data)
     log.info("Contributor Details[0]: %s", contributor_data['data'][0])
     log.info("View Form Data: %s", view_form_data)
     log.info("Validations output: %s", validations)
     log.info("Filtered Validations output: %s",
              filter_validations(validations))
+    log.info("Combined Response and Validation Info Data: %s", response_and_validations)
 
     # validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
@@ -80,7 +84,7 @@ def view_form(inqcode, period, ruref):
             survey=inqcode,
             period=period,
             ruref=ruref,
-            data=view_form_data,
+            data=response_and_validations,
             status_message=json.dumps(status_message),
             contributor_details=contributor_data['data'][0],
             validation=filter_validations(validations))
@@ -90,7 +94,7 @@ def view_form(inqcode, period, ruref):
         survey=inqcode,
         period=period,
         ruref=ruref,
-        data=view_form_data,
+        data=response_and_validations,
         status_message=json.dumps(""),
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),

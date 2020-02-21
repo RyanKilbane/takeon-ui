@@ -12,84 +12,77 @@
 <br>
 {% block content %}
 
-    <div class="panel panel--info panel--simple">
-        <div class="panel__body">
-
-            <h1>{{ contributor_details['referencename'] }}</h1>
-            <p>
-                <strong>Reference:</strong> <span id="ref">{{ contributor_details['reference'] }}</span>
-                <strong>Period:</strong> <span id="period">{{ contributor_details['period'] }}</span>
-                <strong>Survey:</strong> <span id="survey">{{ contributor_details['survey'] }}</span>
-                <strong>Status:</strong> {{ contributor_details['status'] }}
-            </p>
-        </div>
-    </div>
+    <h1>{{ contributor_details['referencename'] }}</h1>
+    <p>
+        <strong>Reference:</strong> <span id="ref">{{ contributor_details['reference'] }}</span>
+        <strong>Period:</strong> <span id="period">{{ contributor_details['period'] }}</span>
+        <strong>Survey:</strong> <span id="survey">{{ contributor_details['survey'] }}</span>
+        <strong>Status:</strong> {{ contributor_details['status'] }}
+    </p>
     <br>
 
     <div class="mainContent">
         <!-- <div class="grid">
             <div class="grid__col col-6@m paddingSection"> -->
                 <form method="post" id="responseForm">
-                    {% for datum in data['view_form_responses'] %}
-                        <div>
-                            {{ datum["displayquestionnumber"] }}<strong> {{ datum["displaytext"] }}</strong>
-                            <br>
-                            <input name="{{ datum['questioncode'] }}"
-                                    value="{{ datum['response'] }}" type="number"
-                                    class="input input--text input-type__input">
-                            <span style="color:red">{{ datum["questioncode"] }}</span>
+                    
+                    {% for datum in data['form_validation_outputs'] %}
+                    
+                        {% if datum['validation_info']|length > 0 %}
 
-
-                            {% if validation['validation_outputs']|length > 0 %}
+                        <div class="panel panel--error panel--simple">
+                            <div class="panel__body">
+                                <strong>{{ datum["displayquestionnumber"] }}</strong> <strong> {{ datum["displaytext"] }}</strong>
+                                <br>
+                                <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input">
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend"></legend>
-                                    <!-- <p class="checkboxes__label">Select all that apply</p> -->
-                                    <div class="panel panel--error panel--simple">
-
-                                        <span class="checkboxes__items">
-                                            <p class="checkboxes__item"></p>
-                                            <br>
-
-                                        {% for output in validation['validation_outputs'] %}
+                                    <br>
+                                    <!-- <div class="panel panel--error panel--simple">
+                                    <div class="panel__body"> -->
+                                    <span class="checkboxes__items">
+                                        <p class="checkboxes__item"></p>
+                                        <br>
+                                        {% for output in datum['validation_info'] %}
                                             {% if output['overridden'] == True %}
 
-                                            <div class="panel__body">
-                                                    <p class="checkboxes__item">
-                                                        <span class="checkbox ">
-                                                            <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox" checked>
-                                                            <p class="field">
-                                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
-                                                                <strong>{{ output["primaryquestion"] }}</strong></br>
-                                                                <strong>{{ output["name"] }}</strong></br>
-                                                                <strong>Triggered: {{ output["triggered"] }}</strong></br>
-                                                            </label>
-                                                            </p>
-                                                        </span>
+                                            <p class="checkboxes__item">
+                                                <span class="checkbox ">
+                                                    <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox" checked>
+                                                    <p class="field">
+                                                    <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                        <strong>{{ output["name"] }}</strong></br>
+                                                    </label>
                                                     </p>
-                                            </div>
+                                                </span>
+                                            </p>
                                             <br>
                                             {% else %}
-                                                <p class="checkboxes__item">
-                                                    <span class="checkbox ">
-                                                        <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox">
-                                                        <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
-                                                            <strong>{{ output["primaryquestion"] }}</strong></br>
-                                                            <strong>{{ output["name"] }}</strong></br>
-                                                            <strong>Triggered: {{ output["triggered"] }}</b></br>
-                                                        </label>
-                                                    </span>
-                                                </p>
-                                                <br>
+                                            <p class="checkboxes__item">
+                                                <span class="checkbox ">
+                                                    <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox">
+                                                    <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
+                                                        <strong>{{ output["name"] }}</strong></br>
+                                                    </label>
+                                                </span>
+                                            </p>
+                                            <br>
                                             {% endif %}
                                         {% endfor %}
-                                        </span>
+                                            </span>  
+                                        </fieldset>
                                     </div>
-                                </fieldset>
-                                {% endif %}
+                                </div>
 
+                            {% else %}
+
+                            <strong>{{ datum["displayquestionnumber"] }}</strong> <strong> {{ datum["displaytext"] }}</strong>
                             <br>
-                            <br>
-                        </div>
+                            <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input">
+
+                            {% endif %}
+                                <br>
+                                <br>
                     {% endfor %}
 
                     <span class="checkbox ">
@@ -98,76 +91,12 @@
                             <strong>Select All</strong>
                         </label>
                     </span>
+                    <br>
+                    <br>
 
                 </form>
             <!-- </div> -->
-
-                <!-- <div class="grid__col col-6@m paddingSection"> -->
-                        <div class="wrapper">
-                            <div class="response-split">
-                                <form method="POST">
-                                    {% if validation['validation_outputs']|length > 0 %}
-                                <fieldset class="fieldset">
-                                    <legend class="fieldset__legend">What Validations would you like to override?</legend>
-                                    <p class="checkboxes__label">Select all that apply</p>
-                                    <div class="panel panel--error panel--simple">
-
-                                        <span class="checkboxes__items">
-                                            <p class="checkboxes__item">
-                                                <span class="checkbox ">
-                                                    <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
-                                                    <label id="select_all" class="checkbox__label" for="select-all">
-                                                        <strong>Select All</strong>
-                                                    </label>
-                                                </span>
-                                            </p>
-                                            <br>
-
-                                        {% for output in validation['validation_outputs'] %}
-                                            {% if output['overridden'] == True %}
-
-                                            <div class="panel__body">
-                                                    <p class="checkboxes__item">
-                                                        <span class="checkbox ">
-                                                            <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox" checked>
-                                                            <p class="field">
-                                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
-                                                                <strong>{{ output["primaryquestion"] }}</strong></br>
-                                                                <strong>{{ output["name"] }}</strong></br>
-                                                                <strong>Validation ID: {{ output["validationid"] }}</b></br>
-                                                                <strong>Formula: {{ output["formula"] }}</strong></br>
-                                                                <strong>Triggered: {{ output["triggered"] }}</strong></br>
-                                                            </label>
-                                                            </p>
-                                                        </span>
-                                                    </p>
-                                            </div>
-                                            <br>
-                                            {% else %}
-                                                <p class="checkboxes__item">
-                                                    <span class="checkbox ">
-                                                        <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox " value="{{output['validationoutputid']}}" name="override-checkbox">
-                                                        <label id="{{output['validationoutputid']}}-label" class="checkbox__label " for="{{output['validationoutputid']}}">
-                                                            <strong>{{ output["primaryquestion"] }}</strong></br>
-                                                            <strong>{{ output["name"] }}</strong></br>
-                                                            <strong>Validation ID: {{ output["validationid"] }}</b></br>
-                                                            <strong>Formula: {{ output["formula"] }}</b></br>
-                                                            <strong>Triggered: {{ output["triggered"] }}</b></br>
-                                                        </label>
-                                                    </span>
-                                                </p>
-                                                <br>
-                                            {% endif %}
-                                        {% endfor %}
-                                        </span>
-                                    </div>
-                                </fieldset>
-                                {% endif %}
-                            </form>
-                        </div>
-                    <!-- </div> -->
             <!-- </div> -->
-        </div>
     </div>
 
 
