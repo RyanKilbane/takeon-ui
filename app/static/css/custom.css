@@ -27,9 +27,16 @@
 }
 
 .checkboxTextAlignment{
-    position: relative;
+    width: auto;
 
 }
+
+.checkboxItemHide{
+    height: 0px;
+    width: 0px;
+    display: none;
+}
+
 .textAlignment{
     vertical-align: middle;
     top: 25px;
