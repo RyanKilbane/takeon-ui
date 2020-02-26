@@ -37,6 +37,14 @@
     position: relative;
 }
 
+.overrideBoxLength{
+    width: 0%;
+}
+
 .paddingSection{
     padding-top: 20px;
+}
+
+.untriggeredTextBoxAlignment{
+    padding-left: 100px;
 }

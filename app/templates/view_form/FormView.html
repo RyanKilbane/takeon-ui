@@ -23,8 +23,8 @@
     <br>
 
     <div class="mainContent">
-        <!-- <div class="grid">
-            <div class="grid__col col-6@m paddingSection"> -->
+        <div class="grid">
+            <div class="grid__col col-6@m paddingSection">
                 <form method="post" id="responseForm">
                     
                     {% for datum in data['form_validation_outputs'] %}
@@ -35,7 +35,7 @@
                             <div class="panel__body">
                                 <strong>{{ datum["displayquestionnumber"] }}</strong> <strong> {{ datum["displaytext"] }}</strong>
                                 <br>
-                                <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input">
+                                <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input untriggeredTextBoxAlignment">
                                 <br>
                                 <fieldset class="fieldset">
                                     <legend class="fieldset__legend">Select Validation To Override</legend>
@@ -83,16 +83,17 @@
                     {% endfor %}
 
                 </form>
-                <span class="checkbox ">
+
+                <span class="checkbox overrideBoxLength">
                     <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
-                    <label id="select_all" class="checkbox__label" for="select-all">
-                        <strong>Select All</strong>
+                    <label id="select_all" class="checkbox__label overrideBoxLength" for="select-all">
+                        <strong>Override All</strong>
                     </label>
                 </span>
                 <br>
                 <br>
-            <!-- </div> -->
-            <!-- </div> -->
+            </div> 
+        </div>
     </div>
 
 
