@@ -142,53 +142,7 @@ def override_validations(inqcode, period, ruref):
     log.info("Overriding Validations...")
 
     return redirect(url_for(view_form, inqcode=inqcode, period=period, ruref=ruref))
-    
-    
-@view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
-def save_responses(inqcode, period, ruref):
-    json_data = request.json
-    log.info("save response: %s", str(json_data))
-    ruref = json_data['reference']
-    inqcode = json_data['survey']
-    period = json_data['period']
-    url_parameters = dict(
-        zip(["survey", "period", "reference"], [inqcode, period, ruref]))
-    parameters = build_uri(url_parameters)
-
-    # Build up JSON structure to save
-    json_output = {}
-    json_output["responses"] = json_data['responses']
-    json_output["user"] = get_user()
-    json_output["reference"] = ruref
-    json_output["period"] = period
-    json_output["survey"] = inqcode
-
-    # Send the data to the business layer for processing
-    log.info("Output JSON: %s", str(json_output))
-    api_caller.save_response(parameters=parameters, data=json_output)
-
-    contributor_details = api_caller.contributor_search(parameters=parameters)
-    validation_outputs = api_caller.validation_outputs(parameters=parameters)
-    view_forms = api_caller.view_form_responses(parameters=parameters)
-
-    contributor_data = json.loads(contributor_details)
-    validations = json.loads(validation_outputs)
-    view_form_data = json.loads(view_forms)
-    status = contributor_data['data'][0]['status']
-    status_colour = check_status(status)
-    
-    response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
-
-    return render_template(
-        template_name_or_list=form_view_template_HTML,
-        survey=inqcode,
-        period=period,
-        ruref=ruref,
-        data=response_and_validations,
-        contributor_details=contributor_data['data'][0],
-        validation=validations,
-        user=get_user(),
-        status_message=json.dumps('New responses saved successfully'))
+     
 
 def extract_responses(data) -> dict:
     output = []

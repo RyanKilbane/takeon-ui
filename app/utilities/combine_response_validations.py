@@ -19,6 +19,7 @@ def combine_response_validations(view_form_data, validations):
                 validation_failure['overridden'] = validation['overridden']
                 validation_failure['validationoutputid'] = validation['validationoutputid']
                 validation_failure['triggered'] = validation['triggered']
+                validation_failure['validationmessage'] = validation['validationmessage']
                 if validation['overridden']:
                     overridden_count += 1
                 validation_info_array.append(validation_failure)

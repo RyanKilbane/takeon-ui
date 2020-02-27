@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en-gb" dir="ltr" class="no-js">
-
+​
 <head>
     {% block head %}
         <meta charset="utf-8">
@@ -19,7 +19,7 @@
         <link rel="apple-touch-icon" type="image/png"
               href="https://cdn.ons.gov.uk/sdc/design-system/13.4.5/favicons/apple-touch-icon.png" sizes="180x180">
         <link rel="manifest" href="https://cdn.ons.gov.uk/sdc/design-system/13.4.5/favicons/manifest.json">
-
+​
         {% block css %}
             <link rel='stylesheet prefetch'
                   href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.css'>
@@ -29,19 +29,19 @@
             <!--<link rel="stylesheet" href="https://cdn.ons.gov.uk/sdc/v2.0.0/css/fixed.css" media="all" type="text/css">-->
             <link rel="stylesheet" href="{{ url_for('static',filename='css/custom.css') }}" media="all" type="text/css">
         {% endblock css %}
-
+​
         {% block head_js %}
             <script type="text/javascript"
                     src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
             <script type="text/javascript" src="{{ url_for('static', filename='js/industry-range.js') }}"></script>
             <!-- <script src="https://cdn.ons.gov.uk/sdc/v2.0.0/scripts/bundle.js"></script> -->
         {% endblock head_js %}
-
+​
     {% endblock head %}
 </head>
-
+​
 <body>
-<div class="phase-banner mainContent">
+<div class="phase-banner">
     <div class="grid grid--flex grid--gutterless grid--vertical-center grid--no-wrap">
         <div class="grid__col col-auto u-flex-no-grow">
             <h3 class="phase-banner__badge">BETA</h3>
@@ -51,9 +51,9 @@
         </div>
     </div>
 </div>
-
+​
 <header class="header header--internal header--thin">
-    <div class="header__top mainContent" role="banner">
+    <div class="header__top" role="banner">
         <div class="header__grid-top grid grid--gutterless grid--flex grid--between grid--vertical-center grid--no-wrap">
             <div class="grid__col col-auto">
                 <a class="header__logo-link" href="/">
@@ -64,22 +64,33 @@
         </div>
     </div>
     <div class="header__main">
-        <div class="grid grid--gutterless grid--flex grid--between grid--vertical-center grid--no-wrap mainContent">
-            <div class="grid__col col-auto u-flex-shrink">
-                <div class="header__title">
-                    {% block page_header %}
-                    {% endblock page_header %}
+        <div class="container">
+            <div class="grid grid--gutterless grid--flex grid--between grid--vertical-center grid--no-wrap">
+                <div class="grid__col col-auto u-flex-shrink">
+                    <div class="header__title">
+                        {% block page_header %}
+                        {% endblock page_header %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </header>
-
-
-{% block content %}
-{% endblock content %}
-
-
+​
+{% block template %}
+<div class="page__container container ">
+    <div class="page__container container ">
+        <div class="grid">
+            <div class="grid__col col-8@m ">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock template %}
+​
+​
 <footer class="footer " data-ga-element="footer">
     <div class="container">
         <div class="grid">
@@ -101,8 +112,8 @@
         </div>
     </div>
 </footer>
-
-
+​
+​
 </body>
-
+​
 </html>
