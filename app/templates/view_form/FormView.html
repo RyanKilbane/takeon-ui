@@ -15,7 +15,8 @@
     <div class="mainContent">
         <div class="grid">
             <div class="grid__col col-7@m paddingSection">
-
+                
+                <br>
                 <dl class="metadata metadata__list grid grid--gutterless u-cf u-mb-s" title="Form details" aria-label="Form details">
                     <h1>{{ contributor_details['referencename'] }}</h1>
                     <dt class="metadata__term grid__col col-2@m u-mt-no">Reference:</dt>
@@ -42,27 +43,24 @@
 
                                     {% if output['overridden'] == True %}
 
-                                    <p class="checkboxes__item ">
-                                        <span class="checkbox ">
-                                            <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox checkboxAlignment" value="{{output['validationoutputid']}}" name="override-checkbox" checked>
-                                            <p class="field">
-                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label checkboxTextAlignment" for="{{output['validationoutputid']}}"> <strong>{{ output["name"] }}</strong></br></label>
-                                            </p>
-                                        </span>
-                                    </p>
+                                    <fieldset>
+                                        <legend class="u-vh"></legend>
+                                        <span class="checkbox js-password-toggle-wrap checkbox--toggle u-mt-no u-mb-s">
+                                            <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox js-password-toggle to-u-bg-w" value="{{output['validationoutputid']}}" name="override-checkbox" checked>
+                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label to-u-bg " for="{{output['validationoutputid']}}">Override '{{ output["name"] }}'</label>
+                                    </fieldset>
 
                                     {% else %}
 
-                                    <p class="checkboxes__item ">
-                                        <span class="checkbox ">
-                                            <p class="field">
-                                                <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox checkboxAlignment" value="{{output['validationoutputid']}}" name="override-checkbox">    
-                                                <p class="panel__error">
-                                                    <label id="{{output['validationoutputid']}}-label" class="checkbox__label checkboxTextAlignment" for="{{output['validationoutputid']}}"> <strong>{{ output["name"] }}</strong></br></label>
-                                                </p>
-                                            </p>
-                                        </span>
-                                    </p>
+                                    <fieldset>
+                                        <legend class="u-vh"></legend>
+                                        <p class="panel__error u-mb-no">
+                                            <strong>{{ output["name"] }}</strong>
+                                        </p>
+                                        <span class="checkbox js-password-toggle-wrap checkbox--toggle u-mt-no u-mb-s">
+                                            <input type="checkbox" id="{{output['validationoutputid']}}-label" class="checkbox__input js-checkbox js-password-toggle to-u-bg-w " value="{{output['validationoutputid']}}" name="override-checkbox">
+                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label to-u-bg " for="{{output['validationoutputid']}}">Override</label>
+                                    </fieldset>
 
                                     {% endif %}
 
@@ -72,7 +70,7 @@
                                 <strong>{{ datum["displayquestionnumber"] }}</strong> <strong> {{ datum["displaytext"] }}</strong>
                                 <br>
                                 <br>
-                                <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input">
+                                <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input input--w-10">
                             </div>
                         </div>
 
@@ -81,23 +79,28 @@
                         <strong>{{ datum["displayquestionnumber"] }}</strong> <strong> {{ datum["displaytext"] }}</strong>
                         <br>
                         <br>
-                        <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input">
+                        <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input input--w-10">
 
                         {% endif %}
-
-                        <br>
-                        <br>
 
                     {% endfor %}
 
                 </form>
 
-                <span class="checkbox overrideBoxLength">
-                    <input type="checkbox" id="select-all" class="checkbox__input js-checkbox checkboxAlignment" value="Select All" name="select-all-checkbox" onclick="select_all(this)">
-                    <label id="select_all" class="checkbox__label checkboxTextAlignment" for="select-all">
-                        <strong>Override All</strong>
-                    </label>
-                </span>
+                <hr>
+
+                <fieldset class="fieldset">
+                    <legend class="fieldset__legend"></legend>
+                    <p class="checkboxes__label"></p>
+                    <span class="checkboxes__items">
+                        <p class="checkboxes__item">
+                            <span class="checkbox input--w-10">
+                                <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
+                                <label id="select_all" class="checkbox__label " for="select-all">Override all</label>
+                            </span>
+                        </p>
+                    </span>
+                </fieldset>
                 <br>
                 <br>
             </div> 
@@ -126,6 +129,8 @@
     </form>
     </div>
 
+    <br>
+    <br>
     <br>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
