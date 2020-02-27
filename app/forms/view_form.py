@@ -34,7 +34,6 @@ def view_form(inqcode, period, ruref):
     log.info("View_Form -- START --")
 
     log.info("Request.form: %s", request.form)
-    log.info("Type of request: %s", type(request.form))
 
     status_message = ""
     url_parameters = dict(
@@ -57,8 +56,6 @@ def view_form(inqcode, period, ruref):
             log.info("Output JSON: %s", str(json_output))
             api_caller.save_response(parameters=parameters, data=json_output)
             status_message = 'Responses saved successfully'
-            # Clear request.form
-            #request.form = ""
         except Exception as error:
             status_message = 'Error saving responses: ' + error + 'Please contact Take-On Support Team'
 
@@ -136,42 +133,9 @@ def override_validations(inqcode, period, ruref):
     period = json_data['period']
 
     api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
-    url_parameters = dict(
-        zip(["survey", "period", "reference"], [inqcode, period, ruref]))
-    parameters = build_uri(url_parameters)
-    
-    contributor_details = api_caller.contributor_search(parameters=parameters)
-    validation_outputs = api_caller.validation_outputs(parameters=parameters)
-    view_forms = api_caller.view_form_responses(parameters=parameters)
+    log.info("Overriding Validations...")
 
-    contributor_data = json.loads(contributor_details)
-    validations = json.loads(validation_outputs)
-
-    view_form_data = json.loads(view_forms)
-
-    response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
-
-    log.info("Contributor Details: %s", contributor_data)
-    log.info("Contributor Details[0]: %s", contributor_data['data'][0])
-    log.info("View Form Data: %s", view_form_data)
-    log.info("Validations output: %s", validations)
-    log.info("Filtered Validations output: %s",
-             filter_validations(validations))
-    log.info("Combined Response and Validation Info Data: %s", response_and_validations)
-    log.info("Got here!!!")
-
-
-    #return redirect(url_for(view_form, inqcode=inqcode, period=period, ruref=ruref))
-    return render_template(
-        template_name_or_list=form_view_template_HTML,
-        survey=inqcode,
-        period=period,
-        ruref=ruref,
-        data=response_and_validations,
-        contributor_details=contributor_data['data'][0],
-        status_message=json.dumps("Validations Overriden Succesfully"),
-        validation=filter_validations(validations),
-        user=get_user())
+    return redirect(url_for(view_form, inqcode=inqcode, period=period, ruref=ruref))
 
 
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
