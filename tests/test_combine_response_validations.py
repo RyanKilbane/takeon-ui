@@ -23,15 +23,20 @@ validation_output = {"validation_outputs": [{"severity": "E", "primaryquestion":
 {"severity": "W", "primaryquestion": "0608", "triggered": True, "instance": "0", "validationoutputid": 1499, "validationid": 6650, "lastupdateddate": "2020-02-19T11:52:05.462+00:00", "lastupdatedby": "fisdba", "name": "Question vs Derived Question", "formula": "4352543 != 20000", "rule": "QVDQ", "overridden": False}]}
 
 def test_valid_input_returns_valid_combined_output():
-    expected_output = {"form_validation_outputs": [{"questioncode": "0146", "response": "2", "panel": "panel--info", "validation_info": [{"name": "Comment Present (BMI)", "overridden": False}]}, 
-    {"questioncode": "0147", "response": "1", "panel": "panel--info", "validation_info": []}, 
-    {"questioncode": "0601", "response": "4325", "panel": "panel--info", "validation_info": [{"name": "Period on Period Zero Continuity", "overridden": False}]}, 
-    {"questioncode": "0602", "response": "234", "panel": "panel--info", "validation_info": [{"name": "Period on Period Zero Continuity", "overridden": False}]}, 
-    {"questioncode": "0603", "response": "5432", "panel": "panel--info", "validation_info": [{"name": "Period on Period Zero Continuity", "overridden": False}]}, 
-    {"questioncode": "0604", "response": "324", "panel": "panel--info", "validation_info": [{"name": "Period on Period Zero Continuity", "overridden": False}]}, 
-    {"questioncode": "0605", "response": "3542", "panel": "panel--info", "validation_info": [{"name": "Period on Period Zero Continuity", "overridden": False}]}, 
-    {"questioncode": "0606", "response": "5600", "panel": "panel--info", "validation_info": [{"name": "Period on Period Zero Continuity", "overridden": False}]}, 
-    {"questioncode": "0607", "response": "543", "panel": "panel--info", "validation_info": [{"name": "Period on Period Zero Continuity", "overridden": False}]}, 
-    {"questioncode": "0608", "response": "4352543", "panel": "panel--info", "validation_info": [{"name": "Question vs Derived Question", "overridden": False}]}, 
-    {"questioncode": "9001", "response": "20000", "panel": "panel--info", "validation_info": []}]}
+    expected_output = {'form_validation_outputs':
+    [{'questioncode': '0146', 'response': '2', 'displayquestionnumber': 'Q146', 'displaytext': 'Comment on the figures included in your return', 'panel': 'panel--error', 'validation_info': [{'name': 'Comment Present (BMI)', 'overridden': False, 'validationoutputid': 1497, 'triggered': True}]},
+    {'questioncode': '0147', 'response': '1', 'displayquestionnumber': 'Q147', 'displaytext': 'New pits or quarries brought into use since date of last return', 'panel': 'panel--info', 'validation_info': []},
+    {'questioncode': '0601', 'response': '4325', 'displayquestionnumber': 'Q601', 'displaytext': 'Sand produced for asphalt (asphalting sand)', 'panel': 'panel--error', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 1490, 'triggered': True}]},
+    {'questioncode': '0602', 'response': '234', 'displayquestionnumber': 'Q602', 'displaytext': 'Sand produced for use in mortar (building or soft sand)', 'panel': 'panel--error', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 1491, 'triggered': True}]},
+    {'questioncode': '0603', 'response': '5432', 'displayquestionnumber': 'Q603', 'displaytext': 'Sand produced for concreting (sharp sand)', 'panel': 'panel--error', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 1492, 'triggered': True}]},
+    {'questioncode': '0604', 'response': '324', 'displayquestionnumber': 'Q604', 'displaytext': 'Gravel coated with bituminous binder (on or off site)', 'panel': 'panel--error', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 1493, 'triggered': True}]},
+    {'questioncode': '0605', 'response': '3542', 'displayquestionnumber': 'Q605', 'displaytext': 'Gravel produced for concrete aggregate (including sand/gravel mixes)', 'panel': 'panel--error', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 1494, 'triggered': True}]},
+    {'questioncode': '0606', 'response': '5600', 'displayquestionnumber': 'Q606', 'displaytext': 'Other screened and graded gravels', 'panel': 'panel--error', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 1495, 'triggered': True}]},
+    {'questioncode': '0607', 'response': '543', 'displayquestionnumber': 'Q607', 'displaytext': 'Sand and gravel used for constructional fill', 'panel': 'panel--error', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 1496, 'triggered': True}]},
+    {'questioncode': '0608', 'response': '4352543', 'displayquestionnumber': 'Q608', 'displaytext': 'TOTALS', 'panel': 'panel--error', 'validation_info': [{'name': 'Question vs Derived Question', 'overridden': False, 'validationoutputid': 1499, 'triggered': True}]},
+    {'questioncode': '9001', 'response': '20000', 'displayquestionnumber': 'Q9001', 'displaytext': 'Derived Total of all sand and gravel (Q601 + Q602 + Q603 + Q604 + Q605 + Q606 + Q607)', 'panel': 'panel--info', 'validation_info': []}]}
+
     assert combine_response_validations(form_response_output, validation_output) == expected_output
+
+def test_invalid_input_throws_exception():
+    pass

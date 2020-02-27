@@ -56,7 +56,9 @@ def view_form(inqcode, period, ruref):
             # Send the data to the business layer for processing
             log.info("Output JSON: %s", str(json_output))
             api_caller.save_response(parameters=parameters, data=json_output)
-            status_message = 'New responses saved successfully'
+            status_message = 'Responses saved successfully'
+            # Clear request.form
+            #request.form = ""
         except Exception as error:
             status_message = 'Error saving responses: ' + error + 'Please contact Take-On Support Team'
 
@@ -138,8 +140,6 @@ def override_validations(inqcode, period, ruref):
         zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
     
-    #return redirect(url_for('view_form.view_form', inqcode=inqcode, period=period, ruref=ruref))
-
     contributor_details = api_caller.contributor_search(parameters=parameters)
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
     view_forms = api_caller.view_form_responses(parameters=parameters)
@@ -160,6 +160,8 @@ def override_validations(inqcode, period, ruref):
     log.info("Combined Response and Validation Info Data: %s", response_and_validations)
     log.info("Got here!!!")
 
+
+    #return redirect(url_for(view_form, inqcode=inqcode, period=period, ruref=ruref))
     return render_template(
         template_name_or_list=form_view_template_HTML,
         survey=inqcode,

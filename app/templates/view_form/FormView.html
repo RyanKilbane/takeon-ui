@@ -82,7 +82,7 @@
                                 <br>
                     {% endfor %}
 
-                </form>
+                <!-- </form> -->
                 <span class="checkbox ">
                     <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
                     <label id="select_all" class="checkbox__label" for="select-all">
@@ -99,22 +99,22 @@
     <div class="mainContent">
     <!-- <form method="POST" action=""> -->
 
-        <button class="btn btn--small" type="submit" id="saveFormButton" value="saveForm" name="action" form="responseForm">
+        <button class="btn btn--small" type="submit" id="saveFormButton" value="saveForm" name="action">
             <span class="btn__inner">Save</span>
         </button>
-
+        <!-- <form method="POST" action=""> -->
         <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
             <span class="btn__inner">Validate</span>
         </button>
-
-        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action' id='override_button' form="checkboxForm">
+        <!-- </form> -->
+        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action' id='override_button'>
             <span class="btn__inner">Override</span>
         </button>
 
         <button class="btn btn--small" type="submit" value="close this window" onclick="self.close()">
             <span class="btn__inner">Exit</span>
         </button>
-    <!-- </form> -->
+    </form>
     </div>
 
     <br>
