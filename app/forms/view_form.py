@@ -1,6 +1,6 @@
 import json
 import os
-from flask import render_template, Blueprint, request
+from flask import render_template, Blueprint, request, redirect, url_for
 from requests.exceptions import HTTPError
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
@@ -36,9 +36,29 @@ def view_form(inqcode, period, ruref):
 
     log.info("Request.form: %s", request.form)
 
+    status_message = ""
     url_parameters = dict(
         zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
+
+    if request.form and request.form['action'] == 'saveForm':
+        try:
+            response_data = extract_responses(request.form)
+            log.info('Response data: %s', response_data)
+            # Build up JSON structure to save
+            json_output = {}
+            json_output["responses"] = response_data
+            json_output["user"] = get_user()
+            json_output["reference"] = ruref
+            json_output["period"] = period
+            json_output["survey"] = inqcode
+
+            # Send the data to the business layer for processing
+            log.info("Output JSON: %s", str(json_output))
+            api_caller.save_response(parameters=parameters, data=json_output)
+            status_message = 'Responses saved successfully'
+        except Exception as error:
+            status_message = 'Error saving responses: ' + error + 'Please contact Take-On Support Team'
 
     contributor_details = api_caller.contributor_search(parameters=parameters)
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
@@ -60,6 +80,7 @@ def view_form(inqcode, period, ruref):
     log.info("Filtered Validations output: %s",
              filter_validations(validations))
     log.info("Combined Response and Validation Info Data: %s", response_and_validations)
+
 
     # validate button logic
     if request.method == "POST" and request.form['action'] == "validate":
@@ -102,7 +123,7 @@ def view_form(inqcode, period, ruref):
         period=period,
         ruref=ruref,
         data=response_and_validations,
-        status_message=json.dumps(""),
+        status_message=json.dumps(status_message),
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
         user=get_user(),
@@ -118,35 +139,11 @@ def override_validations(inqcode, period, ruref):
     period = json_data['period']
 
     api_caller.validation_overrides(parameters='', data=json.dumps(json_data))
-    url_parameters = dict(
-        zip(["survey", "period", "reference"], [inqcode, period, ruref]))
-    parameters = build_uri(url_parameters)
+    log.info("Overriding Validations...")
 
-    contributor_details = api_caller.contributor_search(parameters=parameters)
-    validation_outputs = api_caller.validation_outputs(parameters=parameters)
-    view_forms = api_caller.view_form_responses(parameters=parameters)
-
-    contributor_data = json.loads(contributor_details)
-    validations = json.loads(validation_outputs)
-    status = contributor_data['data'][0]['status']
-    status_colour = check_status(status)
-
-    view_form_data = json.loads(view_forms)
-
-    response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
-
-    return render_template(
-        template_name_or_list=form_view_template_HTML,
-        survey=inqcode,
-        period=period,
-        ruref=ruref,
-        data=response_and_validations,
-        contributor_details=contributor_data['data'][0],
-        validation=filter_validations(validations),
-        user=get_user(),
-        status_colour=status_colour)
-
-
+    return redirect(url_for(view_form, inqcode=inqcode, period=period, ruref=ruref))
+    
+    
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/save-responses', methods=['POST'])
 def save_responses(inqcode, period, ruref):
     json_data = request.json
@@ -179,7 +176,7 @@ def save_responses(inqcode, period, ruref):
     view_form_data = json.loads(view_forms)
     status = contributor_data['data'][0]['status']
     status_colour = check_status(status)
-
+    
     response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
 
     return render_template(
@@ -191,5 +188,11 @@ def save_responses(inqcode, period, ruref):
         contributor_details=contributor_data['data'][0],
         validation=validations,
         user=get_user(),
-        status_message=json.dumps('New responses saved successfully'),
-        status_colour=status_colour)
+        status_message=json.dumps('New responses saved successfully'))
+
+def extract_responses(data) -> dict:
+    output = []
+    for key in data.keys():
+        if key != "action" and key != "override-checkbox":
+            output.append({'question': key, 'response': data[key], 'instance': 0})
+    return output

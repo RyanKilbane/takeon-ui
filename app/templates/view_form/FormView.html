@@ -47,8 +47,9 @@
                                         <legend class="u-vh"></legend>
                                         <span class="checkbox js-password-toggle-wrap checkbox--toggle u-mt-no u-mb-s">
                                             <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox js-password-toggle to-u-bg-w" value="{{output['validationoutputid']}}" name="override-checkbox" checked>
-                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label to-u-bg " for="{{output['validationoutputid']}}">Override '{{ output["name"] }}'</label>
+                                            <label id="{{output['validationoutputid']}}" class="checkbox__label to-u-bg " for="{{output['validationoutputid']}}">Override '{{ output["name"] }}'</label>
                                     </fieldset>
+                                    <br>
 
                                     {% else %}
 
@@ -58,9 +59,10 @@
                                             <strong>{{ output["name"] }}</strong>
                                         </p>
                                         <span class="checkbox js-password-toggle-wrap checkbox--toggle u-mt-no u-mb-s">
-                                            <input type="checkbox" id="{{output['validationoutputid']}}-label" class="checkbox__input js-checkbox js-password-toggle to-u-bg-w " value="{{output['validationoutputid']}}" name="override-checkbox">
-                                            <label id="{{output['validationoutputid']}}-label" class="checkbox__label to-u-bg " for="{{output['validationoutputid']}}">Override</label>
+                                            <input type="checkbox" id="{{output['validationoutputid']}}" class="checkbox__input js-checkbox js-password-toggle to-u-bg-w " value="{{output['validationoutputid']}}" name="override-checkbox">
+                                            <label id="{{output['validationoutputid']}}" class="checkbox__label to-u-bg " for="{{output['validationoutputid']}}">Override</label>
                                     </fieldset>
+                                    <br>
 
                                     {% endif %}
 
@@ -76,57 +78,51 @@
 
                         {% else %}
 
+                        <br>
                         <strong>{{ datum["displayquestionnumber"] }}</strong> <strong> {{ datum["displaytext"] }}</strong>
                         <br>
                         <br>
                         <input name="{{ datum['questioncode'] }}" value="{{ datum['response'] }}" type="number" class="input input--text input-type__input input--w-10">
-
+                        <br>
                         {% endif %}
 
                     {% endfor %}
 
+                    <hr>
+
+                    <fieldset class="fieldset">
+                        <legend class="fieldset__legend"></legend>
+                        <p class="checkboxes__label"></p>
+                        <span class="checkboxes__items">
+                            <p class="checkboxes__item">
+                                <span class="checkbox input--w-10">
+                                    <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
+                                    <label id="select_all" class="checkbox__label " for="select-all">Override all</label>
+                                </span>
+                            </p>
+                        </span>
+                    </fieldset>
+                    <br>
+                    <br>
+
+                    <button class="btn btn--small" type="submit" id="saveFormButton" value="saveForm" name="action">
+                        <span class="btn__inner">Save</span>
+                    </button>
+
+                    <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
+                        <span class="btn__inner">Validate</span>
+                    </button>
+
+                    <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action' id='override_button'>
+                        <span class="btn__inner">Override</span>
+                    </button>
+
+                    <button class="btn btn--small" type="submit" value="close this window" onclick="self.close()">
+                        <span class="btn__inner">Exit</span>
+                    </button>
                 </form>
-
-                <hr>
-
-                <fieldset class="fieldset">
-                    <legend class="fieldset__legend"></legend>
-                    <p class="checkboxes__label"></p>
-                    <span class="checkboxes__items">
-                        <p class="checkboxes__item">
-                            <span class="checkbox input--w-10">
-                                <input type="checkbox" id="select-all" class="checkbox__input js-checkbox " value="Select All" name="select-all-checkbox" onclick="select_all(this)">
-                                <label id="select_all" class="checkbox__label " for="select-all">Override all</label>
-                            </span>
-                        </p>
-                    </span>
-                </fieldset>
-                <br>
-                <br>
-            </div> 
+            </div>
         </div>
-    </div>
-
-
-    <div class="mainContent">
-    <form method="POST" action="">
-
-        <button class="btn btn--small" type="submit" id="saveFormButton" value="saveForm" name="action">
-            <span class="btn__inner">Save</span>
-        </button>
-
-        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='validate' name='action'>
-            <span class="btn__inner">Validate</span>
-        </button>
-
-        <button class="btn btn--small" type="submit" class="btn btn-group__btn btn--loader js-loader js-submit-btn" value='override' name='action' id='override_button'>
-            <span class="btn__inner">Override</span>
-        </button>
-
-        <button class="btn btn--small" type="submit" value="close this window" onclick="self.close()">
-            <span class="btn__inner">Exit</span>
-        </button>
-    </form>
     </div>
 
     <br>
@@ -138,13 +134,13 @@
         var override_button = document.getElementById("override_button")
         override_button.addEventListener("click", function()
         {var checkboxes = document.getElementsByName("override-checkbox");
-           var reference  = document.getElementById("ref").textContent;
-           var period     = document.getElementById("period").textContent;
-           var survey     = document.getElementById("survey").textContent;
-           var user       = '{{ user }}';
-           var checkboxes_checked = []
-           var checkboxes_output  = {}
-           for(var i = 0; i < checkboxes.length; i++) {
+            var reference  = "{{ contributor_details['reference'] }}";
+            var period     = "{{ contributor_details['period'] }}";
+            var survey     = "{{ contributor_details['survey'] }}";
+            var user       = '{{ user }}';
+            var checkboxes_checked = []
+            var checkboxes_output  = {}
+            for(var i = 0; i < checkboxes.length; i++) {
                 if(checkboxes[i].checked) {
                     var checkbox = {}
                     checkbox["validationoutputid"] = checkboxes[i].id
@@ -158,7 +154,7 @@
                     checkbox["user"]               = user
                     checkboxes_checked.push(checkbox)
                 }
-           }
+            }
             checkboxes_output['reference']          = reference
             checkboxes_output['period']             = period
             checkboxes_output['survey']             = survey
@@ -171,9 +167,8 @@
                dataType: 'json',
                data: js_data,
                async: false
-           })
-           })
-           
+            })
+           window.location.reload()})
     </script>
 
     <script>
@@ -185,52 +180,13 @@
         }
     </script>
 
-
     <script>
         var statusMessage = "{{ status_message }}"
         console.log(statusMessage)
-        if (statusMessage == "&#34;&#34;"){
-        }
-        else {
+        if (statusMessage == "&#34;&#34;") {
+        } else {
             alert(statusMessage);
         }
-    </script>
-
-    <script>
-        var saveFormButton = document.getElementById("saveFormButton")
-        saveFormButton.addEventListener("click", function()
-        {response_form = document.getElementById("responseForm");
-        console.log("Response Form = " + response_form)
-        var reference  = document.getElementById("ref").textContent;
-        var period     = document.getElementById("period").textContent;
-        var survey     = document.getElementById("survey").textContent;
-        var contributor_data = {}
-        var edited_response_data = []
-        contributor_data['reference'] = reference
-        contributor_data['period'] = period
-        contributor_data['survey'] = survey
-        for (var i = 0; i < response_form.length; i++){
-            var question_response = {}
-            console.log(response_form.elements[i].name);
-            console.log(response_form.elements[i].value);
-            question_number = response_form.elements[i].name
-            value = response_form.elements[i].value
-            question_response['question'] = question_number
-            question_response['response'] = value
-            question_response['instance'] = 0
-            edited_response_data.push(question_response)
-            }
-            contributor_data['responses'] = edited_response_data
-        var js_data = JSON.stringify(contributor_data)
-        $.ajax({
-            url: 'save-responses',
-            type: 'post',
-            contentType: 'application/json',
-            dataType: 'json',
-            data: js_data,
-            async: false
-        })
-        })
     </script>
 
 {% endblock content %}
