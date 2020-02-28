@@ -3,6 +3,7 @@
 
 <head>
     {% block head %}
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <title>{% block title %}{% endblock title %}</title>
@@ -23,10 +24,8 @@
         {% block css %}
             <link rel='stylesheet prefetch'
                   href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.css'>
-            <!--<link rel="stylesheet" href="https://cdn.ons.gov.uk/sdc/v1.5.0/css/styles.css">-->
             <link rel="stylesheet" href="https://cdn.ons.gov.uk/sdc/design-system/14.4.0/css/main.css" media="all"
                   type="text/css">
-            <!--<link rel="stylesheet" href="https://cdn.ons.gov.uk/sdc/v2.0.0/css/fixed.css" media="all" type="text/css">-->
             <link rel="stylesheet" href="{{ url_for('static',filename='css/custom.css') }}" media="all" type="text/css">
         {% endblock css %}
 
@@ -34,10 +33,10 @@
             <script type="text/javascript"
                     src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
             <script type="text/javascript" src="{{ url_for('static', filename='js/industry-range.js') }}"></script>
-            <!-- <script src="https://cdn.ons.gov.uk/sdc/v2.0.0/scripts/bundle.js"></script> -->
         {% endblock head_js %}
 
     {% endblock head %}
+
 </head>
 
 <body>
@@ -75,10 +74,8 @@
     </div>
 </header>
 
-
 {% block content %}
 {% endblock content %}
-
 
 <footer class="footer " data-ga-element="footer">
     <div class="container">
@@ -101,7 +98,6 @@
         </div>
     </div>
 </footer>
-
 
 </body>
 
