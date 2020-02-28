@@ -3,7 +3,7 @@ import json
 from app.utilities.combine_response_validations import combine_response_validations
 
 
-form_output = {'view_form_responses': [{'displaytext': 'Comment on the figures included in your return', 'instance': 0, 'response': '1', 'questioncode': '0146', 'displayquestionnumber': 'Q146', 'type': 'NUMERIC'},
+form_output = {'view_form_responses': [{'displaytext': 'Comment on the figures included in your return', 'instance': 0,'response': '1', 'questioncode': '0146', 'displayquestionnumber': 'Q146', 'type': 'NUMERIC'},
 {'displaytext': 'New pits or quarries brought into use since date of last return', 'instance': 0, 'response': '2', 'questioncode': '0147', 'displayquestionnumber': 'Q147', 'type': 'NUMERIC'},
 {'displaytext': 'Sand produced for asphalt (asphalting sand)', 'instance': 0, 'response': '2342345', 'questioncode': '0601', 'displayquestionnumber': 'Q601', 'type': 'NUMERIC'},
 {'displaytext': 'Sand produced for use in mortar (building or soft sand)', 'instance': 0, 'response': '20000', 'questioncode': '0602', 'displayquestionnumber': 'Q602', 'type': 'NUMERIC'},

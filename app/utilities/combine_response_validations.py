@@ -31,9 +31,10 @@ def combine_response_validations(view_form_data, validations):
                     combined_output['panel'] = 'panel--error'
             combined_output['validation_info'] = validation_info_array
             combined_array.append(combined_output)
-        combined_dictionary_output = {}
 
+        combined_dictionary_output = {}
         combined_dictionary_output['form_validation_outputs'] = combined_array
+
     except ValueError as value_error:
         print("Error with JSON Structure: " + str(value_error))
         raise ValueError
