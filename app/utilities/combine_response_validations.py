@@ -1,6 +1,9 @@
 # Combine Response and Validation data for new UI Layout
+from app.utilities.helpers import json_validator
+import json
 
 def combine_response_validations(view_form_data, validations):
+    try
     combined_array = []
     for contributor in view_form_data['view_form_responses']:
         overridden_count = 0

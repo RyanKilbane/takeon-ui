@@ -37,3 +37,7 @@
     bottom: -1px;
     position: relative;
 }
+
+.paddingSection{
+    padding-top: 20px;
+}
