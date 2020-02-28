@@ -1,6 +1,6 @@
 import pytest
 import json
-from app.utilities.combine_response_validations import combine_response_validations, json_validator
+from app.utilities.combine_response_validations import combine_response_validations
 
 
 form_output = {'view_form_responses': [{'displaytext': 'Comment on the figures included in your return', 'instance': 0, 'response': '1', 'questioncode': '0146', 'displayquestionnumber': 'Q146', 'type': 'NUMERIC'},
