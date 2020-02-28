@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from wtforms import StringField, Form
+import json
 
 
 # ###################################### UTILITY FUNCTIONS ###########################################
@@ -134,3 +135,11 @@ def find_nodes(data: dict, node_to_find: str) -> (dict, list, str):
             if item is not None:
                 return item
     raise KeyError(f'No node with name "{node_to_find}" found')
+
+def json_validator(data):
+    try:
+        json.loads(data)
+        return True
+    except ValueError as error:
+        print("invalid json: %s" % error)
+        return False

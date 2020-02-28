@@ -22,6 +22,8 @@ validation_output = {"validation_outputs": [{"severity": "E", "primaryquestion":
 {"severity": "E", "primaryquestion": "0146", "triggered": True, "instance": "0", "validationoutputid": 1497, "validationid": 6630, "lastupdateddate": "2020-02-19T11:52:05.462+00:00", "lastupdatedby": "fisdba", "name": "Comment Present (BMI)", "formula": "2 = 2", "rule": "CPBMI", "overridden": False}, 
 {"severity": "W", "primaryquestion": "0608", "triggered": True, "instance": "0", "validationoutputid": 1499, "validationid": 6650, "lastupdateddate": "2020-02-19T11:52:05.462+00:00", "lastupdatedby": "fisdba", "name": "Question vs Derived Question", "formula": "4352543 != 20000", "rule": "QVDQ", "overridden": False}]}
 
+
+
 def test_valid_input_returns_valid_combined_output():
     expected_output = {'form_validation_outputs':
     [{'questioncode': '0146', 'response': '2', 'displayquestionnumber': 'Q146', 'displaytext': 'Comment on the figures included in your return', 'panel': 'panel--error', 'validation_info': [{'name': 'Comment Present (BMI)', 'overridden': False, 'validationoutputid': 1497, 'triggered': True}]},
@@ -38,5 +40,5 @@ def test_valid_input_returns_valid_combined_output():
 
     assert combine_response_validations(form_response_output, validation_output) == expected_output
 
-def test_invalid_input_throws_exception():
+def test_invalid_input_returns_blank():
     pass

@@ -1,7 +1,7 @@
 import json
 import os
 from flask import render_template, Blueprint, request, redirect, url_for
-from requests.exceptions import HTTPError
+from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
 from app.utilities.combine_response_validations import combine_response_validations
@@ -57,8 +57,18 @@ def view_form(inqcode, period, ruref):
             log.info("Output JSON: %s", str(json_output))
             api_caller.save_response(parameters=parameters, data=json_output)
             status_message = 'Responses saved successfully'
-        except Exception as error:
-            status_message = 'Error saving responses: ' + error + 'Please contact Take-On Support Team'
+        except HTTPError as http_error:
+            status_message = 'There was a problem with the HTTP call ' + http_error
+            log.info('HTTP Error %s', http_error)
+        except ConnectionError as connection_error:
+            status_message = 'There was a problem with the connection ' + connection_error
+            log.info('Connection Error %s', connection_error)
+        except Timeout as timeout_error:
+            status_message = 'Timeout error ' + timeout_error
+            log.info('Timeout Error %s', timeout_error)
+        except RequestException as requests_error:
+            status_message = 'There was a problem with your request ' + requests_error + 'Please contact Take-On Support Team'
+            log.info('Requests Error: %s', requests_error)
 
     contributor_details = api_caller.contributor_search(parameters=parameters)
     validation_outputs = api_caller.validation_outputs(parameters=parameters)
@@ -143,7 +153,6 @@ def override_validations(inqcode, period, ruref):
 
     return redirect(url_for(view_form, inqcode=inqcode, period=period, ruref=ruref))
      
-
 def extract_responses(data) -> dict:
     output = []
     for key in data.keys():
