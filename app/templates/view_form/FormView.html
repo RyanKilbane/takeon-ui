@@ -14,11 +14,12 @@
     <dl class="metadata metadata__list grid grid--gutterless u-cf u-mb-s" title="Form details" aria-label="Form details">
         <h1>{{ contributor_details['referencename'] }}</h1>
         <dt class="metadata__term grid__col col-2@m u-mt-no">Reference:</dt>
-        <dd id="ref" class="metadata__value grid__col col-10@m u-mt-no">{{ contributor_details['reference'] }}</dd>
-        <dt class="metadata__term grid__col col-2@m u-mt-no">Period:</dt>
-        <dd id="period" class="metadata__value grid__col col-10@m u-mt-no">{{ contributor_details['period'] }}</dd>
+        <dd class="metadata__value grid__col col-10@m u-mt-no">{{ contributor_details['reference'] }}</dd>
         <dt class="metadata__term grid__col col-2@m u-mt-no">Survey:</dt>
-        <dd id="survey" class="metadata__value grid__col col-10@m u-mt-no">{{ contributor_details['survey'] }}</dd>
+        <dd class="metadata__value grid__col col-10@m u-mt-no">{{ contributor_details['surveyBySurvey']['description'] }} {{ contributor_details['survey'] }}</dd>
+        <dt class="metadata__term grid__col col-2@m u-mt-no">Period:</dt>
+        <dd class="metadata__value grid__col col-10@m u-mt-no">{{ contributor_details['period'] }}</dd>
+        
     </dl>
     <p class="u-bb u-pb-s">
         <span title="Status " class="{{ status_colour }}">{{ contributor_details['status'] }}</span>
@@ -73,6 +74,7 @@
                                                     <strong>{{ output["primaryquestion"] }}</strong></br>
                                                     <strong>{{ output["name"] }}</strong></br>
                                                     <strong>Validation ID: {{ output["validationid"] }}</b></br>
+                                                    <strong>Validation Message: {{ output["validationmessage"] }}</br></strong>
                                                     <strong>Formula: {{ output["formula"] }}</strong></br>
                                                     <strong>Triggered: {{ output["triggered"] }}</strong></br>
                                                 </label>
@@ -87,7 +89,8 @@
                                                         <strong>{{ output["primaryquestion"] }}</strong></br>
                                                         <strong>{{ output["name"] }}</strong></br>
                                                         <strong>Validation ID: {{ output["validationid"] }}</b></br>
-                                                        <strong>Formula: {{ output["formula"] }}</b></br>
+                                                        <strong>Validation Message: {{ output["validationmessage"] }}</br></strong>
+                                                        <strong>Formula: {{ output["formula"] }}</strong></br>                                                      
                                                         <strong>Triggered: {{ output["triggered"] }}</b></br>
                                                     </label>
                                                 </span>
@@ -135,9 +138,9 @@
         var override_button = document.getElementById("override_button")
         override_button.addEventListener("click", function()
         {var checkboxes = document.getElementsByName("override-checkbox");
-           var reference  = document.getElementById("ref").textContent;
-           var period     = document.getElementById("period").textContent;
-           var survey     = document.getElementById("survey").textContent;
+           var reference  = "{{ contributor_details['reference'] }}";
+           var period     = "{{ contributor_details['period'] }}";
+           var survey     = "{{ contributor_details['survey'] }}";
            var user       = '{{ user }}';
            var checkboxes_checked = []
            var checkboxes_output  = {}
@@ -198,9 +201,9 @@
         saveFormButton.addEventListener("click", function()
         {response_form = document.getElementById("responseForm");
         console.log("Response Form = " + response_form)
-        var reference  = document.getElementById("ref").textContent;
-        var period     = document.getElementById("period").textContent;
-        var survey     = document.getElementById("survey").textContent;
+        var reference  = "{{ contributor_details['reference'] }}";
+        var period     = "{{ contributor_details['period'] }}";
+        var survey     = "{{ contributor_details['survey'] }}";
         var contributor_data = {}
         var edited_response_data = []
         contributor_data['reference'] = reference
