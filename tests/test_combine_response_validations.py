@@ -1,6 +1,7 @@
 import pytest
 import json
 from app.utilities.combine_response_validations import combine_response_validations
+from app.utilities.combine_validation_data import combine_data
 
 
 form_output = {'view_form_responses': [{'displaytext': 'Comment on the figures included in your return', 'instance': 0,'response': '1', 'questioncode': '0146', 'displayquestionnumber': 'Q146', 'type': 'NUMERIC'},
@@ -65,3 +66,18 @@ def test_blank_json_returns_error():
 
 # def test_json_validator_returns_expected():
 #     assert json_validator(json.dumps(form_output))
+
+def test_combine_data_returns_expected_format():
+    expected_output = {'form_validation_outputs': [{'questioncode': '0146', 'response': '1', 'displayquestionnumber': 'Q146', 'displaytext': 'Comment on the figures included in your return', 'validation_info': [], 'panel': 'panel--info'},
+    {'questioncode': '0147', 'response': '2', 'displayquestionnumber': 'Q147', 'displaytext': 'New pits or quarries brought into use since date of last return', 'validation_info': [{'name': 'Comment Present (BMI)', 'overridden': True, 'validationoutputid': 2766, 'triggered': True, 'validationmessage': 'Respondent entered a comment'}], 'panel': 'panel--info'},
+    {'questioncode': '0601', 'response': '2342345', 'displayquestionnumber': 'Q601', 'displaytext': 'Sand produced for asphalt (asphalting sand)', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': False, 'validationoutputid': 2758, 'triggered': True, 'validationmessage': 'This is different to the previous submission. If this is 0 or blank, the previous was greater. If this has a value, the previous was 0 or blank'}], 'panel': 'panel--error'},
+    {'questioncode': '0602', 'response': '20000', 'displayquestionnumber': 'Q602', 'displaytext': 'Sand produced for use in mortar (building or soft sand)', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': True, 'validationoutputid': 2759, 'triggered': True, 'validationmessage': 'This is different to the previous submission. If this is 0 or blank, the previous was greater. If this has a value, the previous was 0 or blank'}], 'panel': 'panel--info'},
+    {'questioncode': '0603', 'response': '5', 'displayquestionnumber': 'Q603', 'displaytext': 'Sand produced for concreting (sharp sand)', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': True, 'validationoutputid': 2760, 'triggered': True, 'validationmessage': 'This is different to the previous submission. If this is 0 or blank, the previous was greater. If this has a value, the previous was 0 or blank'}], 'panel': 'panel--info'},
+    {'questioncode': '0604', 'response': '6', 'displayquestionnumber': 'Q604', 'displaytext': 'Gravel coated with bituminous binder (on or off site)', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': True, 'validationoutputid': 2761, 'triggered': True, 'validationmessage': 'This is different to the previous submission. If this is 0 or blank, the previous was greater. If this has a value, the previous was 0 or blank'}], 'panel': 'panel--info'},
+    {'questioncode': '0605', 'response': '7', 'displayquestionnumber': 'Q605', 'displaytext': 'Gravel produced for concrete aggregate (including sand/gravel mixes)', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': True, 'validationoutputid': 2762, 'triggered': True, 'validationmessage': 'This is different to the previous submission. If this is 0 or blank, the previous was greater. If this has a value, the previous was 0 or blank'}], 'panel': 'panel--info'},
+    {'questioncode': '0606', 'response': '8', 'displayquestionnumber': 'Q606', 'displaytext': 'Other screened and graded gravels', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': True, 'validationoutputid': 2763, 'triggered': True, 'validationmessage': 'This is different to the previous submission. If this is 0 or blank, the previous was greater. If this has a value, the previous was 0 or blank'}], 'panel': 'panel--info'},
+    {'questioncode': '0607', 'response': '15', 'displayquestionnumber': 'Q607', 'displaytext': 'Sand and gravel used for constructional fill', 'validation_info': [{'name': 'Period on Period Zero Continuity', 'overridden': True, 'validationoutputid': 2764, 'triggered': True, 'validationmessage': 'This is different to the previous submission. If this is 0 or blank, the previous was greater. If this has a value, the previous was 0 or blank'}], 'panel': 'panel--info'},
+    {'questioncode': '0608', 'response': '102', 'displayquestionnumber': 'Q608', 'displaytext': 'TOTALS', 'validation_info': [{'name': 'Question vs Derived Question', 'overridden': False, 'validationoutputid': 2767, 'triggered': True, 'validationmessage': 'This total is not equal to the derived total'}], 'panel': 'panel--error'},
+    {'questioncode': '9001', 'response': '2362386', 'displayquestionnumber': 'Q9001', 'displaytext': 'Derived Total of all sand and gravel (Q601 + Q602 + Q603 + Q604 + Q605 + Q606 + Q607)', 'validation_info': [], 'panel': 'panel--info'}]}
+    print(combine_data(form_output, validation_output))
+    assert combine_data(form_output, validation_output) == expected_output
