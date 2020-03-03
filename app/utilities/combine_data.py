@@ -13,6 +13,7 @@ def extract_question_data(form_data, index):
 def extract_validation_data(extracted_form_data, validation_data):
     validation_info_array = []
     overridden_count = 0
+    panel = ''
     for validation in validation_data['validation_outputs']:
         validation_failure = {}
         if validation['primaryquestion'] == extracted_form_data['questioncode']:
