@@ -81,3 +81,15 @@ def test_combine_data_returns_expected_format():
     {'questioncode': '9001', 'response': '2362386', 'displayquestionnumber': 'Q9001', 'displaytext': 'Derived Total of all sand and gravel (Q601 + Q602 + Q603 + Q604 + Q605 + Q606 + Q607)', 'validation_info': [], 'panel': 'panel--info'}]}
     print(combine_data(form_output, validation_output))
     assert combine_data(form_output, validation_output) == expected_output
+
+def test_missing_key_input_returns_key_error_json():
+    with pytest.raises(KeyError):
+        combine_data(form_output, invalid_validation_output)
+
+def test_invalid_json_returns_type_error_json():
+    with pytest.raises(TypeError):
+        combine_data(form_output, invalid_json)
+
+def test_blank_json_returns_error_json():
+    with pytest.raises(KeyError):
+        combine_data(form_output, blank_validation_json)
