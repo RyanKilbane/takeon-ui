@@ -34,7 +34,7 @@ def decide_panel_colour(overridden_count, validation_info_array):
         panel = 'panel--error'
     return panel
 
-def combine_data(form_data, validation_data):
+def combine_responses_and_validations(form_data, validation_data):
     try:
         counter = 0
         combined_array = []
@@ -57,4 +57,3 @@ def combine_data(form_data, validation_data):
     except TypeError as type_error:
         print("Error with data type converting to JSON " + str(type_error))
         raise TypeError
-    
