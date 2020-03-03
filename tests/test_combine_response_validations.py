@@ -32,9 +32,23 @@ invalid_validation_output = {'validation_outputs': [{'severity': 'E', 'triggered
 {'severity': 'E', 'triggered': True, 'instance': '0', 'validationid': 6626, 'rule': 'POPZC', 'overridden': True, 'primaryquestion': '0607', 'validationoutputid': 2764, 'lastupdateddate': '2020-02-27T15:18:02.421+00:00', 'lastupdatedby': '', 'name': 'Period on Period Zero Continuity', 'formula': '15 != 0 AND ( 15 = 0 OR 0 = 0 ) AND abs(15 - 0) > 0'},
 {'severity': 'E', 'triggered': True, 'instance': '0', 'validationid': 6640, 'rule': 'CPBMI', 'overridden': True, 'primaryquestion': '0147', 'validationoutputid': 2766, 'lastupdateddate': '2020-02-27T16:28:42.497+00:00', 'lastupdatedby': '', 'name': 'Comment Present (BMI)', 'formula': '2 = 2', 'validationmessage': 'Respondent entered a comment'}, {'severity': 'W', 'triggered': True, 'instance': '0', 'validationid': 6650, 'rule': 'QVDQ', 'overridden': False, 'primaryquestion': '0608', 'validationoutputid': 2767, 'lastupdateddate': '2020-02-28T10:08:59.638+00:00', 'lastupdatedby': 'fisdba', 'name': 'Question vs Derived Question', 'formula': '102 != 2362386'}]}
 
+blank_form_output = {'view_form_responses': [{'displaytext': 'Comment on the figures included in your return', 'instance': '', 'response': '', 'questioncode': '0146', 'displayquestionnumber': 'Q146', 'type': 'NUMERIC'},
+{'displaytext': 'New pits or quarries brought into use since date of last return', 'instance': '', 'response': '', 'questioncode': '0147', 'displayquestionnumber': 'Q147', 'type': 'NUMERIC'},
+{'displaytext': 'Sand produced for asphalt (asphalting sand)', 'instance': '', 'response': '', 'questioncode': '0601', 'displayquestionnumber': 'Q601', 'type': 'NUMERIC'},
+{'displaytext': 'Sand produced for use in mortar (building or soft sand)', 'instance': '', 'response': '', 'questioncode': '0602', 'displayquestionnumber': 'Q602', 'type': 'NUMERIC'},
+{'displaytext': 'Sand produced for concreting (sharp sand)', 'instance': '', 'response': '', 'questioncode': '0603', 'displayquestionnumber': 'Q603', 'type': 'NUMERIC'},
+{'displaytext': 'Gravel coated with bituminous binder (on or off site)', 'instance': '', 'response': '', 'questioncode': '0604', 'displayquestionnumber': 'Q604', 'type': 'NUMERIC'},
+{'displaytext': 'Gravel produced for concrete aggregate (including sand/gravel mixes)', 'instance': '', 'response': '', 'questioncode': '0605', 'displayquestionnumber': 'Q605', 'type': 'NUMERIC'},
+{'displaytext': 'Other screened and graded gravels', 'instance': '', 'response': '', 'questioncode': '0606', 'displayquestionnumber': 'Q606', 'type': 'NUMERIC'},
+{'displaytext': 'Sand and gravel used for constructional fill', 'instance': '', 'response': '', 'questioncode': '0607', 'displayquestionnumber': 'Q607', 'type': 'NUMERIC'},
+{'displaytext': 'TOTALS', 'instance': '', 'response': '', 'questioncode': '0608', 'displayquestionnumber': 'Q608', 'type': 'NUMERIC'},
+{'displaytext': 'Derived Total of all sand and gravel (Q601 + Q602 + Q603 + Q604 + Q605 + Q606 + Q607)', 'instance': '', 'response': '', 'questioncode': '9001', 'displayquestionnumber': 'Q9001', 'type': 'NUMERIC'}]}
+
+blank_validations_output = {'validation_outputs': []}
+
 invalid_json = [{"invalid": "json"}]
 
-blank_validation_json = {}
+empty_input_json = {}
 
 def test_combine_data_returns_expected_format():
     expected_output = {'form_validation_outputs': [{'questioncode': '0146', 'response': '1', 'displayquestionnumber': 'Q146', 'displaytext': 'Comment on the figures included in your return', 'validation_info': [], 'panel': 'panel--info'},
@@ -50,6 +64,20 @@ def test_combine_data_returns_expected_format():
     {'questioncode': '9001', 'response': '2362386', 'displayquestionnumber': 'Q9001', 'displaytext': 'Derived Total of all sand and gravel (Q601 + Q602 + Q603 + Q604 + Q605 + Q606 + Q607)', 'validation_info': [], 'panel': 'panel--info'}]}
     assert combine_responses_and_validations(form_output, validation_output) == expected_output
 
+def test_blank_form_blank_validation_returns_valid_output():
+    expected_output = {'form_validation_outputs': [{'questioncode': '0146', 'response': '', 'displayquestionnumber': 'Q146', 'displaytext': 'Comment on the figures included in your return', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0147', 'response': '', 'displayquestionnumber': 'Q147', 'displaytext': 'New pits or quarries brought into use since date of last return', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0601', 'response': '', 'displayquestionnumber': 'Q601', 'displaytext': 'Sand produced for asphalt (asphalting sand)', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0602', 'response': '', 'displayquestionnumber': 'Q602', 'displaytext': 'Sand produced for use in mortar (building or soft sand)', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0603', 'response': '', 'displayquestionnumber': 'Q603', 'displaytext': 'Sand produced for concreting (sharp sand)', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0604', 'response': '', 'displayquestionnumber': 'Q604', 'displaytext': 'Gravel coated with bituminous binder (on or off site)', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0605', 'response': '', 'displayquestionnumber': 'Q605', 'displaytext': 'Gravel produced for concrete aggregate (including sand/gravel mixes)', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0606', 'response': '', 'displayquestionnumber': 'Q606', 'displaytext': 'Other screened and graded gravels', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0607', 'response': '', 'displayquestionnumber': 'Q607', 'displaytext': 'Sand and gravel used for constructional fill', 'validation_info': [], 'panel': ''},
+    {'questioncode': '0608', 'response': '', 'displayquestionnumber': 'Q608', 'displaytext': 'TOTALS', 'validation_info': [], 'panel': ''},
+    {'questioncode': '9001', 'response': '', 'displayquestionnumber': 'Q9001', 'displaytext': 'Derived Total of all sand and gravel (Q601 + Q602 + Q603 + Q604 + Q605 + Q606 + Q607)', 'validation_info': [], 'panel': ''}]}
+    assert combine_responses_and_validations(blank_form_output, blank_validations_output) == expected_output
+
 def test_missing_key_input_returns_key_error_json():
     with pytest.raises(KeyError):
         combine_responses_and_validations(form_output, invalid_validation_output)
@@ -60,4 +88,4 @@ def test_invalid_json_returns_type_error_json():
 
 def test_blank_json_returns_error_json():
     with pytest.raises(KeyError):
-        combine_responses_and_validations(form_output, blank_validation_json)
+        combine_responses_and_validations(form_output, empty_input_json)
