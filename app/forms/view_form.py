@@ -33,19 +33,16 @@ def internal_server_error(error):
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/viewform', methods=['GET', 'POST'])
 def view_form(inqcode, period, ruref):
     log.info("View_Form -- START --")
-
     log.info("Request.form: %s", request.form)
-
     status_message = ""
     url_parameters = dict(
         zip(["survey", "period", "reference"], [inqcode, period, ruref]))
     parameters = build_uri(url_parameters)
-
-    if request.form and request.form['action'] == 'saveForm':
+    if request.form and request.form['action'] == 'saveandvalidate':
+        response_data = extract_responses(request.form)
         try:
-            response_data = extract_responses(request.form)
             log.info('Response data: %s', response_data)
-            # Build up JSON structure to save
+            #Build up JSON structure to save
             json_output = {}
             json_output["responses"] = response_data
             json_output["user"] = get_user()
@@ -76,6 +73,7 @@ def view_form(inqcode, period, ruref):
 
     contributor_data = json.loads(contributor_details)
     validations = json.loads(validation_outputs)
+    status_message=""
     status = contributor_data['data'][0]['status']
     status_colour = check_status(status)
 
@@ -89,60 +87,46 @@ def view_form(inqcode, period, ruref):
     log.info("View Form Data: %s", view_form_data)
     log.info("Validations output: %s", validations)
     log.info("Filtered Validations output: %s",
-             filter_validations(validations))
+                filter_validations(validations))
     log.info("Combined Response and Validation Info Data: %s", response_and_validations)
 
-
     # validate button logic
-    if request.method == "POST" and request.form['action'] == "validate":
-        log.info('save validation button pressed')
-        json_data = {"survey": inqcode, "period": period,
-                     "reference": ruref, "bpmId": "0"}
-        header = {"x-api-key": api_key}
-        status_message = 'Validation Run Successfully'
-        try:
-            response = api_caller.run_validation(
-                url, json.dumps(json_data), header)
-            log.info("Response from SQS: %s", response)
-        except HTTPError as http_err:
-            status_message = "Http Error. Unable to call URL"
-            log.info('URL error occurred: %s', http_err)
-        except ConnectionError as connection_err:
-            status_message = "Connection Error. Unable to Connect to API Gateway"
-            log.info('API request error occured: %s', connection_err)
-        except Exception as e:
-            status_message = 'Validation Error. Kubernetes secret does not exist or is incorrect'
-            log.info('Validation Error Occurred: %s', e)
-            return render_template(
-                template_name_or_list="./error_templates/validate_error.html",
-                error=e
-            )
+
+    log.info('save validation button pressed')
+    json_data = {"survey": inqcode, "period": period,
+                    "reference": ruref, "bpmId": "0"}
+    header = {"x-api-key": api_key}
+    status_message = 'Validation Run Successfully'
+    try:
+        response = api_caller.run_validation(
+            url, json.dumps(json_data), header)
+        log.info("Response from SQS: %s", response)
+    except HTTPError as http_err:
+        status_message = "Http Error. Unable to call URL"
+        log.info('URL error occurred: %s', http_err)
+    except ConnectionError as connection_err:
+        status_message = "Connection Error. Unable to Connect to API Gateway"
+        log.info('API request error occured: %s', connection_err)
+    except Exception as e:
+        status_message = 'Validation Error. Kubernetes secret does not exist or is incorrect'
+        log.info('Validation Error Occurred: %s', e)
         return render_template(
-            template_name_or_list=form_view_template_HTML,
-            survey=inqcode,
-            period=period,
-            ruref=ruref,
-            data=response_and_validations,
-            override_button=override_button,
-            status_message=json.dumps(status_message),
-            contributor_details=contributor_data['data'][0],
-            validation=filter_validations(validations),
-            status_colour=status_colour)
-
+            template_name_or_list="./error_templates/validate_error.html",
+            error=e
+        )
     return render_template(
-        template_name_or_list=form_view_template_HTML,
-        survey=inqcode,
-        period=period,
-        ruref=ruref,
-        data=response_and_validations,
-        override_button=override_button,
-        status_message=json.dumps(status_message),
-        contributor_details=contributor_data['data'][0],
-        validation=filter_validations(validations),
-        user=get_user(),
-        status_colour=status_colour)
-
-
+    template_name_or_list=form_view_template_HTML,
+    survey=inqcode,
+    period=period,
+    ruref=ruref,
+    data=response_and_validations,
+    override_button=override_button,
+    status_message=json.dumps(status_message),
+    contributor_details=contributor_data['data'][0],
+    validation=filter_validations(validations),
+    user=get_user(),
+    status_colour=status_colour)
+    
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
 def override_validations(inqcode, period, ruref):
     json_data = request.json
