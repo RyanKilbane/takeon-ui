@@ -82,6 +82,7 @@ def view_form(inqcode, period, ruref):
     view_form_data = json.loads(view_forms)
 
     response_and_validations = combine_responses_and_validations(view_form_data, filter_validations(validations))
+    override_button = override_all_button(response_and_validations)
 
     log.info("Contributor Details: %s", contributor_data)
     log.info("Contributor Details[0]: %s", contributor_data['data'][0])
@@ -122,6 +123,7 @@ def view_form(inqcode, period, ruref):
             period=period,
             ruref=ruref,
             data=response_and_validations,
+            override_button=override_button,
             status_message=json.dumps(status_message),
             contributor_details=contributor_data['data'][0],
             validation=filter_validations(validations),
@@ -133,6 +135,7 @@ def view_form(inqcode, period, ruref):
         period=period,
         ruref=ruref,
         data=response_and_validations,
+        override_button=override_button,
         status_message=json.dumps(status_message),
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
@@ -159,3 +162,12 @@ def extract_responses(data) -> dict:
         if key != "action" and key != "override-checkbox":
             output.append({'question': key, 'response': data[key], 'instance': 0})
     return output
+
+def override_all_button(data):
+    validation_triggered_counter = 0
+    for row in data['form_validation_outputs']:
+        if row['validation_info']:
+            validation_triggered_counter += 1
+        if validation_triggered_counter == 2:
+            return True
+    return False
