@@ -4,7 +4,7 @@ from flask import render_template, Blueprint, request, redirect, url_for
 from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 from app.utilities.helpers import build_uri, get_user
 from app.utilities.filter_validations import filter_validations
-from app.utilities.combine_response_validations import combine_response_validations
+from app.utilities.combine_data import combine_responses_and_validations
 from app.utilities.check_status import check_status
 from app.setup import log, api_caller
 
@@ -81,7 +81,7 @@ def view_form(inqcode, period, ruref):
 
     view_form_data = json.loads(view_forms)
 
-    response_and_validations = combine_response_validations(view_form_data, filter_validations(validations))
+    response_and_validations = combine_responses_and_validations(view_form_data, filter_validations(validations))
     override_button = override_all_button(response_and_validations)
 
     log.info("Contributor Details: %s", contributor_data)
@@ -155,7 +155,7 @@ def override_validations(inqcode, period, ruref):
     log.info("Overriding Validations...")
 
     return redirect(url_for(view_form, inqcode=inqcode, period=period, ruref=ruref))
-     
+
 def extract_responses(data) -> dict:
     output = []
     for key in data.keys():
