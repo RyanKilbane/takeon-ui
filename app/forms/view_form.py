@@ -96,7 +96,6 @@ def view_form(inqcode, period, ruref):
     json_data = {"survey": inqcode, "period": period,
                     "reference": ruref, "bpmId": "0"}
     header = {"x-api-key": api_key}
-    status_message = 'Validation Run Successfully'
     try:
         response = api_caller.run_validation(
             url, json.dumps(json_data), header)
@@ -114,6 +113,19 @@ def view_form(inqcode, period, ruref):
             template_name_or_list="./error_templates/validate_error.html",
             error=e
         )
+        return render_template(
+        template_name_or_list=form_view_template_HTML,
+        survey=inqcode,
+        period=period,
+        ruref=ruref,
+        data=response_and_validations,
+        override_button=override_button,
+        status_message=json.dumps(status_message),
+        contributor_details=contributor_data['data'][0],
+        validation=filter_validations(validations),
+        user=get_user(),
+        status_colour=status_colour)
+
     return render_template(
     template_name_or_list=form_view_template_HTML,
     survey=inqcode,
@@ -126,7 +138,8 @@ def view_form(inqcode, period, ruref):
     validation=filter_validations(validations),
     user=get_user(),
     status_colour=status_colour)
-    
+
+
 @view_form_blueprint.route('/Contributor/<inqcode>/<period>/<ruref>/override-validations', methods=['POST'])
 def override_validations(inqcode, period, ruref):
     json_data = request.json
