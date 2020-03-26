@@ -18,7 +18,7 @@ form_view_template_HTML = "./view_form/FormView.html"
 @view_form_blueprint.errorhandler(404)
 def not_found(error):
     return render_template('./error_templates/404.html', message_header=error), 404
-
+    
 
 @view_form_blueprint.errorhandler(403)
 def not_auth(error):

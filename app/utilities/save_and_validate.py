@@ -77,3 +77,4 @@ def validate(inqcode, period, ruref, response_and_validations, override_button, 
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
         status_colour=status_colour)
+        
