@@ -4,7 +4,6 @@ from flask import render_template, Blueprint
 from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 from app.utilities.filter_validations import filter_validations
 from app.setup import log, api_caller
-from app.forms.view_form import extract_responses
 from app.utilities.helpers import get_user
 
 view_form_blueprint = Blueprint(
@@ -12,6 +11,13 @@ view_form_blueprint = Blueprint(
 url = os.getenv('API_URL')
 api_key = os.getenv('API_KEY')
 form_view_template_HTML = "./view_form/FormView.html"
+
+def extract_responses(data) -> dict:
+    output = []
+    for key in data.keys():
+        if key != "action" and key != "override-checkbox":
+            output.append({'question': key, 'response': data[key], 'instance': 0})
+    return output
 
 def save_form(parameters, requestform, inqcode, period, ruref):
     try:
@@ -77,4 +83,3 @@ def validate(inqcode, period, ruref, response_and_validations, override_button, 
         contributor_details=contributor_data['data'][0],
         validation=filter_validations(validations),
         status_colour=status_colour)
-        

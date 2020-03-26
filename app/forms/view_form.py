@@ -18,7 +18,7 @@ form_view_template_HTML = "./view_form/FormView.html"
 @view_form_blueprint.errorhandler(404)
 def not_found(error):
     return render_template('./error_templates/404.html', message_header=error), 404
-    
+
 
 @view_form_blueprint.errorhandler(403)
 def not_auth(error):
@@ -63,7 +63,7 @@ def view_form(inqcode, period, ruref):
              filter_validations(validations))
     log.info("Combined Response and Validation Info Data: %s", response_and_validations)
 
-    if request.form and request.form['action'] == 'saveForm':
+    if request.form and request.form['action'] == 'save-and-validate':
         save_form(parameters, request.form, inqcode, period, ruref)
         validate(inqcode, period, ruref, response_and_validations, override_button, contributor_data, validations, status_colour)
 
