@@ -8,6 +8,9 @@ __pycache__
 
 # Pycharm Settings
 .idea
+.DS_Store
+*.xml
+configfiles/urlconfig.py
 
 # Script to Set Env vars
 /env.bat
@@ -18,4 +21,6 @@ venv1/
 
 # Vendored packages for application
 vendor/
+
+
 
